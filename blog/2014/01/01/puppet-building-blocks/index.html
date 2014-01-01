@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Puppet building blocks - People & Software</title>
+  <meta name="author" content="Bert Hajee">
+
+  
+  <meta name="description" content="In this blog post, I will look into Puppet and describe the building blocks Puppet uses. In Puppet, you describe how your system should be configured &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://yoursite.com/blog/2014/01/01/puppet-building-blocks/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="People & Software" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">People & Software</a></h1>
+  <h2>My ramblings on people using software</h2>
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Puppet Building Blocks</h1>
+    
+  </header>
+
+
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>
+  
+</span>
+
+
+<div class="entry-content"><p>In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.</p>
+
+<p>In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it&rsquo;s detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.</p>
+
+<!-- more -->
+
+
+<h2>The resource type</h2>
+
+<p>Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the <code>File</code> type.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">file</span> <span class="p">{</span><span class="s1">&#39;/application/config.xml&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>   <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">content</span>  <span class="o">=&gt;</span> <span class="s1">&#39;&lt;xml&gt;just some config file&lt;/xml&gt;&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>besides the <code>File</code> type, there are types for managing <code>Users</code>, <code>Groups</code>, <code>Services</code> and so on. Actually Puppet has a lot of built-in types. If you look at <a href="http://docs.puppetlabs.com/references/latest/type.html">type documentation</a> on the puppet site,you see a list of 48 built-in types.</p>
+
+<p><img src="/images/list_of_types.png" title="List of built-in types" ></p>
+
+<p>A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism&rsquo;s to define structured sets of resources on a system. These are the <code>class</code> and the <code>defined resource</code>.</p>
+
+<p>A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism&rsquo;s to define structured sets of resources on a system. These are the <code>class</code> and the <code>defined resource</code>.</p>
+
+<h2>The class</h2>
+
+<p><a href="http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html">The Puppet documentation for classes</a> states:</p>
+
+<blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node&#8217;s catalog) with the include function or a resource-like syntax.</p></blockquote>
+
+
+<p>Quite some definition. In layman&rsquo;s terms, though a Puppet class is a way of structuring resources into a building block. The class <a href="https://forge.puppetlabs.com/puppetlabs/apache">apache</a>, for example, contains all resources needed to install, configure and run an apache https daemon on your system.</p>
+
+<h2>The defined resource</h2>
+
+<p><a href="http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html">The Puppet documentation for defined types</a> states:</p>
+
+<blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote>
+
+
+<p>As you can see in the definition, just like the <code>class</code>, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a <code>class</code>and a  defined type is that a <code>class</code>may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.</p>
+
+<h2>The custom type</h2>
+
+<p>While the <code>class</code> and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the <code>types</code> needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.</p>
+
+<h2>Next time</h2>
+
+<p>This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Bert Hajee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T20:14:10+01:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://yoursite.com/blog/2014/01/01/puppet-building-blocks/" data-via="bhajee" data-counturl="http://yoursite.com/blog/2014/01/01/puppet-building-blocks/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations/" title="Previous Post: Repeatability and testability of Linux platform installations">&laquo; Repeatability and testability of Linux platform installations</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section>
+  <h1>About me</h1>
+  <ul id="my_info">
+      <li class="gravator">
+				<img src="http://www.gravatar.com/avatar/3d00c6d5e4c56164f44f1fc96a1027ef?s=150" alt="Gravatar of Bert Hajee " title="Gravatar of Bert Hajee" />
+      </li>
+      <li class="name">
+        <a href="/about">Bert Hajee</a>
+      </li>
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/puppet-building-blocks/">Puppet building blocks</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations/">Repeatability and testability of Linux platform installations</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hajee">@hajee</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hajee',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Bert Hajee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'berthajee';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://yoursite.com/blog/2014/01/01/puppet-building-blocks/';
+        var disqus_url = 'http://yoursite.com/blog/2014/01/01/puppet-building-blocks/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/javascripts/aharris.js"></script>
+
+</body>
+</html>

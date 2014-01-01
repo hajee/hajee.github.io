@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>
+            http://yoursite.com/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations/
+        </loc>
+        <lastmod>2014-01-01T22:05:09+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://yoursite.com/blog/2014/01/01/puppet-building-blocks/</loc>
+        <lastmod>2014-01-01T22:30:24+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://yoursite.com/about/</loc>
+        <lastmod>2014-01-01T23:13:33+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://yoursite.com/blog/archives/</loc>
+        <lastmod>2014-01-01T23:13:33+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://yoursite.com/</loc>
+        <lastmod>2014-01-01T22:30:24+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://yoursite.com/robots.txt</loc>
+        <lastmod>2014-01-01T20:13:02+01:00</lastmod>
+    </url>
+</urlset>
