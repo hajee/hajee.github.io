@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: puppet | People & Software]]></title>
-  <link href="http://yoursite.com/blog/categories/puppet/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2014-01-01T23:31:30+01:00</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://hajee.github.io/blog/categories/puppet/atom.xml" rel="self"/>
+  <link href="http://hajee.github.io/"/>
+  <updated>2014-01-01T23:38:02+01:00</updated>
+  <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Puppet building blocks]]></title>
-    <link href="http://yoursite.com/blog/2014/01/01/puppet-building-blocks/"/>
+    <link href="http://hajee.github.io/blog/2014/01/01/puppet-building-blocks/"/>
     <updated>2014-01-01T20:14:10+01:00</updated>
-    <id>http://yoursite.com/blog/2014/01/01/puppet-building-blocks</id>
+    <id>http://hajee.github.io/blog/2014/01/01/puppet-building-blocks</id>
     <content type="html"><![CDATA[<p>In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.</p>
 
 <p>In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it&rsquo;s detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.</p>
@@ -73,9 +73,9 @@
   
   <entry>
     <title type="html"><![CDATA[Repeatability and testability of Linux platform installations]]></title>
-    <link href="http://yoursite.com/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations/"/>
+    <link href="http://hajee.github.io/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations/"/>
     <updated>2014-01-01T20:13:45+01:00</updated>
-    <id>http://yoursite.com/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations</id>
+    <id>http://hajee.github.io/blog/2014/01/01/repeatability-and-testability-of-linux-platform-installations</id>
     <content type="html"><![CDATA[<p>While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
 In the next month, I will post a series of blog posts on our experiences.</p>
 
