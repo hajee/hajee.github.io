@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-02T10:04:28+01:00</updated>
+  <updated>2014-01-02T23:35:41+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -18,56 +18,54 @@
     <link href="http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/"/>
     <updated>2013-12-30T20:14:10+01:00</updated>
     <id>http://hajee.github.io/blog/2013/12/30/puppet-building-blocks</id>
-    <content type="html"><![CDATA[<p>In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.</p>
+    <content type="html"><![CDATA[In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.
 
-<p>In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it&rsquo;s detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.</p>
+In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it's detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.
 
 <!-- more -->
 
+##The resource type
+Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the `File` type.
 
-<h2>The resource type</h2>
+```ruby
 
-<p>Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the <code>File</code> type.</p>
-
-<p>```ruby</p>
-
-<p>file {&lsquo;/application/config.xml&rsquo;:
-  ensure    => present,
-  content   => &lsquo;<xml>just some config file</xml>&rsquo;,
+file {'/application/config.xml':
+  ensure	=> present,
+  content	=> '<xml>just some config file</xml>',
 }
-```</p>
+```
 
-<p>besides the <code>File</code> type, there are types for managing <code>Users</code>, <code>Groups</code>, <code>Services</code> and so on. Actually Puppet has a lot of built-in types. If you look at <a href="http://docs.puppetlabs.com/references/latest/type.html">type documentation</a> on the puppet site,you see a list of 48 built-in types.</p>
+besides the `File` type, there are types for managing `Users`, `Groups`, `Services` and so on. Actually Puppet has a lot of built-in types. If you look at [type documentation](http://docs.puppetlabs.com/references/latest/type.html) on the puppet site,you see a list of 48 built-in types.
 
-<p><img src="/images/list_of_types.png" title="List of built-in types" ></p>
+<img src="/images/list_of_types.png" title="List of built-in types" >
 
-<p>A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism&rsquo;s to define structured sets of resources on a system. These are the <code>class</code> and the <code>defined resource</code>.</p>
+A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`.
 
-<p>A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism&rsquo;s to define structured sets of resources on a system. These are the <code>class</code> and the <code>defined resource</code>.</p>
+A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`. 
 
-<h2>The class</h2>
 
-<p><a href="http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html">The Puppet documentation for classes</a> states:</p>
+##The class
+[The Puppet documentation for classes](http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html) states:
 
-<p><blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node&rsquo;s catalog) with the include function or a resource-like syntax.</p></blockquote></p>
+<blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node's catalog) with the include function or a resource-like syntax.</p></blockquote>
 
-<p>Quite some definition. In layman&rsquo;s terms, though a Puppet class is a way of structuring resources into a building block. The class <a href="https://forge.puppetlabs.com/puppetlabs/apache">apache</a>, for example, contains all resources needed to install, configure and run an apache https daemon on your system.</p>
+Quite some definition. In layman's terms, though a Puppet class is a way of structuring resources into a building block. The class [apache](https://forge.puppetlabs.com/puppetlabs/apache), for example, contains all resources needed to install, configure and run an apache https daemon on your system.
 
-<h2>The defined resource</h2>
 
-<p><a href="http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html">The Puppet documentation for defined types</a> states:</p>
+##The defined resource
+[The Puppet documentation for defined types](http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html) states:
 
-<p><blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p></p><p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote></p>
+<blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote>
 
-<p>As you can see in the definition, just like the <code>class</code>, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a <code>class</code>and a  defined type is that a <code>class</code>may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.</p>
+As you can see in the definition, just like the `class`, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a `class`and a  defined type is that a `class`may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.
 
-<h2>The custom type</h2>
 
-<p>While the <code>class</code> and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the <code>types</code> needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.</p>
+##The custom type
+While the `class` and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the `types` needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.
 
-<h2>Next time</h2>
 
-<p>This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.</p>
+##Next time
+This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.
 ]]></content>
   </entry>
   
@@ -76,22 +74,61 @@
     <link href="http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations/"/>
     <updated>2013-12-28T20:13:45+01:00</updated>
     <id>http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations</id>
-    <content type="html"><![CDATA[<p>While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
-In the next month, I will post a series of blog posts on our experiences.</p>
+    <content type="html"><![CDATA[While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
+In the next month, I will post a series of blog posts on our experiences.
 
 <!-- more -->
 
+* Using RSpec to test our Linux, Oracle and WebLogic installations
+* Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS
+* Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.
+* Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.
 
-<ul>
-<li>Using RSpec to test our Linux, Oracle and WebLogic installations</li>
-<li>Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS</li>
-<li>Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.</li>
-<li>Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.</li>
-</ul>
+The blog posts won't necessary be in the above order.]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Visualize your continuous deployment maturity]]></title>
+    <link href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
+    <updated>2013-10-02T17:15:13+02:00</updated>
+    <id>http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity</id>
+    <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.
+
+<!-- more -->
+
+In their 2010 seminal work ["Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) [Jez Humble](http://jezhumble.net/) and [David Farley](http://www.davefarley.net/) described a maturity model for continuous delivery. The goal of this model was to assess the gap between where you are and where you want to be and help to define the steps you need to take to go there.
+
+The model identifies six main area's of interest:
+
+* Build management and continuous integration
+* Environments and deployments
+* Release management and compliance
+* Testing
+* Data management
+* Configuration management
 
 
-<p>The blog posts won&rsquo;t necessary be in the above order.</p>
-]]></content>
+Each of these area's must be at a certain level to be able to achieve the benefits of continuous delivery. One of the key points for increasing your continuous delivery performance is to make well-balanced steps. It doesn't really help if your build management is top notch 100%, but you don't have any automated testing. Value comes when you increase the level of maturity evenly over all six focus area's.
+
+<img src="/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" >
+
+The picture shows a method to make these levels visual. This really helps in discussions with stakeholders in finding out where you are and where you need to go. Based on the graph above, you can see that it's best to work on improvements in data management and configuration management before you start to address other area's.
+
+#What's the scale?
+
+In the model, they describe the following 5 levels:
+
+0. Regressive
+1. Repeatable
+2. Consistent
+3. Quantitatively managed
+4. Optimizing
+
+These levels are loosely based on the levels defined by the [Capability Maturity Model](http://en.wikipedia.org/wiki/Capability_Maturity_Model) originally from the [Carnegie Mellon Software Engineering Institute (SEI)](http://www.sei.cmu.edu/). The higher the number the better you are.
+
+##What's next?
+
+In the [next blog post](/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
   </entry>
   
 </feed>

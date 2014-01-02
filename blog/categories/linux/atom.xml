@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-02T10:04:28+01:00</updated>
+  <updated>2014-01-02T23:35:41+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -18,22 +18,17 @@
     <link href="http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations/"/>
     <updated>2013-12-28T20:13:45+01:00</updated>
     <id>http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations</id>
-    <content type="html"><![CDATA[<p>While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
-In the next month, I will post a series of blog posts on our experiences.</p>
+    <content type="html"><![CDATA[While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
+In the next month, I will post a series of blog posts on our experiences.
 
 <!-- more -->
 
+* Using RSpec to test our Linux, Oracle and WebLogic installations
+* Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS
+* Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.
+* Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.
 
-<ul>
-<li>Using RSpec to test our Linux, Oracle and WebLogic installations</li>
-<li>Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS</li>
-<li>Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.</li>
-<li>Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.</li>
-</ul>
-
-
-<p>The blog posts won&rsquo;t necessary be in the above order.</p>
-]]></content>
+The blog posts won't necessary be in the above order.]]></content>
   </entry>
   
 </feed>

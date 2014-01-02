@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>About Bert Hajee - People & Software</title>
+  <title>Visualize your continuous deployment maturity - People & Software</title>
   <meta name="author" content="Bert Hajee">
 
   
-  <meta name="description" content="About Bert Hajee Me My name is Bert Hajee. I&rsquo;m a IT Project manager and consultant. I&rsquo;m specialised in bridging the gap between highly &hellip;">
+  <meta name="description" content="Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the stories of Facebook deploying &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/about/">
+  <link rel="canonical" href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -55,48 +55,108 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">About Bert Hajee</h1>
+    
+      <h1 class="entry-title">Visualize Your Continuous Deployment Maturity</h1>
     
   </header>
+
+
+
+
+<span class="categories">
   
-  <h1>Me</h1>
-
-<p>My name is Bert Hajee. I&rsquo;m a IT Project manager and consultant. I&rsquo;m specialised in bridging the gap between highly technical stuff and management.</p>
-
-<h1>My Intrests</h1>
-
-<p>My main area&rsquo;s of interest are:
-* software development: from idea to running application
-* IT infrastructure: making and keeping it running</p>
-
-<h1>My experience</h1>
-
-<p>In the past and present I&rsquo;ve been on assignment at numerous large companies and government organisations. See my <a href="http://nl.linkedin.com/in/hajee/">linked in profile</a> for more information.</p>
-
-<h1>Contact Information</h1>
-
-<p>You can reach me at:
-email: <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x68;&#x61;&#x6a;&#x65;&#101;&#64;&#109;&#111;&#x72;&#101;&#x74;&#73;&#65;&#46;&#99;&#111;&#109;">&#104;&#97;&#x6a;&#x65;&#101;&#x40;&#109;&#x6f;&#114;&#101;&#116;&#x49;&#65;&#46;&#99;&#x6f;&#x6d;</a>
-twitter: bhajee</p>
-
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/method/'>method</a>, <a class='category' href='/blog/categories/visualize/'>visualize</a>
   
-    <footer>
+</span>
+
+
+<div class="entry-content"><p>Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the <a href="https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920">stories of Facebook deploying multiple times per day</a>. The stories of <a href="http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/">The Guardian</a> and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.</p>
+
+<!-- more -->
+
+
+<p>In their 2010 seminal work <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;Continuous Delivery&rdquo;</a> <a href="http://jezhumble.net/">Jez Humble</a> and <a href="http://www.davefarley.net/">David Farley</a> described a maturity model for continuous delivery. The goal of this model was to assess the gap between where you are and where you want to be and help to define the steps you need to take to go there.</p>
+
+<p>The model identifies six main area&rsquo;s of interest:</p>
+
+<ul>
+<li>Build management and continuous integration</li>
+<li>Environments and deployments</li>
+<li>Release management and compliance</li>
+<li>Testing</li>
+<li>Data management</li>
+<li>Configuration management</li>
+</ul>
+
+
+<p>Each of these area&rsquo;s must be at a certain level to be able to achieve the benefits of continuous delivery. One of the key points for increasing your continuous delivery performance is to make well-balanced steps. It doesn&rsquo;t really help if your build management is top notch 100%, but you don&rsquo;t have any automated testing. Value comes when you increase the level of maturity evenly over all six focus area&rsquo;s.</p>
+
+<p><img src="/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" ></p>
+
+<p>The picture shows a method to make these levels visual. This really helps in discussions with stakeholders in finding out where you are and where you need to go. Based on the graph above, you can see that it&rsquo;s best to work on improvements in data management and configuration management before you start to address other area&rsquo;s.</p>
+
+<h1>What&rsquo;s the scale?</h1>
+
+<p>In the model, they describe the following 5 levels:</p>
+
+<ol>
+<li>Regressive</li>
+<li>Repeatable</li>
+<li>Consistent</li>
+<li>Quantitatively managed</li>
+<li>Optimizing</li>
+</ol>
+
+
+<p>These levels are loosely based on the levels defined by the <a href="http://en.wikipedia.org/wiki/Capability_Maturity_Model">Capability Maturity Model</a> originally from the <a href="http://www.sei.cmu.edu/">Carnegie Mellon Software Engineering Institute (SEI)</a>. The higher the number the better you are.</p>
+
+<h2>What&rsquo;s next?</h2>
+
+<p>In the <a href="/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/">next blog post</a>, I will dig deeper into the six main area&rsquo;s of interest.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-      
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/about/index.html" data-via="bhajee" data-counturl="http://hajee.github.io/about/index.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">Bert Hajee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-02T17:15:13+02:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/" data-via="bhajee" data-counturl="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/" >Tweet</a>
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+      
+        <a class="basic-alignment right" href="/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/" title="Next Post: Levels of maturity for continuous deployment">Levels of maturity for continuous deployment &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
   <section>
@@ -197,8 +257,8 @@ twitter: bhajee</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://hajee.github.io/about/index.html';
-        var disqus_url = 'http://hajee.github.io/about/index.html';
+        var disqus_identifier = 'http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/';
+        var disqus_url = 'http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/';
         var disqus_script = 'embed.js';
       
     (function () {

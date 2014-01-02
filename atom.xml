@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-02T10:04:28+01:00</updated>
+  <updated>2014-01-02T23:35:41+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -95,6 +95,95 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 
 
 <p>The blog posts won&rsquo;t necessary be in the above order.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Levels of maturity for continuous deployment]]></title>
+    <link href="http://hajee.github.io/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/"/>
+    <updated>2013-10-12T22:25:10+02:00</updated>
+    <id>http://hajee.github.io/blog/2013/10/12/levels-of-maturity-for-continuous-deployment</id>
+    <content type="html"><![CDATA[<p>In <a href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/">my last blog post</a>, I showed a way to visualize the level of maturity for the six interest area&rsquo;s of continuous development. In this blog post,  I will dig deeper into what the areas of interest are.</p>
+
+<!-- more -->
+
+
+<h2>The area&rsquo;s of interest</h2>
+
+<h3>Build management and continuous integration</h3>
+
+<p>Build management are all processes and tools we need to ensure that ,at any point in time, we can build a specific version of our software. Besides being able to build it, we also need to ensure that is works. To do this, we need a set of (preferably automated) unit-tests. To be able, to quickly see the impact of source code changes, at least every night a build must be done.</p>
+
+<h3>Environments and deployments</h3>
+
+<p>To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests. It is cheap (meaning automated) to get a new environment for testing. Systems provisioning and application deployments are all automated. Also, there needs to be a way to automatically roll back to a previous well known working system state.</p>
+
+<h3>Release management and compliance</h3>
+
+<p>Besides all sorts of tooling stuff, processes must be in place. There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.</p>
+
+<h3>Testing</h3>
+
+<p>To be able to do continuous delivery, testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario&rsquo;s written by testers and business representatives in cooperation. Not only functional tests need te be automated, there needs to be some sort of mechanism te check non-functional requirements like, for example, response times</p>
+
+<h3>Data management</h3>
+
+<p>While most automated installation scripts focus on provisioning the software. The data in the database is just as important. Therefore, you need to have automated the way you change your data model and also the configuration data inside the database.</p>
+
+<h3>Configuration management</h3>
+
+<p>To be able to get built every version in time at any moment,  we need source code management tools like <a href="http://git-scm.com/">git</a> or <a href="Apache%20Subversion">subversion</a>. All components needed to get the software working, must be under this regime of version control. This includes the libraries and all database changes.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Visualize your continuous deployment maturity]]></title>
+    <link href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
+    <updated>2013-10-02T17:15:13+02:00</updated>
+    <id>http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity</id>
+    <content type="html"><![CDATA[<p>Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the <a href="https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920">stories of Facebook deploying multiple times per day</a>. The stories of <a href="http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/">The Guardian</a> and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.</p>
+
+<!-- more -->
+
+
+<p>In their 2010 seminal work <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;Continuous Delivery&rdquo;</a> <a href="http://jezhumble.net/">Jez Humble</a> and <a href="http://www.davefarley.net/">David Farley</a> described a maturity model for continuous delivery. The goal of this model was to assess the gap between where you are and where you want to be and help to define the steps you need to take to go there.</p>
+
+<p>The model identifies six main area&rsquo;s of interest:</p>
+
+<ul>
+<li>Build management and continuous integration</li>
+<li>Environments and deployments</li>
+<li>Release management and compliance</li>
+<li>Testing</li>
+<li>Data management</li>
+<li>Configuration management</li>
+</ul>
+
+
+<p>Each of these area&rsquo;s must be at a certain level to be able to achieve the benefits of continuous delivery. One of the key points for increasing your continuous delivery performance is to make well-balanced steps. It doesn&rsquo;t really help if your build management is top notch 100%, but you don&rsquo;t have any automated testing. Value comes when you increase the level of maturity evenly over all six focus area&rsquo;s.</p>
+
+<p><img src="http://hajee.github.io/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" ></p>
+
+<p>The picture shows a method to make these levels visual. This really helps in discussions with stakeholders in finding out where you are and where you need to go. Based on the graph above, you can see that it&rsquo;s best to work on improvements in data management and configuration management before you start to address other area&rsquo;s.</p>
+
+<h1>What&rsquo;s the scale?</h1>
+
+<p>In the model, they describe the following 5 levels:</p>
+
+<ol>
+<li>Regressive</li>
+<li>Repeatable</li>
+<li>Consistent</li>
+<li>Quantitatively managed</li>
+<li>Optimizing</li>
+</ol>
+
+
+<p>These levels are loosely based on the levels defined by the <a href="http://en.wikipedia.org/wiki/Capability_Maturity_Model">Capability Maturity Model</a> originally from the <a href="http://www.sei.cmu.edu/">Carnegie Mellon Software Engineering Institute (SEI)</a>. The higher the number the better you are.</p>
+
+<h2>What&rsquo;s next?</h2>
+
+<p>In the <a href="http://hajee.github.io/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/">next blog post</a>, I will dig deeper into the six main area&rsquo;s of interest.</p>
 ]]></content>
   </entry>
   
