@@ -1,0 +1,13 @@
+{% if site.gravatar_email %}
+<section>
+  <h1>About me</h1>
+  <ul id="my_info">
+      <li class="gravator">
+				<img src="{% gravatar_image 150 %}" alt="Gravatar of {{ site.author}} " title="Gravatar of {{ site.author }}" />
+      </li>
+      <li class="name">
+        <a href="/about">Bert Hajee</a>
+      </li>
+  </ul>
+</section>
+{% endif %}
