@@ -4,20 +4,20 @@
   <title><![CDATA[Category: visualize | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/visualize/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-02T23:35:41+01:00</updated>
+  <updated>2014-01-03T22:26:03+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
-    
+    <email><![CDATA[hajee@moretIA.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Visualize your continuous deployment maturity]]></title>
-    <link href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
+    <link href="http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
     <updated>2013-10-02T17:15:13+02:00</updated>
-    <id>http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity</id>
+    <id>http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity</id>
     <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.
 
 <!-- more -->
@@ -54,7 +54,7 @@ These levels are loosely based on the levels defined by the [Capability Maturity
 
 ##What's next?
 
-In the [next blog post](/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
+In the [next blog post](/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
   </entry>
   
 </feed>

@@ -9,8 +9,8 @@
   <meta name="author" content="Bert Hajee">
 
   
-  <meta name="description" content="In this blog post, I will look into Puppet and describe the building blocks Puppet uses. In Puppet, you describe how your system should be configured &hellip;">
-  
+  <meta name="description" content="A description of the main Puppet building blocks">
+  <meta name="keywords" content="devops, puppet, continiuous deployment, continiuous integration">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/">
+  <link rel="canonical" href="http://hajee.github.io/2013/12/30/puppet-building-blocks/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -52,6 +52,14 @@
 </hgroup>
 
 </header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="http://feeds.feedburner.com/PeopleSoftware" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+
+</nav>
   <div id="main">
     <div id="content">
       <div>
@@ -68,7 +76,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/deployment/'>deployment</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/puppet-method/'>puppet;, method</a>
   
 </span>
 
@@ -155,7 +163,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/" data-via="bhajee" data-counturl="http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2013/12/30/puppet-building-blocks/" data-via="bhajee" data-counturl="http://hajee.github.io/2013/12/30/puppet-building-blocks/" >Tweet</a>
   
   
   
@@ -164,8 +172,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations/" title="Previous Post: Repeatability and testability of Linux platform installations">&laquo; Repeatability and testability of Linux platform installations</a>
+        <a class="basic-alignment left" href="/2013/12/28/repeatability-and-testability-of-linux-platform-installations/" title="Previous Post: Repeatability and testability of Linux platform installations">&laquo; Repeatability and testability of Linux platform installations</a>
       
+      
+        <a class="basic-alignment right" href="/2014/01/02/what-to-change/" title="Next Post: Want easier deployments?">Want easier deployments? &raquo;</a>
       
     </p>
   </footer>
@@ -199,19 +209,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/12/30/puppet-building-blocks/">Puppet building blocks</a>
+        <a href="/2014/01/02/what-to-change/">Want easier deployments?</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations/">Repeatability and testability of Linux platform installations</a>
+        <a href="/2013/12/30/puppet-building-blocks/">Puppet building blocks</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/">Levels of maturity for continuous deployment</a>
+        <a href="/2013/12/28/repeatability-and-testability-of-linux-platform-installations/">Repeatability and testability of Linux platform installations</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/02/visualize-your-continuous-deployment-maturity/">Visualize your continuous deployment maturity</a>
+        <a href="/2013/10/12/levels-of-maturity-for-continuous-deployment/">Levels of maturity for continuous deployment</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">Visualize your continuous deployment maturity</a>
       </li>
     
   </ul>
@@ -265,12 +279,12 @@
   
 
 <script type="text/javascript">
-      var disqus_shortname = 'berthajee';
+      var disqus_shortname = 'hajee';
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/';
-        var disqus_url = 'http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/';
+        var disqus_identifier = 'http://hajee.github.io/2013/12/30/puppet-building-blocks/';
+        var disqus_url = 'http://hajee.github.io/2013/12/30/puppet-building-blocks/';
         var disqus_script = 'embed.js';
       
     (function () {

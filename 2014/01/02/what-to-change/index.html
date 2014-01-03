@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: visualize - People & Software</title>
+  <title>Want easier deployments? - People & Software</title>
   <meta name="author" content="Bert Hajee">
 
   
-  <meta name="description" content="Category: visualize">
-  
+  <meta name="description" content="How to get the discussions started about faster and more deployments">
+  <meta name="keywords" content="devops, continiuous deployment, continiuous integration">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.ioblog/categories/visualize/">
+  <link rel="canonical" href="http://hajee.github.io/2014/01/02/what-to-change/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,36 +63,104 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Visualize</h1>
+    
+      <h1 class="entry-title">Want Easier Deployments?</h1>
     
   </header>
+
+
+
+
+<span class="categories">
   
-  <div id="blog-archives" class="category">
-
-
-
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/method/'>method</a>
   
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">Visualize your continuous deployment maturity</a></h1>
-<time datetime="2013-10-02T17:15:13+02:00" pubdate><span class='month'>Oct</span> <span class='day'>02</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories"><a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/visualize/'>visualize</a></span>
-</footer>
+</span>
 
 
-</article>
+<div class="entry-content"><p>Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the <a href="https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920">stories of Facebook deploying multiple times per day</a>. The stories of <a href="http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/">The Guardian</a> and many many more. If after reading these stories you feel like you want to move from your current one deployment per 3 month strategy to a more agile method, but have don&rsquo;t know where to start. This blog post might be of assistance.</p>
 
+<!-- more -->
+
+
+<p>In their 2010 seminal work <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;Continuous Delivery&rdquo;</a> <a href="http://jezhumble.net/">Jez Humble</a> and <a href="http://www.davefarley.net/">David Farley</a> described a maturity model for continious delivery. The goal of this model was to asses the gap between where you are and where you want to be and help to define the steps you need to take to go there.</p>
+
+<h1>What to measure?</h1>
+
+<h1>What&rsquo;s the scale</h1>
+
+<p>In the model they describe the following 5 levels.</p>
+
+<h3>initial</h3>
+
+<p>There is no process for releasing and delivering software. A new deployment becomes a intensive event whith a lot of oportunaty to fail. A succesful deployment is a victory.</p>
+
+<h3>managed</h3>
+
+<p>When you are at this level, some stuff is beeing take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans.Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document.</p>
+
+<h3>defined</h3>
+
+<p>There are automated tests at a sufficent level to detected critical errrors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.</p>
+
+<h3>optimizing</h3>
+
+<p>The testting and deployment is fully automated and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are cought in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments.</p>
+
+<h3>quantitatively managed</h3>
+
+<p>Systems are architected with continuous deployment in mind. All new requirements describe how the value of the feature will be measured in production.Metrics are gathered through techniques such as A/B testing to validate the value is actualy beeing delivered like expected.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Bert Hajee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-02T16:15:13+01:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2014</time>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2014/01/02/what-to-change/" data-via="bhajee" data-counturl="http://hajee.github.io/2014/01/02/what-to-change/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2013/12/30/puppet-building-blocks/" title="Previous Post: Puppet building blocks">&laquo; Puppet building blocks</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -189,7 +257,10 @@
       var disqus_shortname = 'hajee';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hajee.github.io/2014/01/02/what-to-change/';
+        var disqus_url = 'http://hajee.github.io/2014/01/02/what-to-change/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

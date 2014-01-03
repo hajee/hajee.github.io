@@ -4,20 +4,54 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-02T23:35:41+01:00</updated>
+  <updated>2014-01-03T22:26:03+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
-    
+    <email><![CDATA[hajee@moretIA.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
+    <title type="html"><![CDATA[Want easier deployments?]]></title>
+    <link href="http://hajee.github.io/2014/01/02/what-to-change/"/>
+    <updated>2014-01-02T16:15:13+01:00</updated>
+    <id>http://hajee.github.io/2014/01/02/what-to-change</id>
+    <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many many more. If after reading these stories you feel like you want to move from your current one deployment per 3 month strategy to a more agile method, but have don't know where to start. This blog post might be of assistance.
+
+<!-- more -->
+In their 2010 seminal work ["Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) [Jez Humble](http://jezhumble.net/) and [David Farley](http://www.davefarley.net/) described a maturity model for continious delivery. The goal of this model was to asses the gap between where you are and where you want to be and help to define the steps you need to take to go there.
+
+#What to measure?
+
+
+#What's the scale
+In the model they describe the following 5 levels.
+
+###initial
+There is no process for releasing and delivering software. A new deployment becomes a intensive event whith a lot of oportunaty to fail. A succesful deployment is a victory. 
+
+###managed
+When you are at this level, some stuff is beeing take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans.Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document.
+
+###defined
+There are automated tests at a sufficent level to detected critical errrors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.
+
+###optimizing
+The testting and deployment is fully automated and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are cought in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments. 
+
+###quantitatively managed
+Systems are architected with continuous deployment in mind. All new requirements describe how the value of the feature will be measured in production.Metrics are gathered through techniques such as A/B testing to validate the value is actualy beeing delivered like expected. 
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Puppet building blocks]]></title>
-    <link href="http://hajee.github.io/blog/2013/12/30/puppet-building-blocks/"/>
+    <link href="http://hajee.github.io/2013/12/30/puppet-building-blocks/"/>
     <updated>2013-12-30T20:14:10+01:00</updated>
-    <id>http://hajee.github.io/blog/2013/12/30/puppet-building-blocks</id>
+    <id>http://hajee.github.io/2013/12/30/puppet-building-blocks</id>
     <content type="html"><![CDATA[In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.
 
 In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it's detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.
@@ -71,9 +105,9 @@ This concludes our small introduction into the Puppet building blocks. Next time
   
   <entry>
     <title type="html"><![CDATA[Repeatability and testability of Linux platform installations]]></title>
-    <link href="http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations/"/>
+    <link href="http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/"/>
     <updated>2013-12-28T20:13:45+01:00</updated>
-    <id>http://hajee.github.io/blog/2013/12/28/repeatability-and-testability-of-linux-platform-installations</id>
+    <id>http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations</id>
     <content type="html"><![CDATA[While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
 In the next month, I will post a series of blog posts on our experiences.
 
@@ -88,10 +122,46 @@ The blog posts won't necessary be in the above order.]]></content>
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Levels of maturity for continuous deployment]]></title>
+    <link href="http://hajee.github.io/2013/10/12/levels-of-maturity-for-continuous-deployment/"/>
+    <updated>2013-10-12T22:25:10+02:00</updated>
+    <id>http://hajee.github.io/2013/10/12/levels-of-maturity-for-continuous-deployment</id>
+    <content type="html"><![CDATA[In [my last blog post](/2013/10/02/visualize-your-continuous-deployment-maturity/), I showed a way to visualize the level of maturity for the six interest area's of continuous delivery. In this blog post,  I will dig deeper into what the areas of interest are.
+
+<!-- more -->
+
+##The area's of interest
+
+###Build management and continuous integration
+Build management are all processes and tools we need to ensure that ,at any point in time, we can build a specific version of our software. Besides being able to build it, we also need to ensure that is works. To do this, we need a set of (preferably automated) unit-tests. To be able, to quickly see the impact of source code changes, at least every night a build must be done.
+
+###Environments and deployments
+To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests. It is cheap (meaning automated) to get a new environment for testing. Systems provisioning and application deployments are all automated. Also, there needs to be a way to automatically roll back to a previous well known working system state.
+
+###Release management and compliance
+
+Besides all sorts of tooling stuff, processes must be in place. There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.
+
+###Testing
+
+To be able to do continuous delivery, testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario's written by testers and business representatives in cooperation. Not only functional tests need te be automated, there needs to be some sort of mechanism te check non-functional requirements like, for example, response times
+
+###Data management
+
+While most automated installation scripts focus on provisioning the software. The data in the database is just as important. Therefore, you need to have automated the way you change your data model and also the configuration data inside the database.
+
+###Configuration management
+
+To be able to get built every version in time at any moment,  we need source code management tools like [git](http://git-scm.com/) or [subversion](Apache Subversion). All components needed to get the software working, must be under this regime of version control. This includes the libraries and all database changes.
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Visualize your continuous deployment maturity]]></title>
-    <link href="http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
+    <link href="http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
     <updated>2013-10-02T17:15:13+02:00</updated>
-    <id>http://hajee.github.io/blog/2013/10/02/visualize-your-continuous-deployment-maturity</id>
+    <id>http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity</id>
     <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.
 
 <!-- more -->
@@ -128,7 +198,7 @@ These levels are loosely based on the levels defined by the [Capability Maturity
 
 ##What's next?
 
-In the [next blog post](/blog/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
+In the [next blog post](/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
   </entry>
   
 </feed>
