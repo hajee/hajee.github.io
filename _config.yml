@@ -7,8 +7,8 @@ title: People & Software
 subtitle: My ramblings on people using software
 author: Bert Hajee
 simple_search: http://google.com/search
-description:
-
+description: Blog about people using software and software for people
+keywords: ruby,ruby on rails,rspec, puppet, continuous deployment, continouos delivery, continouos integration, testing
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
 # http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime
@@ -17,9 +17,9 @@ date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
-subscribe_email:
+subscribe_email: http://feeds.feedburner.com/PeopleSoftware
 # RSS feeds can list your email address if you like
-email:
+email: hajee@moretIA.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -27,7 +27,7 @@ email:
 
 # If publishing to a subdirectory as in http://site.com/project set 'root: /project'
 root: /
-permalink: /blog/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
 source: source
 destination: public
 plugins: plugins
@@ -65,9 +65,9 @@ gravatar_email: hajee@moretIA.com
 
 # Github repositories
 github_user: hajee
-github_repo_count: 4
+github_repo_count: 5
 github_show_profile_link: true
-github_skip_forks: true
+github_skip_forks: false
 
 # Twitter
 twitter_user: bhajee
@@ -91,7 +91,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: berthajee
+disqus_short_name: hajee
 disqus_show_comment_count: false
 
 # Google Analytics

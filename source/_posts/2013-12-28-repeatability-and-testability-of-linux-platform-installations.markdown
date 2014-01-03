@@ -1,9 +1,10 @@
 ---
 layout: post
 title: "Repeatability and testability of Linux platform installations"
-date: 2014-01-01 20:13:45 +0100
+date: 2013-12-28 20:13:45 +0100
 comments: true
-categories: linux testing rspec puppet devops
+categories: ['linux', 'testing','rspec', 'puppet','devops', 'deployment']
+keyword: linux, rspec, testing, devops, deployment
 ---
 While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
 In the next month, I will post a series of blog posts on our experiences.
