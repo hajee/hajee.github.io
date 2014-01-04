@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-04T15:20:21+01:00</updated>
+  <updated>2014-01-04T15:48:14+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -112,7 +112,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 
 <h1>The Five maturity levels</h1>
 
-<p>In the model,  they describe the following five levels.</p>
+<p>In the model, they describe the following five levels.</p>
 
 <ol>
 <li>Regressive</li>
@@ -122,6 +122,8 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 <li>Optimizing</li>
 </ol>
 
+
+<p><img src="http://hajee.github.io/images/maturity-levels.png" title="The levels of maturity" ></p>
 
 <h3>Regressive</h3>
 

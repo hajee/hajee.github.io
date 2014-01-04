@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-04T15:20:21+01:00</updated>
+  <updated>2014-01-04T15:48:14+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -100,13 +100,16 @@ Like I told in the previous blog posts, this information is based on the book ["
 
 #The Five maturity levels
 
-In the model,  they describe the following five levels.
+In the model, they describe the following five levels.
 
 0. Regressive
 1. Repeatable
 2. Consistent
 3. Quantitatively managed
 4. Optimizing
+
+<img src="/images/maturity-levels.png" title="The levels of maturity" >
+
 
 ### Regressive
 
