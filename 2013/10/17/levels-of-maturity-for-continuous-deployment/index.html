@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Want easier deployments? - People & Software</title>
+  <title>On your way to easier deployments? - People & Software</title>
   <meta name="author" content="Bert Hajee">
   <meta name="twitter:widgets:csp" content="on">
 
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/2014/01/02/what-to-change/">
+  <link rel="canonical" href="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Want Easier Deployments?</h1>
+      <h1 class="entry-title">On Your Way to Easier Deployments?</h1>
     
   </header>
 
@@ -82,38 +82,45 @@
 </span>
 
 
-<div class="entry-content"><p>Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the <a href="https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920">stories of Facebook deploying multiple times per day</a>. The stories of <a href="http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/">The Guardian</a> and many many more. If after reading these stories you feel like you want to move from your current one deployment per 3 month strategy to a more agile method, but have don&rsquo;t know where to start. This blog post might be of assistance.</p>
+<div class="entry-content"><p>In <a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">my last blog post</a>, I described the main area&rsquo;s of interest to work on to get faster and easier deployments. For every area,  the level of maturity may be different. In this blog post,  I will dive deeper in the levels of maturity and what they mean.</p>
 
 <!-- more -->
 
 
-<p>In their 2010 seminal work <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;Continuous Delivery&rdquo;</a> <a href="http://jezhumble.net/">Jez Humble</a> and <a href="http://www.davefarley.net/">David Farley</a> described a maturity model for continious delivery. The goal of this model was to asses the gap between where you are and where you want to be and help to define the steps you need to take to go there.</p>
+<p>Like I told in the previous blog posts, this information is based on the book <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;Continuous Delivery&rdquo;</a> by <a href="http://jezhumble.net/">Jez Humble</a> and <a href="http://www.davefarley.net/">David Farley</a></p>
 
-<h1>What to measure?</h1>
+<h1>The Five maturity levels</h1>
 
-<h1>What&rsquo;s the scale</h1>
+<p>In the model,  they describe the following five levels.</p>
 
-<p>In the model they describe the following 5 levels.</p>
+<ol>
+<li>Regressive</li>
+<li>Repeatable</li>
+<li>Consistent</li>
+<li>Quantitatively managed</li>
+<li>Optimizing</li>
+</ol>
 
-<h3>initial</h3>
 
-<p>There is no process for releasing and delivering software. A new deployment becomes a intensive event whith a lot of oportunaty to fail. A succesful deployment is a victory.</p>
+<h3>Regressive</h3>
 
-<h3>managed</h3>
+<p>There is no process for releasing and delivering software. A new deployment becomes an intensive event with a lot of opportunity to fail. A successful deployment is a victory. Although the number in the list says 1. In their book, Jez and David call the level -1. Minus because deployment is actually in the toddler stage.</p>
 
-<p>When you are at this level, some stuff is beeing take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans.Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document.</p>
+<h3>Repeatable</h3>
 
-<h3>defined</h3>
+<p>When you are at this level of maturity, some stuff is being take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans. Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document. In my view,  this is the minimum level at which you can rightfully claim you are doing <a href="http://en.wikipedia.org/wiki/Information_Technology_Infrastructure_Library#ITIL_V3">ITIL</a>. As you can see this is still much lower than the levels proposed in <a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">the book</a></p>
 
-<p>There are automated tests at a sufficent level to detected critical errrors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.</p>
+<h3>Consistent</h3>
 
-<h3>optimizing</h3>
-
-<p>The testting and deployment is fully automated and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are cought in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments.</p>
+<p>At this level of maturity,  you have a broad set of automated tests. The tests are  at a sufficient level to detected critical errors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.</p>
 
 <h3>quantitatively managed</h3>
 
-<p>Systems are architected with continuous deployment in mind. All new requirements describe how the value of the feature will be measured in production.Metrics are gathered through techniques such as A/B testing to validate the value is actualy beeing delivered like expected.</p>
+<p>The testing and deployment are fully automated, and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are caught in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments. The statistics of builds and deployments are tracked, and acted upon.</p>
+
+<h3>optimizing</h3>
+
+<p>At the final level, not only all processes and tools are in place, but the whole organisation around building, testing and deploying software is constantly improving. Teams regularly discuss the problems and fix them. Every deployment, whether it is in production or any test environment is a vehicle for improvement.</p>
 </div>
 
 
@@ -136,12 +143,12 @@
   
 
 
-<time datetime="2014-01-02T16:15:13+01:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2014</time>
+<time datetime="2013-10-17T17:15:13+02:00" pubdate data-updated="true">Oct 17<span>th</span>, 2013</time>
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2014/01/02/what-to-change/" data-via="bhajee" data-counturl="http://hajee.github.io/2014/01/02/what-to-change/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/" data-via="bhajee" data-counturl="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/" >Tweet</a>
   
   
   
@@ -152,8 +159,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2013/12/30/puppet-building-blocks/" title="Previous Post: Puppet building blocks">&laquo; Puppet building blocks</a>
+        <a class="basic-alignment left" href="/2013/10/12/areas-of-interest-to-realize-continuous-deployment/" title="Previous Post: Area's of interest for continuous deployment">&laquo; Area's of interest for continuous deployment</a>
       
+      
+        <a class="basic-alignment right" href="/2013/12/28/repeatability-and-testability-of-linux-platform-installations/" title="Next Post: Repeatability and testability of Linux platform installations">Repeatability and testability of Linux platform installations &raquo;</a>
       
     </p>
   </footer>
@@ -187,10 +196,6 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/2014/01/02/what-to-change/">Want easier deployments?</a>
-      </li>
-    
-      <li class="post">
         <a href="/2013/12/30/puppet-building-blocks/">Puppet building blocks</a>
       </li>
     
@@ -199,7 +204,11 @@
       </li>
     
       <li class="post">
-        <a href="/2013/10/12/levels-of-maturity-for-continuous-deployment/">Levels of maturity for continuous deployment</a>
+        <a href="/2013/10/17/levels-of-maturity-for-continuous-deployment/">On your way to easier deployments?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">Area's of interest for continuous deployment</a>
       </li>
     
       <li class="post">
@@ -261,8 +270,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://hajee.github.io/2014/01/02/what-to-change/';
-        var disqus_url = 'http://hajee.github.io/2014/01/02/what-to-change/';
+        var disqus_identifier = 'http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/';
+        var disqus_url = 'http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,11 +4,17 @@
         <loc>
             http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/
         </loc>
-        <lastmod>2014-01-03T21:46:00+01:00</lastmod>
+        <lastmod>2014-01-04T14:49:12+01:00</lastmod>
     </url>
     <url>
-        <loc>http://hajee.github.io/2013/10/12/levels-of-maturity-for-continuous-deployment/</loc>
-        <lastmod>2014-01-03T21:46:00+01:00</lastmod>
+        <loc>
+            http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/
+        </loc>
+        <lastmod>2014-01-04T14:43:55+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/</loc>
+        <lastmod>2014-01-04T15:20:08+01:00</lastmod>
     </url>
     <url>
         <loc>
@@ -21,10 +27,6 @@
         <lastmod>2014-01-04T10:30:07+01:00</lastmod>
     </url>
     <url>
-        <loc>http://hajee.github.io/2014/01/02/what-to-change/</loc>
-        <lastmod>2014-01-03T21:46:00+01:00</lastmod>
-    </url>
-    <url>
         <loc>http://hajee.github.io/404.html</loc>
         <lastmod>2014-01-04T14:18:59+01:00</lastmod>
     </url>
@@ -34,11 +36,11 @@
     </url>
     <url>
         <loc>http://hajee.github.io/blog/archives/</loc>
-        <lastmod>2014-01-04T10:30:07+01:00</lastmod>
+        <lastmod>2014-01-04T15:20:08+01:00</lastmod>
     </url>
     <url>
         <loc>http://hajee.github.io/</loc>
-        <lastmod>2014-01-04T10:30:07+01:00</lastmod>
+        <lastmod>2014-01-04T15:20:08+01:00</lastmod>
     </url>
     <url>
         <loc>http://hajee.github.io/robots.txt</loc>

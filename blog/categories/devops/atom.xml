@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-04T14:19:05+01:00</updated>
+  <updated>2014-01-04T15:20:21+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -12,40 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Want easier deployments?]]></title>
-    <link href="http://hajee.github.io/2014/01/02/what-to-change/"/>
-    <updated>2014-01-02T16:15:13+01:00</updated>
-    <id>http://hajee.github.io/2014/01/02/what-to-change</id>
-    <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many many more. If after reading these stories you feel like you want to move from your current one deployment per 3 month strategy to a more agile method, but have don't know where to start. This blog post might be of assistance.
-
-<!-- more -->
-In their 2010 seminal work ["Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) [Jez Humble](http://jezhumble.net/) and [David Farley](http://www.davefarley.net/) described a maturity model for continious delivery. The goal of this model was to asses the gap between where you are and where you want to be and help to define the steps you need to take to go there.
-
-#What to measure?
-
-
-#What's the scale
-In the model they describe the following 5 levels.
-
-###initial
-There is no process for releasing and delivering software. A new deployment becomes a intensive event whith a lot of oportunaty to fail. A succesful deployment is a victory. 
-
-###managed
-When you are at this level, some stuff is beeing take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans.Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document.
-
-###defined
-There are automated tests at a sufficent level to detected critical errrors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.
-
-###optimizing
-The testting and deployment is fully automated and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are cought in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments. 
-
-###quantitatively managed
-Systems are architected with continuous deployment in mind. All new requirements describe how the value of the feature will be measured in production.Metrics are gathered through techniques such as A/B testing to validate the value is actualy beeing delivered like expected. 
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Puppet building blocks]]></title>
@@ -122,10 +88,50 @@ The blog posts won't necessary be in the above order.]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Levels of maturity for continuous deployment]]></title>
-    <link href="http://hajee.github.io/2013/10/12/levels-of-maturity-for-continuous-deployment/"/>
+    <title type="html"><![CDATA[On your way to easier deployments?]]></title>
+    <link href="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/"/>
+    <updated>2013-10-17T17:15:13+02:00</updated>
+    <id>http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment</id>
+    <content type="html"><![CDATA[In [my last blog post](/2013/10/02/visualize-your-continuous-deployment-maturity/), I described the main area's of interest to work on to get faster and easier deployments. For every area,  the level of maturity may be different. In this blog post,  I will dive deeper in the levels of maturity and what they mean.
+
+<!-- more -->
+
+Like I told in the previous blog posts, this information is based on the book ["Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) by [Jez Humble](http://jezhumble.net/) and [David Farley](http://www.davefarley.net/)
+
+#The Five maturity levels
+
+In the model,  they describe the following five levels.
+
+0. Regressive
+1. Repeatable
+2. Consistent
+3. Quantitatively managed
+4. Optimizing
+
+### Regressive
+
+There is no process for releasing and delivering software. A new deployment becomes an intensive event with a lot of opportunity to fail. A successful deployment is a victory. Although the number in the list says 1. In their book, Jez and David call the level -1. Minus because deployment is actually in the toddler stage.
+
+###Repeatable
+When you are at this level of maturity, some stuff is being take care of. Changes management processes are in lace. There are clear guidelines of what to do and when to do it. Most of the times the organisations have a OTAP strategy, but most of the testing is done by humans. Only a small part of the tests, if any, is automated. Not a lot has been done to automate deployment. Most of the work is done by typing commands on a terminal based on a script in a paper document. In my view,  this is the minimum level at which you can rightfully claim you are doing [ITIL](http://en.wikipedia.org/wiki/Information_Technology_Infrastructure_Library#ITIL_V3). As you can see this is still much lower than the levels proposed in [the book](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912)
+
+###Consistent
+At this level of maturity,  you have a broad set of automated tests. The tests are  at a sufficient level to detected critical errors early end often. The deployment is getting more and more automated. Deploying a new version to an integrated testing environment becomes easy.
+
+###quantitatively managed
+The testing and deployment are fully automated, and there is a pipeline in place to do the testing and deployments in OTAP environments. Bad versions are caught in the deployment pipeline before they reach production. Because deployments are easy and the quality of releases increase, teams start to do more and smaller deployments. The statistics of builds and deployments are tracked, and acted upon.
+
+###optimizing
+At the final level, not only all processes and tools are in place, but the whole organisation around building, testing and deploying software is constantly improving. Teams regularly discuss the problems and fix them. Every deployment, whether it is in production or any test environment is a vehicle for improvement.
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Area's of interest for continuous deployment]]></title>
+    <link href="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/"/>
     <updated>2013-10-12T22:25:10+02:00</updated>
-    <id>http://hajee.github.io/2013/10/12/levels-of-maturity-for-continuous-deployment</id>
+    <id>http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment</id>
     <content type="html"><![CDATA[In [my last blog post](/2013/10/02/visualize-your-continuous-deployment-maturity/), I showed a way to visualize the level of maturity for the six interest area's of continuous delivery. In this blog post,  I will dig deeper into what the areas of interest are.
 
 <!-- more -->
@@ -198,7 +204,7 @@ These levels are loosely based on the levels defined by the [Capability Maturity
 
 ##What's next?
 
-In the [next blog post](/2013/10/12/levels-of-maturity-for-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
+In the [next blog post](/2013/10/12/areas-of-interest-to-realize-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
   </entry>
   
 </feed>
