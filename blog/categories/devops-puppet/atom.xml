@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: puppet;, method | People & Software]]></title>
-  <link href="http://hajee.github.io/blog/categories/puppet-method/atom.xml" rel="self"/>
+  <title><![CDATA[Category: devops,puppet, | People & Software]]></title>
+  <link href="http://hajee.github.io/blog/categories/devops-puppet/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-03T23:25:37+01:00</updated>
+  <updated>2014-01-04T10:29:00+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
