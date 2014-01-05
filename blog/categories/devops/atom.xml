@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-04T16:12:56+01:00</updated>
+  <updated>2014-01-05T19:12:15+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -88,6 +88,181 @@ The blog posts won't necessary be in the above order.]]></content>
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Asses YOUR continuous deployment maturity]]></title>
+    <link href="http://hajee.github.io/2013/10/24/asses-YOUR-continuous-deployment-maturity/"/>
+    <updated>2013-10-24T14:45:47+02:00</updated>
+    <id>http://hajee.github.io/2013/10/24/asses-YOUR-continuous-deployment-maturity</id>
+    <content type="html"><![CDATA[In the last couple of blog posts, I've talked about how to describe how mature you are in your ability to do continuous deployment. [This blog post](/2013/10/02/visualize-your-continuous-deployment-maturity/) introduced a way to visualise the maturity. In [this blog post](/2013/10/12/areas-of-interest-to-realize-continuous-deployment/) I described the area's of interest on the x-scale of the graph. While in [the last blog post]( /2013/10/17/levels-of-maturity-for-continuous-deployment/) I described the levels of maturity on the y-scale. That's all nice, but how do you use these ingredients to assess *YOUR* continuous deployment maturity? In this blog post,  I will introduce  some criteria.
+
+<!-- more -->
+
+["The book Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) [The book] contains the following matrix.
+
+<img src="/images/maturity-matrix.png" title="The Continuous Deployment Maturity Matrix" >
+
+This matrix helps to get a basic feel of what you need to do to get to a certain level of maturity in a specified area of interest. But it is still rather general. It the next few sections I will describe a set of practices that I feel, *need* to be filled in to claim this maturity level. I would really like to hear from you what kind of practices YOU think are needed.
+
+## Build management
+
+Build management are all processes and tools we need to ensure that,at any point in time, we can build a specific version of our software.
+
+### To be repeatable you need:
+
+* A build is done regularly. Preferable daily or at least weekly 
+* The build is fully automated
+* Every build is concluded with a unit-test
+* The unit-tests test 70% or more of all business functionality 
+* Every build retrieves the source from a source code management system
+
+### To be consistent your need:
+
+* Every change to the source control systems, triggers a new build and a new (unit-)test 
+* All dependencies with other source packages and libraries are known and managed 
+* All build and test scripts are being reused.
+
+### To be quantitatively  managed, you need:
+
+* Metrics of all builds are collected 
+* The metrics of all builds are visual to the whole team 
+* Improvement actions are described based on the build metrics 
+* After a failure of the automated build, all activities are first directed at resolving the issues
+
+### To be at an optimising level, you need:
+
+* Teams frequently discuss integration problems and solutions 
+* The team strives to better visibility of problems using automated solutions 
+* The team strives to signalling the problems as early as possible using automated solutions
+
+#Environments and deployment
+
+To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests.
+
+### To be repeatable you need:
+
+* Automated deployment to some environments 
+* Creation of environments is cheap (integration) 
+* All configuration is externalized 
+* All configuration is versioned
+
+### To be consistent your need:
+
+* Fully automated self-service push-button process for deploying software 
+* Same process to deploy to every environment. 
+* Scripts and tools are reused
+
+### To be quantitatively  managed, you need:
+
+* Orchestrated deployments managed 
+* Release, and rollback processes tested.
+
+### To be at an optimising level, you need:
+
+* Provisioning fully automated
+* Virtualization used if applicable
+
+#Release management and compliance 
+There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.
+
+### To be repeatable you need:
+
+* Infrequent releases but reliable 
+* Limited traceability from requirements to release.
+
+### To be consistent your need:
+
+* Change management and approvals process defined 
+* Change management and approvals process enforced 
+* Regulatory and compliance conditions met
+
+### To be quantitatively  managed, you need:
+
+* Environment  health monitored
+* Application health monitored
+
+### To be at an optimising level, you need:
+
+* Operations and delivery teams regularly collaborate to manage risks 
+* Operations and delivery teams regularly collaborate to reduce cycle time.
+
+#Testing
+
+Testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario's written by testers and business representatives in cooperation.
+
+### To be repeatable you need:
+
+* Tests are automated
+* Tests are written during story development
+
+### To be consistent your need:
+
+* Automated unit-test  available
+* Automated acceptance test available 
+* Automated acceptance test are written with/by testers 
+* Testing is an integral part of the development process
+
+### To be quantitatively  managed, you need:
+
+* Quality metrics and trends tracked 
+* Non functional requirements defined 
+* Non functional requirements measured
+
+### To be at an optimising level, you need:
+
+* Production rollbacks rare. (< 5%) * Defects found and fixed immediately. ( < 48 hr)
+
+#Data management
+
+You need to have automated the way you change your data model and also the configuration data inside the database.
+
+### To be repeatable you need:
+
+* Changes to databases done with automated scripts 
+* Changes to databases are versioned with the application
+
+### To be consistent your need:
+
+* Database changes performed automatically as part of the deployment process
+
+### To be quantitatively  managed, you need:
+
+* Database upgrades tested with every deployment 
+* Database rollbacks tested with every deployment 
+* Databases performance monitored 
+* Database performance continuous optimized
+
+### To be at an optimising level, you need:
+
+* release to release feedback loop of database performance and deployment process 
+* release to release feedback loop of the deployment process
+
+#Configuration management
+
+To be able to get built every version in time at any moment, we need source code management tools like [git](http://git-scm.com/) or [subversion](Apache Subversion).
+
+### To be repeatable you need:
+
+* Version control in use for source code 
+* Version control in use for build scripts * Version control in use deployment scripts 
+* Version control in use for data migrations
+
+### To be consistent your need:
+
+* Libraries and dependencies managed 
+* Version control usage policies determined by change management process
+
+### To be quantitatively  managed, you need:
+
+* Developers check-in to mainline at least once a day 
+* Branching only used to release.
+
+### To be at an optimising level, you need:
+
+* Regular validation that CM policy supports effective collaboration 
+* Regular validation that CM policy supports rapid development 
+* Regular validation that CM policy supports auditable change management processes]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[On your way to easier deployments?]]></title>
     <link href="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/"/>
     <updated>2013-10-17T17:15:13+02:00</updated>
@@ -164,50 +339,6 @@ While most automated installation scripts focus on provisioning the software. Th
 To be able to get built every version in time at any moment,  we need source code management tools like [git](http://git-scm.com/) or [subversion](Apache Subversion). All components needed to get the software working, must be under this regime of version control. This includes the libraries and all database changes.
 
 ]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Visualize your continuous deployment maturity]]></title>
-    <link href="http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/"/>
-    <updated>2013-10-02T17:15:13+02:00</updated>
-    <id>http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity</id>
-    <content type="html"><![CDATA[Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.
-
-<!-- more -->
-
-In their 2010 seminal work ["Continuous Delivery"](http://www.amazon.com/gp/product/0321601912?ie=UTF8&tag=martinfowlerc-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321601912) [Jez Humble](http://jezhumble.net/) and [David Farley](http://www.davefarley.net/) described a maturity model for continuous delivery. The goal of this model was to assess the gap between where you are and where you want to be and help to define the steps you need to take to go there.
-
-The model identifies six main area's of interest:
-
-* Build management and continuous integration
-* Environments and deployments
-* Release management and compliance
-* Testing
-* Data management
-* Configuration management
-
-
-Each of these area's must be at a certain level to be able to achieve the benefits of continuous delivery. One of the key points for increasing your continuous delivery performance is to make well-balanced steps. It doesn't really help if your build management is top notch 100%, but you don't have any automated testing. Value comes when you increase the level of maturity evenly over all six focus area's.
-
-<img src="/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" >
-
-The picture shows a method to make these levels visual. This really helps in discussions with stakeholders in finding out where you are and where you need to go. Based on the graph above, you can see that it's best to work on improvements in data management and configuration management before you start to address other area's.
-
-#What's the scale?
-
-In the model, they describe the following 5 levels:
-
-0. Regressive
-1. Repeatable
-2. Consistent
-3. Quantitatively managed
-4. Optimizing
-
-These levels are loosely based on the levels defined by the [Capability Maturity Model](http://en.wikipedia.org/wiki/Capability_Maturity_Model) originally from the [Carnegie Mellon Software Engineering Institute (SEI)](http://www.sei.cmu.edu/). The higher the number the better you are.
-
-##What's next?
-
-In the [next blog post](/2013/10/12/areas-of-interest-to-realize-continuous-deployment/), I will dig deeper into the six main area's of interest.]]></content>
   </entry>
   
 </feed>

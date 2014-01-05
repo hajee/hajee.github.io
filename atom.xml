@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-04T16:12:56+01:00</updated>
+  <updated>2014-01-05T19:12:15+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -95,6 +95,256 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 
 
 <p>The blog posts won&rsquo;t necessary be in the above order.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Asses YOUR continuous deployment maturity]]></title>
+    <link href="http://hajee.github.io/2013/10/24/asses-YOUR-continuous-deployment-maturity/"/>
+    <updated>2013-10-24T14:45:47+02:00</updated>
+    <id>http://hajee.github.io/2013/10/24/asses-YOUR-continuous-deployment-maturity</id>
+    <content type="html"><![CDATA[<p>In the last couple of blog posts, I&rsquo;ve talked about how to describe how mature you are in your ability to do continuous deployment. <a href="http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/">This blog post</a> introduced a way to visualise the maturity. In <a href="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">this blog post</a> I described the area&rsquo;s of interest on the x-scale of the graph. While in <a href="http://hajee.github.io/2013/10/17/levels-of-maturity-for-continuous-deployment/">the last blog post</a> I described the levels of maturity on the y-scale. That&rsquo;s all nice, but how do you use these ingredients to assess <em>YOUR</em> continuous deployment maturity? In this blog post,  I will introduce  some criteria.</p>
+
+<!-- more -->
+
+
+<p><a href="http://www.amazon.com/gp/product/0321601912?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321601912">&ldquo;The book Continuous Delivery&rdquo;</a> [The book] contains the following matrix.</p>
+
+<p><img src="http://hajee.github.io/images/maturity-matrix.png" title="The Continuous Deployment Maturity Matrix" ></p>
+
+<p>This matrix helps to get a basic feel of what you need to do to get to a certain level of maturity in a specified area of interest. But it is still rather general. It the next few sections I will describe a set of practices that I feel, <em>need</em> to be filled in to claim this maturity level. I would really like to hear from you what kind of practices YOU think are needed.</p>
+
+<h2>Build management</h2>
+
+<p>Build management are all processes and tools we need to ensure that,at any point in time, we can build a specific version of our software.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>A build is done regularly. Preferable daily or at least weekly</li>
+<li>The build is fully automated</li>
+<li>Every build is concluded with a unit-test</li>
+<li>The unit-tests test 70% or more of all business functionality</li>
+<li>Every build retrieves the source from a source code management system</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Every change to the source control systems, triggers a new build and a new (unit-)test</li>
+<li>All dependencies with other source packages and libraries are known and managed</li>
+<li>All build and test scripts are being reused.</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Metrics of all builds are collected</li>
+<li>The metrics of all builds are visual to the whole team</li>
+<li>Improvement actions are described based on the build metrics</li>
+<li>After a failure of the automated build, all activities are first directed at resolving the issues</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>Teams frequently discuss integration problems and solutions</li>
+<li>The team strives to better visibility of problems using automated solutions</li>
+<li>The team strives to signalling the problems as early as possible using automated solutions</li>
+</ul>
+
+
+<h1>Environments and deployment</h1>
+
+<p>To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>Automated deployment to some environments</li>
+<li>Creation of environments is cheap (integration)</li>
+<li>All configuration is externalized</li>
+<li>All configuration is versioned</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Fully automated self-service push-button process for deploying software</li>
+<li>Same process to deploy to every environment.</li>
+<li>Scripts and tools are reused</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Orchestrated deployments managed</li>
+<li>Release, and rollback processes tested.</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>Provisioning fully automated</li>
+<li>Virtualization used if applicable</li>
+</ul>
+
+
+<h1>Release management and compliance</h1>
+
+<p>There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>Infrequent releases but reliable</li>
+<li>Limited traceability from requirements to release.</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Change management and approvals process defined</li>
+<li>Change management and approvals process enforced</li>
+<li>Regulatory and compliance conditions met</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Environment  health monitored</li>
+<li>Application health monitored</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>Operations and delivery teams regularly collaborate to manage risks</li>
+<li>Operations and delivery teams regularly collaborate to reduce cycle time.</li>
+</ul>
+
+
+<h1>Testing</h1>
+
+<p>Testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario&rsquo;s written by testers and business representatives in cooperation.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>Tests are automated</li>
+<li>Tests are written during story development</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Automated unit-test  available</li>
+<li>Automated acceptance test available</li>
+<li>Automated acceptance test are written with/by testers</li>
+<li>Testing is an integral part of the development process</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Quality metrics and trends tracked</li>
+<li>Non functional requirements defined</li>
+<li>Non functional requirements measured</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>Production rollbacks rare. (&lt; 5%) * Defects found and fixed immediately. ( &lt; 48 hr)</li>
+</ul>
+
+
+<h1>Data management</h1>
+
+<p>You need to have automated the way you change your data model and also the configuration data inside the database.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>Changes to databases done with automated scripts</li>
+<li>Changes to databases are versioned with the application</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Database changes performed automatically as part of the deployment process</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Database upgrades tested with every deployment</li>
+<li>Database rollbacks tested with every deployment</li>
+<li>Databases performance monitored</li>
+<li>Database performance continuous optimized</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>release to release feedback loop of database performance and deployment process</li>
+<li>release to release feedback loop of the deployment process</li>
+</ul>
+
+
+<h1>Configuration management</h1>
+
+<p>To be able to get built every version in time at any moment, we need source code management tools like <a href="http://git-scm.com/">git</a> or <a href="Apache%20Subversion">subversion</a>.</p>
+
+<h3>To be repeatable you need:</h3>
+
+<ul>
+<li>Version control in use for source code</li>
+<li>Version control in use for build scripts * Version control in use deployment scripts</li>
+<li>Version control in use for data migrations</li>
+</ul>
+
+
+<h3>To be consistent your need:</h3>
+
+<ul>
+<li>Libraries and dependencies managed</li>
+<li>Version control usage policies determined by change management process</li>
+</ul>
+
+
+<h3>To be quantitatively  managed, you need:</h3>
+
+<ul>
+<li>Developers check-in to mainline at least once a day</li>
+<li>Branching only used to release.</li>
+</ul>
+
+
+<h3>To be at an optimising level, you need:</h3>
+
+<ul>
+<li>Regular validation that CM policy supports effective collaboration</li>
+<li>Regular validation that CM policy supports rapid development</li>
+<li>Regular validation that CM policy supports auditable change management processes</li>
+</ul>
+
 ]]></content>
   </entry>
   
