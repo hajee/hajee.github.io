@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-05T19:12:15+01:00</updated>
+  <updated>2014-01-05T19:19:40+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -157,7 +157,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 </ul>
 
 
-<h1>Environments and deployment</h1>
+<h2>Environments and deployment</h2>
 
 <p>To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests.</p>
 
@@ -196,7 +196,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 </ul>
 
 
-<h1>Release management and compliance</h1>
+<h2>Release management and compliance</h2>
 
 <p>There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.</p>
 
@@ -233,7 +233,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 </ul>
 
 
-<h1>Testing</h1>
+<h2>Testing</h2>
 
 <p>Testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario&rsquo;s written by testers and business representatives in cooperation.</p>
 
@@ -271,7 +271,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 </ul>
 
 
-<h1>Data management</h1>
+<h2>Data management</h2>
 
 <p>You need to have automated the way you change your data model and also the configuration data inside the database.</p>
 
@@ -308,7 +308,7 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 </ul>
 
 
-<h1>Configuration management</h1>
+<h2>Configuration management</h2>
 
 <p>To be able to get built every version in time at any moment, we need source code management tools like <a href="http://git-scm.com/">git</a> or <a href="Apache%20Subversion">subversion</a>.</p>
 
@@ -345,6 +345,12 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 <li>Regular validation that CM policy supports auditable change management processes</li>
 </ul>
 
+
+<h2>This leads to?</h2>
+
+<p>When you score all these assesments questions, and you plot them on the <a href="http://hajee.github.io/2013/10/02/visualize-your-continuous-deployment-maturity/">graph</a>. You get the next graph.</p>
+
+<p><img src="http://hajee.github.io/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" ></p>
 ]]></content>
   </entry>
   

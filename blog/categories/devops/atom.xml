@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-05T19:12:15+01:00</updated>
+  <updated>2014-01-05T19:19:40+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -133,7 +133,7 @@ Build management are all processes and tools we need to ensure that,at any point
 * The team strives to better visibility of problems using automated solutions 
 * The team strives to signalling the problems as early as possible using automated solutions
 
-#Environments and deployment
+##Environments and deployment
 
 To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests.
 
@@ -160,7 +160,7 @@ To be able to do continuous delivery, there must be a pipeline of systems for do
 * Provisioning fully automated
 * Virtualization used if applicable
 
-#Release management and compliance 
+##Release management and compliance 
 There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.
 
 ### To be repeatable you need:
@@ -184,7 +184,7 @@ There must be a (strict) change management process including regulated approvals
 * Operations and delivery teams regularly collaborate to manage risks 
 * Operations and delivery teams regularly collaborate to reduce cycle time.
 
-#Testing
+##Testing
 
 Testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario's written by testers and business representatives in cooperation.
 
@@ -210,7 +210,7 @@ Testing must be highly automated. You need at least automated unit-tests and a s
 
 * Production rollbacks rare. (< 5%) * Defects found and fixed immediately. ( < 48 hr)
 
-#Data management
+##Data management
 
 You need to have automated the way you change your data model and also the configuration data inside the database.
 
@@ -235,7 +235,7 @@ You need to have automated the way you change your data model and also the confi
 * release to release feedback loop of database performance and deployment process 
 * release to release feedback loop of the deployment process
 
-#Configuration management
+##Configuration management
 
 To be able to get built every version in time at any moment, we need source code management tools like [git](http://git-scm.com/) or [subversion](Apache Subversion).
 
@@ -259,7 +259,14 @@ To be able to get built every version in time at any moment, we need source code
 
 * Regular validation that CM policy supports effective collaboration 
 * Regular validation that CM policy supports rapid development 
-* Regular validation that CM policy supports auditable change management processes]]></content>
+* Regular validation that CM policy supports auditable change management processes
+
+##This leads to?
+When you score all these assesments questions, and you plot them on the [graph](/2013/10/02/visualize-your-continuous-deployment-maturity/). You get the next graph.
+
+
+<img src="/images/maturity_model.png" title="Visualize the level of maturity for the six interest area's" >
+]]></content>
   </entry>
   
   <entry>
