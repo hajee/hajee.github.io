@@ -1,0 +1,13 @@
+---
+layout: page
+page title: "404 Error"
+date: 2012-10-26 16:25
+comments: false
+sharing: false
+footer: false
+---
+#Non existing page
+
+You have reached a non existing page. Checkout the [blog archive](/blog/archives) for an overview of all artcles on this site. If you just want to know something about the author, check [my about page](/about).
+
+ 

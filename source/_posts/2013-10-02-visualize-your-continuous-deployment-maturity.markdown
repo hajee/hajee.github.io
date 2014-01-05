@@ -43,4 +43,4 @@ These levels are loosely based on the levels defined by the [Capability Maturity
 
 ##What's next?
 
-In the [next blog post]({% post_url 2013-10-12-levels-of-maturity-for-continuous-deployment %}), I will dig deeper into the six main area's of interest.
+In the [next blog post]({% post_url 2013-10-12-areas-of-interest-to-realize-continuous-deployment %}), I will dig deeper into the six main area's of interest.

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Levels of maturity for continuous deployment"
+title: "Area's of interest for continuous deployment"
 date: 2013-10-12 21:25:10 +0100
 comments: true
 categories: ['devops','method', 'maturity model']
