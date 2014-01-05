@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>People & Software</title>
+  <title>The specifications - People & Software</title>
   <meta name="author" content="Bert Hajee">
   <meta name="twitter:widgets:csp" content="on">
 
   
-  <meta name="description" content="Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the stories of Facebook deploying &hellip;">
+  <meta name="description" content="Appdrones uses the specifications as a basis for all the work in the work packages. In this blog post and video we will introduce the Appdrones &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/blog/page/2/">
+  <link rel="canonical" href="http://hajee.github.io/2013/01/02/the-specifications/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,71 +63,73 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">Visualize Your Continuous Deployment Maturity</a></h1>
+      <h1 class="entry-title">The Specifications</h1>
     
   </header>
 
 
-  
-    <p class="meta">
-      
 
 
 
+<div class="entry-content"><p><a href="http://www.appdrones.com">Appdrones</a> uses the specifications as a basis for all the work in the work packages. In this blog post and video we will introduce the Appdrones speciations system.</p>
+
+<!-- more -->
 
 
+<h2>Gherkin</h2>
+
+<p>The Appdrones specifications are based on Gherkin. Gherkin is is a Business Readable, Domain Specific Language that lets you describe software’s behaviour without detailing how that behaviour is implemented. Gherkin serves two purposes – documentation and automated tests.</p>
+
+<iframe class="left-image" width="420" height="315" src="http://www.youtube.com/embed/oZr6l22R8p0" frameborder="0" allowfullscreen=""></iframe>
 
 
+<h3>A feature</h3>
 
-  
+<p>In Gherkin functionality is described in features. A feature is a description of some sort of functionality you need. Every Feature has the following elements:</p>
 
-
-<time datetime="2013-10-02T17:15:13+02:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
-      
-    </p>
-  
-  
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/visualize/'>visualize</a>
-  
-</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Feature</span>
+</span><span class='line'><span class="nf">description</span>
+</span><span class='line'><span class="nf"> Narrative </span>
+</span><span class='line'><span class="nf">Scenarios</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-  <div class="entry-content"><p>Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the <a href="https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920">stories of Facebook deploying multiple times per day</a>. The stories of <a href="http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/">The Guardian</a> and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.</p>
+<p>In the narrative you can write anything you want, but the best thing is to use the narrative to describe what the business value of the feature. You can do this by questioning why you need this feature. This is called “popping the why stack”. You describe the narrative in the following format:
+In order to have some business value</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">as a specific user</span>
+</span><span class='line'><span class="k">I </span><span class="nf">want to do some stuff</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Scenarios</h3>
+
+<p>A feature can have one or more scenarios. A scenario describes a specific situation in your feature. Let me give you an example: In the video we enter the feature “Order Pastries”. Within the feature we have the scenario: new customer and the scenario returning customer. In both cases we need to do something else.</p>
+
+<h2>Gradually build your specs</h2>
+
+<p>Most of the times when you start with a new project, you just have a basic idea of the functionality you want. You start with just entering the high level features.  Later you can enter the scenarios.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/10/02/visualize-your-continuous-deployment-maturity/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/01/02/the-specifications/">The Specifications</a></h1>
-    
-  </header>
-
-
-  
+  <footer>
     <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Bert Hajee</span></span>
+
       
 
 
@@ -141,86 +143,39 @@
 
 
 <time datetime="2013-01-02T19:28:48+01:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2013</time>
-      
     </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2013/01/02/the-specifications/" data-via="bhajee" data-counturl="http://hajee.github.io/2013/01/02/the-specifications/" >Tweet</a>
   
   
-
-
-  <div class="entry-content"><p><a href="http://www.appdrones.com">Appdrones</a> uses the specifications as a basis for all the work in the work packages. In this blog post and video we will introduce the Appdrones speciations system.</p>
-
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/01/02/the-specifications/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
     
-      <h1 class="entry-title"><a href="/2012/07/19/introducing-appdrones/">Introducing Appdrones</a></h1>
-    
-  </header>
-
-
-  
     <p class="meta">
       
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-19T20:28:10+02:00" pubdate data-updated="true">Jul 19<span>th</span>, 2012</time>
+        <a class="basic-alignment left" href="/2012/07/19/introducing-appdrones/" title="Previous Post: Introducing Appdrones">&laquo; Introducing Appdrones</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/10/02/visualize-your-continuous-deployment-maturity/" title="Next Post: Visualize your continuous deployment maturity">Visualize your continuous deployment maturity &raquo;</a>
       
     </p>
-  
-  
+  </footer>
+</article>
 
-
-  <div class="entry-content"><p>Building software has always been a difficult and error-prone activity. The examples of failed software development projects are numerous. A lot of progress has been made the last couple of years. <a href="http://www.appdrones.com">Appdrones</a> builds on this progress to provide businesses a better way to outsource application development. We believe that getting your application built can be easier.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2012/07/19/introducing-appdrones/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/">Newer &rarr;</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
-  
-    <form action="http://google.com/search" method="get">
-      <fieldset role="search">
-        <input type="hidden" name="q" value="site:hajee.github.io" />
-        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-      </fieldset>
-    </form>
-  
   
     
 <section>
@@ -256,7 +211,7 @@
       </li>
     
       <li class="post">
-        <a href="/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">Area&#8217;s of interest for continuous deployment</a>
+        <a href="/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">Area's of interest for continuous deployment</a>
       </li>
     
   </ul>
@@ -265,7 +220,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/hajee">@hajee</a> on GitHub
@@ -298,6 +253,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -312,7 +268,10 @@
       var disqus_shortname = 'hajee';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hajee.github.io/2013/01/02/the-specifications/';
+        var disqus_url = 'http://hajee.github.io/2013/01/02/the-specifications/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

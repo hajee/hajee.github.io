@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-05T19:19:40+01:00</updated>
+  <updated>2014-01-05T19:45:32+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -489,6 +489,99 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 <h2>What&rsquo;s next?</h2>
 
 <p>In the <a href="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">next blog post</a>, I will dig deeper into the six main area&rsquo;s of interest.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The specifications]]></title>
+    <link href="http://hajee.github.io/2013/01/02/the-specifications/"/>
+    <updated>2013-01-02T19:28:48+01:00</updated>
+    <id>http://hajee.github.io/2013/01/02/the-specifications</id>
+    <content type="html"><![CDATA[<p><a href="http://www.appdrones.com">Appdrones</a> uses the specifications as a basis for all the work in the work packages. In this blog post and video we will introduce the Appdrones speciations system.</p>
+
+<!-- more -->
+
+
+<h2>Gherkin</h2>
+
+<p>The Appdrones specifications are based on Gherkin. Gherkin is is a Business Readable, Domain Specific Language that lets you describe software’s behaviour without detailing how that behaviour is implemented. Gherkin serves two purposes – documentation and automated tests.</p>
+
+<iframe class="left-image" width="420" height="315" src="http://www.youtube.com/embed/oZr6l22R8p0" frameborder="0" allowfullscreen=""></iframe>
+
+
+<h3>A feature</h3>
+
+<p>In Gherkin functionality is described in features. A feature is a description of some sort of functionality you need. Every Feature has the following elements:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Feature</span>
+</span><span class='line'><span class="nf">description</span>
+</span><span class='line'><span class="nf"> Narrative </span>
+</span><span class='line'><span class="nf">Scenarios</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the narrative you can write anything you want, but the best thing is to use the narrative to describe what the business value of the feature. You can do this by questioning why you need this feature. This is called “popping the why stack”. You describe the narrative in the following format:
+In order to have some business value</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">as a specific user</span>
+</span><span class='line'><span class="k">I </span><span class="nf">want to do some stuff</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Scenarios</h3>
+
+<p>A feature can have one or more scenarios. A scenario describes a specific situation in your feature. Let me give you an example: In the video we enter the feature “Order Pastries”. Within the feature we have the scenario: new customer and the scenario returning customer. In both cases we need to do something else.</p>
+
+<h2>Gradually build your specs</h2>
+
+<p>Most of the times when you start with a new project, you just have a basic idea of the functionality you want. You start with just entering the high level features.  Later you can enter the scenarios.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Appdrones]]></title>
+    <link href="http://hajee.github.io/2012/07/19/introducing-appdrones/"/>
+    <updated>2012-07-19T20:28:10+02:00</updated>
+    <id>http://hajee.github.io/2012/07/19/introducing-appdrones</id>
+    <content type="html"><![CDATA[<p>Building software has always been a difficult and error-prone activity. The examples of failed software development projects are numerous. A lot of progress has been made the last couple of years. <a href="http://www.appdrones.com">Appdrones</a> builds on this progress to provide businesses a better way to outsource application development. We believe that getting your application built can be easier.</p>
+
+<!-- more -->
+
+
+<h2>A lot of progress</h2>
+
+<p>Al lot of progress has been made in the last couple of years:</p>
+
+<ul>
+<li>The introduction of the agile movement has put focus on business value. Agile combined with Test Driver Development; Behavior Driven Development and outside-in development has helped software developers deliver the right software to their customers.</li>
+<li>Specification by example, also known as executable specifications, has helped bridge the communication barrier between developers and customers. Using these developments, customers have better tools to describe the software they need.</li>
+<li>Recent developments in continuous integration and continuous delivery helped IT to deliver the results faster and at a more constant quality.</li>
+<li>Platforms as a Service (PaaS) has helped developers to put their application onto the web faster and easier.</li>
+</ul>
+
+
+<p><img src="http://hajee.github.io/images/appdrones-screenshot.png" title="A screen shot of the Appdrones application" ></p>
+
+<h2>No changes in business model</h2>
+
+<p>This has all been beneficial for IT professionals and in the end also to their customers. It only hasn’t changed the business model behind application development. Appdrones aims to do just that. Change the business model behind building an application. We make software easier.</p>
+
+<h2>How to achieve this?</h2>
+
+<p>To achieve this, Appdrones provides the business owner with the following tools:
+* A specification system to “harvest” the specifications behind his idea.
+* A market place to get help. Bon the market place he can find an analyst who can help refine the specifications; a designer who can design the pages; a developer who can build the application
+* The specifications are transformed into executable specifications, so during development every change by the developer leads to a test against the specification. Progress is instantly reported to the customer.
+* During development the business owner always has access to the last version the developer has commited to the version management system.
+* After the work is done, one push on is sufficient to deploy the application in production mode.</p>
+
+<p>Next post I&rsquo;ll tell you more about the integrated progress monitoring.</p>
 ]]></content>
   </entry>
   
