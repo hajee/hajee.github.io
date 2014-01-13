@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Repeatability and testability of Linux platform installations - People & Software</title>
+  <title>How to test systems installations - People & Software</title>
   <meta name="author" content="Bert Hajee">
   <meta name="twitter:widgets:csp" content="on">
 
   
-  <meta name="description" content="While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our &hellip;">
-  
+  <meta name="description" content="How to test your systems installations">
+  <meta name="keywords" content="devops, puppet, continuous deployment, infastructure testing">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/">
+  <link rel="canonical" href="http://hajee.github.io/2014/01/13/how-to-test-systems-installations/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Repeatability and Testability of Linux Platform Installations</h1>
+      <h1 class="entry-title">How to Test Systems Installations</h1>
     
   </header>
 
@@ -77,26 +77,62 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/deployment/'>deployment</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/testing/'>testing</a>
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/testing/'>testing</a>
   
 </span>
 
 
-<div class="entry-content"><p>While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
-In the next month, I will post a series of blog posts on our experiences.</p>
+<div class="entry-content"><p>Just imagine yourself installing a Linux system with an Oracle database and a WebLogic application server. There are a lot of manual steps that have to be taken. A lot of commands to be typed and a lot of configurations to be set right in order to get the perfect system for the application. A lot of things can go wrong. You can miss a configuration setting. You can forget a command. Hopefully you get an error message because you did something wrong, but it can also turn out te be a silent error. One you only see after you have given the system to the application developers, or worse one that only comes out after the system is running in production and some load is put onto it. Hoe do we make sure a system is correct after the installation. In this blog post,  I will describe how we used Rspec to test out installations.</p>
 
 <!-- more -->
 
 
+<h2>How it&rsquo;s done mostly</h2>
+
+<p>In the area&rsquo;s of interest for continuous deployment, testing is a separate topic. Although testing  has become mainstream in regular software development, testing isn&rsquo;t really that mainstream when it comes to environments and deployments. Certainly not automated testing. Most of the times, the operations guy checks a couple of items on a checklist. Does the system boot well? Are there any error messages during the boot? Can I log in as root? Can I ping to the router? Can I connect to the database? All good tests, but hardly sufficient.</p>
+
+<h2>It&rsquo;s quite big and complex</h2>
+
+<p>Actualy te be certain a system is installed correctly, is a rather complex and big task. There are numerous configuration files and settings. Every individual setting might cause the system to misbehave. Not only that, but the settings are also interrelated. Sometimes, if I change setting X, then I must also change setting Y. If for example I change the hostname of a Linux system, I might also have to change the hostname for the web server.</p>
+
+<p>From research,  we know that the human brain is very powerful. But it lacks the capacity to see and manage a lot of intricate small little details. So even a very clever devops engineer can easily forget the extra change in setting Y after he changes setting X.</p>
+
+<h2>how can we manage?</h2>
+
+<p>We could of course after an installation have QA check all settings. Because there are so many of the small little, but important settings, this would become a very labour intensive task. Not to mention a tedious and an error prone task. We need help. Just like in regular software development, we need to test our units with automated tests. The units can be the different kinds of settings. In the figure below you see an extract of running a unit-test for  a Linux installation.</p>
+
+<p><img src="/images/rspec_output.png" title="Part of an Rspec report on an installation" ></p>
+
+<h2>What tools do we need?</h2>
+
+<p>The market for testing tools for regular software is crowded. A lot of good tools and frameworks exist for that kind of work. The market for testing tools for devops is a lot more dense. We decided to use <a href="https://relishapp.com/rspec">RSpec</a> a tool mostly used in behaviour driven software development in the <a href="https://www.ruby-lang.org/en/">Ruby world</a>. We choose Rspec because of these reasons:</p>
+
 <ul>
-<li>Using RSpec to test our Linux, Oracle and WebLogic installations</li>
-<li>Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS</li>
-<li>Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.</li>
-<li>Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.</li>
+<li>After a small test, it really seemed to fit</li>
+<li>It is not only great as a test tool but even better as a communication tool (more on that later)</li>
+<li>It is open source and therefore we don&rsquo;t need any expensive license</li>
+<li>It has a large and vibrant user community</li>
+<li>Because we were aiming at using <a href="http://puppetlabs.com/puppet/puppet-enterprise">Puppet</a>, we needed Ruby on our systems anyway.</li>
 </ul>
 
 
-<p>The blog posts won&rsquo;t necessary be in the above order.</p>
+<h2>Communication</h2>
+
+<p>One of the best things of RSpec is the clarity of its reporting. We noticed that the RSpec reports, where a means of discussion between the different stakeholders. In the past,  we&rsquo;d have these vague discussions about a setting. Not all stakeholders new what the setting meant and why it was setup this way. After using RSpec, all of a sudden, we could pinpoint a certain setting and have a meaningful discussion about the reason of the setting and the actual value.</p>
+
+<h2>How we use it?</h2>
+
+<p>Like I explained before, we are using the automated tests to check our settings. This means we mostly do checks on those sometimes we do a little bit more. For example, when we check the settings of the DNS resolver on a system, it is quite easy to extend the test to do a lookup and a reverse lookup to assess if it is really working.</p>
+
+<p>On the other hand, if a new package solves a certain bug, it is easy to test if a certain version of that package is installed =, but quite hard to simulate the bug te check if it is actually solved. So we don&rsquo;t do that.</p>
+
+<h2>Is the test sufficient?</h2>
+
+<p><strong>NO</strong> definitely not. Just like the unit-tests of a regular application is insufficient. the RSpec tests are just a first kind of smoke test. But we noticed it is a very valuable one. After the RSpec tests are done, you still need acceptance and integration tests. Preferably with the application and all related middleware installed.</p>
+
+<h2>Next&hellip;</h2>
+
+<p>In the next blog post I will explain how we have structured our Rspec code.</p>
 </div>
 
 
@@ -119,12 +155,12 @@ In the next month, I will post a series of blog posts on our experiences.</p>
   
 
 
-<time datetime="2013-12-28T20:13:45+01:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+<time datetime="2014-01-13T20:14:10+01:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/" data-via="bhajee" data-counturl="http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2014/01/13/how-to-test-systems-installations/" data-via="bhajee" data-counturl="http://hajee.github.io/2014/01/13/how-to-test-systems-installations/" >Tweet</a>
   
   
   
@@ -135,10 +171,8 @@ In the next month, I will post a series of blog posts on our experiences.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2013/10/24/asses-YOUR-continuous-deployment-maturity/" title="Previous Post: Asses YOUR continuous deployment maturity">&laquo; Asses YOUR continuous deployment maturity</a>
+        <a class="basic-alignment left" href="/2013/12/30/puppet-building-blocks/" title="Previous Post: Puppet building blocks">&laquo; Puppet building blocks</a>
       
-      
-        <a class="basic-alignment right" href="/2013/12/30/puppet-building-blocks/" title="Next Post: Puppet building blocks">Puppet building blocks &raquo;</a>
       
     </p>
   </footer>
@@ -268,8 +302,8 @@ In the next month, I will post a series of blog posts on our experiences.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/';
-        var disqus_url = 'http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/';
+        var disqus_identifier = 'http://hajee.github.io/2014/01/13/how-to-test-systems-installations/';
+        var disqus_url = 'http://hajee.github.io/2014/01/13/how-to-test-systems-installations/';
         var disqus_script = 'embed.js';
       
     (function () {
