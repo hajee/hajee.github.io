@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-18T22:31:58+01:00</updated>
+  <updated>2014-01-18T22:36:47+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -280,7 +280,7 @@ On the other hand, if a new package solves a certain bug, it is easy to test if 
 **NO** definitely not. Just like the unit-tests of a regular application is insufficient. the RSpec tests are just a first kind of smoke test. But we noticed it is a very valuable one. After the RSpec tests are done, you still need acceptance and integration tests. Preferably with the application and all related middleware installed.
 
 ##Next...
-In the next blog post I will explain how we have structured our Rspec code. ]]></content>
+In the [next blog post](/2014/01/18/testing-your-system-installation-with-rspec/)  I will explain how we have structured our Rspec code. ]]></content>
   </entry>
   
 </feed>

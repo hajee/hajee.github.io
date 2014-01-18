@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-18T22:31:58+01:00</updated>
+  <updated>2014-01-18T22:36:47+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -405,7 +405,7 @@ development network</code> in line 5. In this line,  we include a specific conte
 
 <h2>Next&hellip;</h2>
 
-<p>In the next blog post I will explain how we have structured our Rspec code.</p>
+<p>In the <a href="http://hajee.github.io/2014/01/18/testing-your-system-installation-with-rspec/">next blog post</a>  I will explain how we have structured our Rspec code.</p>
 ]]></content>
   </entry>
   
