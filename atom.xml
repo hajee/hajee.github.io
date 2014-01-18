@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-13T23:04:23+01:00</updated>
+  <updated>2014-01-18T22:31:58+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -11,6 +11,344 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Testing your system installation with RSpec]]></title>
+    <link href="http://hajee.github.io/2014/01/18/testing-your-system-installation-with-rspec/"/>
+    <updated>2014-01-18T14:12:37+01:00</updated>
+    <id>http://hajee.github.io/2014/01/18/testing-your-system-installation-with-rspec</id>
+    <content type="html"><![CDATA[<p><a href="http://hajee.github.io/2014/01/13/how-to-test-systems-installations/">In the last blog post</a> we introduced described the need for a testing tool for Linux and middleware installations. After some Internet reasearch and a small test, we concluded  <a href="https://relishapp.com/rspec">RSpec</a> would be a good fit. In this blog post,  we will dive into the way we use RSpec to build the specifications and tests needed for your systems.</p>
+
+<!-- more -->
+
+
+<h2>Our environment</h2>
+
+<p>Before we dive into RSpec, lets first describe our environment. Most of our applications use at least the combination of an Oracle database and a WebLogic JEE server. Sometimes the applications are also built using  Tibco products. Normally, all these middleware functions are installed on separate distinct systems. This means one or more  systems for the Oracle database. One or more systems for the WebLogic JEE server, and one or more systems for Tibco products. All these systems have interrelated settings. For example, the Weblogic server needs a connection to the Oracle database to get it&rsquo;s data. This group of interrelated systems, we call a platform. We build specifications and tests for a complete platform. So the specification contains all settings and tests for a set of 3 or more systems.</p>
+
+<h2>What&rsquo;s this RSpec thing?</h2>
+
+<p>RSpec is a tool based on the  <a href="http://en.wikipedia.org/wiki/Behavior-driven_development">Behaviour Driven Development</a>(BDD) software development process. Wikipedia says:</p>
+
+<blockquote><p>At the heart of BDD is a rethinking of the approach to unit testing and acceptance testing that North came up with while dealing with these issues. For example, he proposes that unit test names be whole sentences starting with the word &#8220;should&#8221; and should be written in order of business value.</p></blockquote>
+
+
+<p>Heart of the matter is, you write specifications, and you accompany them with a test to validate the specification. Throughout this blog post, the terms specification (and spec) and tests are both used and mean (about) the same.
+If you would like to know more about the RSpec core, I recommend checking out the <a href="https://www.relishapp.com/rspec/rspec-core/v/3-0/docs">web site</a>  and to read the book <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a></p>
+
+<h2>The top spec</h2>
+
+<p>The code below shows what we call, a top level spec. As you can see, we use all the normal RSpec syntax.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s2">&quot;a top spec, </span>
+</span><span class='line'><span class="s2"> :with_domain =&gt; &#39;just.a.domain.com&#39;,</span>
+</span><span class='line'><span class="s2"> :with_dbname =&gt; &#39;dbname&#39; do</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2"> include_context &quot;</span><span class="n">running</span> <span class="k">in</span> <span class="n">our</span> <span class="n">development</span> <span class="n">network</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2"> host = &#39;dbhost&#39;</span>
+</span><span class='line'><span class="s2"> describe &quot;</span><span class="no">RDBMS</span> <span class="n">host</span><span class="s2">&quot;, </span>
+</span><span class='line'><span class="s2">     :on_host =&gt; host,</span>
+</span><span class='line'><span class="s2">     :with_ip =&gt; &#39;10.0.0.1&#39;,</span>
+</span><span class='line'><span class="s2">     :if =&gt; runs_on(host) do</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="n">runs</span> <span class="n">on</span> <span class="no">DL380</span><span class="s2">&quot;, &#39;M6&#39;, 4, &#39;4G&#39;</span>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="n">a</span> <span class="n">database</span> <span class="n">server</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="n">database</span> <span class="n">is</span> <span class="n">configured</span> <span class="k">for</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">application</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2"> end</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2"> host = &#39;wlshost&#39;</span>
+</span><span class='line'><span class="s2"> describe &quot;</span><span class="no">JEE</span> <span class="n">host</span><span class="s2">&quot;, </span>
+</span><span class='line'><span class="s2">     :on_host =&gt; host,</span>
+</span><span class='line'><span class="s2">     :with_ip =&gt; &#39;10.0.0.3&#39;,</span>
+</span><span class='line'><span class="s2">     :if =&gt; runs_on(host) do</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="n">runs</span> <span class="n">on</span> <span class="no">DL380</span><span class="s2">&quot;, &#39;M6&#39;, 4, &#39;4G&#39;</span>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="n">a</span> <span class="no">WebLogic</span> <span class="n">host</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">     it_behaves_like &quot;</span><span class="no">WebLogic</span> <span class="n">is</span> <span class="n">configured</span> <span class="n">dor</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">application</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="s2"> end</span>
+</span><span class='line'><span class="s2">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you read through the code, you can see, the top level spec, contains the specifications for all the systems in this platform. We have a <code>dbhost</code>. The spec for this system starts at line 8. The other system in the platform is the <code>wlshost</code>. Again: together, we call them a platform. To run the spec on either system, you can use the regular RSpec command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rspec toplevel_spec.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The line <code>:on_host =&gt; host</code>, takes care that only the right set of spec&rsquo;s and tests are run on the system. If we enter this command on node <code>wlshost</code>, only line 15 trough to line 28 are run. On the other hand, if we run the command on host <code>dbhost</code>, only lines 13 until 15 are run. If you enter the command on any other system, nothings happens.</p>
+
+<h2>Running in different environments</h2>
+
+<p>One of the design goals of our testing setup is that we want to be able to run the same set of tests in all of our environments. This means the same tests run in development, test, acceptance and even in production. To accomplish this, we make heavy use of RSpec&rsquo;s metadata.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s2">&quot;RDBMS host&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:on_host</span> <span class="o">=&gt;</span> <span class="n">host</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:with_ip</span> <span class="o">=&gt;</span> <span class="s1">&#39;10.0.0.1&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:if</span> <span class="o">=&gt;</span> <span class="n">runs_on</span><span class="p">(</span><span class="n">host</span><span class="p">)</span> <span class="k">do</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>:on_host =&gt; host</code> and the <code>:with_ip =&gt; '10.0.0.1'</code> are <a href="https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/metadata/user-defined-metadata">user defined metadata elements</a>. Later in this blog post, I will show how we actually use this metadata to make the individual tests are unaffected by the environment the run in.</p>
+
+<p>If you have more than a couple of environment specific settings, setting them all in the <a href="https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/basic-structure-describe-it"><code>describe block</code></a>, would become quite large and cumbersome to read and understand. Therefore, we introduced the <code>include_context "running in our
+development network</code> in line 5. In this line,  we include a specific context or environment.</p>
+
+<p>In the shared_contexts, you can specify all sorts of metadata parameters. Because they are named, you can select which one you need. Right now, we use the one that works in our development network. The shared contexts can be written in another file. Here is the one we used:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">shared_context</span> <span class="s2">&quot;running in our development network&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">meta_for</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">domain</span>           <span class="s1">&#39;just.a.domain.com&#39;</span>
+</span><span class='line'>      <span class="n">dns_servers</span>      <span class="o">[</span><span class="s1">&#39;12.88.129.19&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.42.155&#39;</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">ntp_servers</span>      <span class="o">[</span><span class="s1">&#39;192.168.80.4&#39;</span><span class="p">,</span> <span class="s1">&#39;192.168.80.120&#39;</span><span class="p">,</span> <span class="s1">&#39;127.127.1.0&#39;</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">netmask</span>          <span class="s1">&#39;255.255.254.0&#39;</span>
+</span><span class='line'>      <span class="n">ldap_server</span>      <span class="s1">&#39;ldap.domain.com&#39;</span>
+</span><span class='line'>      <span class="n">env</span>              <span class="s1">&#39;d&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this <code>shared_context</code>,  we can specify all specific setting for an environment. What&rsquo;s even better, we can share it between different top level specs. So the top level spec&rsquo;s running in this environment, can include this shared context and have all nescecarry settings. It&rsquo;s also very <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a> If you change your dns servers, there&rsquo;s only one place you have to change this value.</p>
+
+<p>The <a href="https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/shared-context"><code>shared_context</code></a> idiom is RSpec standard. The <code>meta_for</code> is something we added. You can specify any legal ruby variable name on the left and any ruby type on the right side.</p>
+
+<h2>structure of the spec&rsquo;s</h2>
+
+<p>Let&rsquo;s get back to the actual specification. Again we make heavy use of a standard RSpec feature. The <a href="https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/shared-examples">shared examples</a>.  Using <code>it_behaves_like</code>, we can call a set of specifications.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;runs on DL380&quot;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;4G&#39;</span>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;a database server&quot;</span>
+</span><span class='line'><span class="n">it_behaves_like</span> <span class="s2">&quot;database is configured for a specific application&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We have a convention to structure the tests in three levels.</p>
+
+<ol>
+<li>The hardware</li>
+<li>The type of function of the system. E.g. a database or a JEE server</li>
+<li>The extra additions we need to get a specific application running on it.</li>
+</ol>
+
+
+<h2>The real stuff</h2>
+
+<p>All the elements we talked about this far, are mostly stuff we need to structure the set of tests. But what does the real stuff look like? Here is part of the real stuff.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">shared_examples</span> <span class="s2">&quot;using generic services&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;having LDAP service&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;file /etc/ldap.conf exists&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">should</span> <span class="kp">include</span> <span class="s2">&quot;/etc/ldap.conf&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;idle time limit for LDAP queries is set to 870&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/ldap.conf&quot;</span><span class="o">][</span><span class="s2">&quot;idle_timelimit&quot;</span><span class="o">].</span><span class="n">should</span> <span class="n">eq</span> <span class="s2">&quot;870&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;ldap url is set to ldap://</span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:ldap_server</span><span class="p">)</span><span class="si">}</span><span class="s2">/&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/ldap.conf&quot;</span><span class="o">][</span><span class="s2">&quot;uri&quot;</span><span class="o">].</span><span class="n">should</span> <span class="n">eq</span> <span class="p">(</span><span class="s2">&quot;ldap://&quot;</span> <span class="o">+</span> <span class="n">meta</span><span class="p">(</span><span class="ss">:ldap_server</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;using generic DNS services&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;file /etc/resolv.conf exists&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">should</span> <span class="kp">include</span> <span class="s2">&quot;/etc/resolv.conf&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;dns servers are set to: </span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:dns_servers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/resolv.conf&quot;</span><span class="o">][</span><span class="s2">&quot;nameserver&quot;</span><span class="o">].</span><span class="n">should</span> <span class="kp">include</span> <span class="o">*</span><span class="n">meta</span><span class="p">(</span><span class="ss">:dns_servers</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;DNS search list is set to: </span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:domain</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/resolv.conf&quot;</span><span class="o">][</span><span class="s2">&quot;search&quot;</span><span class="o">].</span><span class="n">should</span> <span class="n">eq_ignorecase</span> <span class="n">meta</span><span class="p">(</span><span class="ss">:domain</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;is able to resolve FQDN (</span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:host</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:domain</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="no">System</span><span class="o">.</span><span class="n">check_dns</span><span class="p">(</span><span class="n">meta</span><span class="p">(</span><span class="ss">:host</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">meta</span><span class="p">(</span><span class="ss">:domain</span><span class="p">))</span><span class="o">.</span><span class="n">should</span> <span class="n">eq</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is part of the specifications for the base Linux system. It describes the LDAP and DNS settings.  Here, you see the basic RSpec structure. We use <code>describe</code> to structure  a big set of specifications and tests into smaller units. The actual specifications are done using the <code>it</code> commands.  Our aim is to write communicable text in the <code>it</code> statement. We have noticed that besides a good test tool, RSpec really enabled us to communicate about what we did and why we did it.</p>
+
+<p>The <code>System.files["/etc/ldap.conf"]["idle_timelimit"].should eq "870"</code> is the actual test. Also in this code, we place a high value on communication. Even someone who doesn&rsquo;t know anything about RSpec and ruby, but knows about LDAP, is able to understand that we test if the <code>idle_timelimit</code> in <code>/etc/ldap.conf</code> is set to 870.</p>
+
+<h2>What does that meta thing do?</h2>
+
+<p>I told you before that we make heavy use of Rspec&rsquo;s user defined metadata. We define the information either in the describe block or we can describe them in the shared_context&rsquo;s. But in the test, is where we actually use them. Let&rsquo;s look at one in detail.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it</span> <span class="s2">&quot;dns servers are set to: </span><span class="si">#{</span><span class="n">meta</span><span class="p">(</span><span class="ss">:dns_servers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/resolv.conf&quot;</span><span class="o">][</span><span class="s2">&quot;nameserver&quot;</span><span class="o">].</span><span class="n">should</span> <span class="kp">include</span> <span class="o">*</span><span class="n">meta</span><span class="p">(</span><span class="ss">:dns_servers</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This specification text contains a call to the <code>meta</code> method with the parameter <code>:dns_servers</code>. This call looks into the meta information that&rsquo;s available and retrieves the value for <code>:dns_servers</code>. If you check back to the <code>shared_context</code>, you can see, that it translates to <code>['12.88.129.19', '192.168.42.155']</code>. So when this specification is run, the description of the specification will become:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dns</span> <span class="n">servers</span> <span class="n">are</span> <span class="n">set</span> <span class="ss">to</span><span class="p">:</span> <span class="o">[</span><span class="s2">&quot;12.88.129.19&quot;</span><span class="p">,</span> <span class="s2">&quot;192.168.42.155&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the test itself,  the <code>*meta(:dns_servers)</code> will also be translated to the array with the two string values.</p>
+
+<p>This <code>meta</code> method is <strong>not</strong> standard RSpec. In standard RSpec,  there is a difference between meta information you can use on the description level and the meta information you can use in the test. We felt that it would be useful to use them equally in both the description and the test. So we build our own extension to the RSpec meta information.</p>
+
+<h2>The <strong>real</strong> real stuff</h2>
+
+<p>I said before that I would show you the real stuff. But that was a small lie. The <code>System</code> class you see in the example is an abstraction. An abstraction we use to keep the spec&rsquo;s and tests at that level very readable and with a high communication value. Did I tell you the value we put on communication ;&ndash;). But <strong>NOW</strong> I&#8217;,m going to show you the real stuff. Here&hellip;. without further ado, is the <code>System</code> class:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">System</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">files</span>
+</span><span class='line'>      <span class="no">Facter</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;system_files&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">service_startup</span>
+</span><span class='line'>      <span class="k">return</span> <span class="no">Facter</span><span class="o">.</span><span class="n">fact</span><span class="p">(</span><span class="s2">&quot;service_startup&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the <code>System class</code>,  we use the <a href="http://puppetlabs.com/facter">Facter gem</a>.</p>
+
+<blockquote><p>Facter is a lightweight program that gathers basic node information about the hardware and operating system. Facter is especially useful for retrieving things like operating system names, hardware characteristics, IP addresses, MAC addresses, and SSH keys.</p></blockquote>
+
+
+<p>With facter,  we retrieve all sorts of information from the operating system and middleware in a way that we can easily use it in our spec&rsquo;s (Or in a puppet manifest). Depending on the kind of information, it returns an integer, an array, a string or even a <a href="http://ruby-doc.org/core-2.1.0/Hash.html">hash</a>. Returning a hash helps in making the higher level tests very easy to read. Let me give you an example. Let&rsquo;s look at the test below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">it</span> <span class="s2">&quot;idle time limit for LDAP queries is set to 870&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">System</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="s2">&quot;/etc/ldap.conf&quot;</span><span class="o">][</span><span class="s2">&quot;idle_timelimit&quot;</span><span class="o">].</span><span class="n">should</span> <span class="n">eq</span> <span class="s2">&quot;870&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It calls the <code>files</code> method on the <code>System</code> class.  We&rsquo;ve seen the files method calling the <code>system_files</code>  fact. The fact returns the following information:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;/etc/anther_file&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">}</span>
+</span><span class='line'><span class="s2">&quot;/etc/ldap.conf&quot;</span>  <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;idle_timelimit&quot;</span>          <span class="o">=&gt;</span>  <span class="s2">&quot;870&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;another_setting&quot;</span>     <span class="o">=&gt;</span>  <span class="s2">&quot;nonsense&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s why it is easy to get the <code>idele_timelimit</code> from <code>/etc/ldap.conf</code></p>
+
+<h2>Whats next&hellip;</h2>
+
+<p>Next time, I&rsquo;m going to tell you a bit about the work we did to make it easier to build custom types and resources for Puppet. Stay tuned.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to test systems installations]]></title>
