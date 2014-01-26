@@ -10,7 +10,7 @@
   <meta name="twitter:widgets:csp" content="on">
 
   
-  <meta name="description" content="In the last blog post we introduced described the need for a testing tool for Linux and middleware installations. After some Internet reasearch and a &hellip;">
+  <meta name="description" content="Robert scratched his head. How would he get a Puppet class to manage a complex resource on his systems? I guess I’ll have to make a Custom Type, he &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/01/26/puppet-custom-types-the-easy-way/">Puppet Custom Types, the Easy Way</a></h1>
+    
+  </header>
+
+
+  
+    <p class="meta">
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-26T13:57:20+01:00" pubdate data-updated="true">Jan 26<span>th</span>, 2014</time>
+      
+    </p>
+  
+  
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+  <div class="entry-content"><p>Robert scratched his head. How would he get a Puppet class to manage a complex resource on his systems? I guess I’ll have to make a Custom Type, he thought. But last time I looked into that, I noticed you need to know a lot about Puppet Internals.</p>
+
+<p>If you recognize this thought process, maybe it’s time to meet <a href="https://github.com/hajee/easy_type">easy_type</a>. Like the name says, easy type is designed to make it easy to build a Custom Puppet Type. In this article, we will introduce <a href="https://github.com/hajee/easy_type">easy_type</a>. We do this by taking you along on in the process of  making a Custom Type. In the process, we explain how <code>easy_type</code> actually makes it…… well easy to build a Custom Type. In the first part, we will show you how to get Puppet to see and index all your resources. In the next blog posts, we will enhance the Custom Type to be able to create, remove and modify existing resources.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/01/26/puppet-custom-types-the-easy-way/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -269,56 +321,6 @@ In the next month, I will post a series of blog posts on our experiences.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/10/24/asses-YOUR-continuous-deployment-maturity/">Asses YOUR Continuous Deployment Maturity</a></h1>
-    
-  </header>
-
-
-  
-    <p class="meta">
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-24T14:45:47+02:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
-      
-    </p>
-  
-  
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/visualize/'>visualize</a>
-  
-</span>
-
-
-  <div class="entry-content"><p>In the last couple of blog posts, I&rsquo;ve talked about how to describe how mature you are in your ability to do continuous deployment. <a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">This blog post</a> introduced a way to visualise the maturity. In <a href="/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">this blog post</a> I described the area&rsquo;s of interest on the x-scale of the graph. While in <a href="/2013/10/17/levels-of-maturity-for-continuous-deployment/">the last blog post</a> I described the levels of maturity on the y-scale. That&rsquo;s all nice, but how do you use these ingredients to assess <em>YOUR</em> continuous deployment maturity? In this blog post,  I will introduce  some criteria.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/10/24/asses-YOUR-continuous-deployment-maturity/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -355,6 +357,10 @@ In the next month, I will post a series of blog posts on our experiences.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2014/01/26/puppet-custom-types-the-easy-way/">Puppet Custom Types, the easy way</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/01/18/testing-your-system-installation-with-rspec/">Testing your system installation with RSpec</a>
       </li>
     
@@ -368,10 +374,6 @@ In the next month, I will post a series of blog posts on our experiences.</p>
     
       <li class="post">
         <a href="/2013/12/28/repeatability-and-testability-of-linux-platform-installations/">Repeatability and testability of Linux platform installations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/10/24/asses-YOUR-continuous-deployment-maturity/">Asses YOUR continuous deployment maturity</a>
       </li>
     
   </ul>

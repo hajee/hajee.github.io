@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-18T22:36:47+01:00</updated>
+  <updated>2014-01-26T17:20:03+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -11,6 +11,334 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet Custom Types, the easy way]]></title>
+    <link href="http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way/"/>
+    <updated>2014-01-26T13:57:20+01:00</updated>
+    <id>http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way</id>
+    <content type="html"><![CDATA[<p>Robert scratched his head. How would he get a Puppet class to manage a complex resource on his systems? I guess I’ll have to make a Custom Type, he thought. But last time I looked into that, I noticed you need to know a lot about Puppet Internals.</p>
+
+<p>If you recognize this thought process, maybe it’s time to meet <a href="https://github.com/hajee/easy_type">easy_type</a>. Like the name says, easy type is designed to make it easy to build a Custom Puppet Type. In this article, we will introduce <a href="https://github.com/hajee/easy_type">easy_type</a>. We do this by taking you along on in the process of  making a Custom Type. In the process, we explain how <code>easy_type</code> actually makes it…… well easy to build a Custom Type. In the first part, we will show you how to get Puppet to see and index all your resources. In the next blog posts, we will enhance the Custom Type to be able to create, remove and modify existing resources.</p>
+
+<!-- more -->
+
+
+<h2>When to build a Custom Type</h2>
+
+<p>Well that’s an interesting question! The Puppet language is actually very versatile, and you can do anything with it. But why would you step out of puppet and into ruby to build a Custom Type? In one of his <a href="http://garylarizza.com/blog/2013/11/25/fun-with-providers/">excellent blog posts</a>, Gary Larizza explains it in one sentence: “Because 20 execs in a defined type… “. Another indication, you’d be better of on a Custom Type path instead of a defined type, is when you need to build one or more custom facts.</p>
+
+<blockquote><p>What would drive someone to write a custom type and provider for Puppet anyhow? Afterall, you can do ANYTHING IMAGINABLE in the Puppet DSL*! After drawing back my sarcasm a bit, let me explain where the Puppet DSL tends to fall over and the idea of a custom type and provider starts becoming more than just an incredibly vivid dream:</p><p><ul><br/>    <li>You have more than a couple of exec statements in a single class/defined type that have multiple conditional properties like ‘onlyif’ and/or ‘unless’.</li><br/>    <li>You need to use pure Ruby to manipulate data and parse it through a system binary</li><br/> <li>Your defined type has more conditional logic than your pre-nuptual agreement</li><br/>  <li>Any combination of similar arguments related to the above</li><br/></ul><br/>If the above sounds familiar to you, then you’re probably ready to build your own custom Puppet type and provider.</p><footer><strong>Gary Larizza in Fun With Puppet Providers</strong></footer></blockquote>
+
+
+<h2>Let’s get started</h2>
+
+<p>To get started, you first need to include <code>easy_type</code> in your <code>Puppetfile</code> or otherwise get it into your puppet directories. To add it to your <code>Puppetfile</code>, you can add the following line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mod</span> <span class="s2">&quot;hajee/easy_type&quot;</span><span class="p">,</span> <span class="err">“</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="err">”</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that run the librarian to add the right modules to your puppet tree:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>librarian-puppet install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>librarian</code> reads the <code>Puppetfile</code> and puts the nescecary files into your module tree. After this command, you can see <code>easy_type</code> in your  list of modules.</p>
+
+<p><img src="http://hajee.github.io/images/easy_type_added.png" title="easy_type added to modules" ></p>
+
+<p>Well that was easy. Now we have all the basic requirements in place to start. What better time then now to think about the resource you want to manage.</p>
+
+<h2>How to manage the resource?</h2>
+
+<p>Because <code>easy_type</code> hides some of the Puppet intricacies from you, you can focus on the resource. To continue, you need to know how:</p>
+
+<ul>
+<li>get a list of all available resources?</li>
+<li>what’s important in a resource?</li>
+<li>to create a resource?</li>
+<li>to modify an existing resource</li>
+<li>to remove one</li>
+</ul>
+
+
+<p>This is the basic information you need to build a custom resource.</p>
+
+<h1>An example please?</h1>
+
+<p>As an example I’ve picked the same Custom Type as is described in the book <a href="http://shop.oreilly.com/product/0636920026860.do">“Puppet Types and Providers&#8221;</a>.  This is an excellent book if you are into writing custom resources. It describes in great detail everything you must known and do to build a Custom Type in the standard puppet way. In the book they state:</p>
+
+<blockquote><p>the `custom_package` type is not intended to serve as a replacement of Puppet’s existing package type. It serves as an example of how to take advantage of the features of the type and provider APIs.</p><footer><strong>Puppet Types and Providers By Dan Bode</strong> <cite>Nan Liu</cite></footer></blockquote>
+
+
+<p>Of course, the same thing counts over here.</p>
+
+<h2>A scaffold</h2>
+
+<p>To get started, it would be helfull if we have a scafffold. Let&rsquo;s say we want to name our own module <code>my_own_easy_type</code> and we name our own Custom Type <code>custom_package</code>. Let&rsquo;s start with creating the right directories. Go over to your module directory and create the following directories:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mkdir -p my_own_easy_type/lib/puppet/provider/custom_package
+</span><span class='line'>mkdir -p my_own_easy_type/lib/puppet/type/custom_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>The first code we need, is the next scaffold:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;easy_type&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">Puppet</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">newtype</span><span class="p">(</span><span class="ss">:custom_package</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">EasyType</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># set_command(:the_righ_command)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">to_get_raw_resources</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># What commando to give to get a list of all resource.</span>
+</span><span class='line'>      <span class="c1"># We need to return an Array of Hashes </span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">on_create</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># What do we do to create a resource</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">on_modify</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># What do we do to modify an existingresource</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">on_destroy</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># What do we do to destroy/delete an existingresource</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">newparam</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="kp">include</span> <span class="no">EasyType</span>
+</span><span class='line'>      <span class="n">isnamevar</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">to_translate_to_resource</span> <span class="k">do</span> <span class="o">|</span> <span class="n">raw_resource</span><span class="o">|</span>
+</span><span class='line'>        <span class="c1"># how to translate from the Hash-like raw resource to get the name</span>
+</span><span class='line'>        <span class="c1"># raw_resource.column_data(:name)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s put it in <code>my_own_easy_type/lib/puppet/type/custom_package.rb</code>. The next file we need is the provider file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;easy_type&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Puppet</span><span class="p">:</span><span class="ss">:Type</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="ss">:custom_package</span><span class="p">)</span><span class="o">.</span><span class="n">provide</span><span class="p">(</span><span class="ss">:simple</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">EasyType</span><span class="p">:</span><span class="ss">:Provider</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;Manage packages with easy_type&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">mk_resource_methods</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to put that at <code>my_own_easy_type/lib/puppet/provider/easy_type/simple.rb</code></p>
+
+<h2>It works&hellip;. Well, kind of</h2>
+
+<p>Actually this is all you have to do to get the basic Puppet stuff in order. Now you can give the puppet command to get a view of all available resources:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet resource custom_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And it shows&hellip;.. nothing. No output. But what is more import at this stage, is no error&rsquo;s or warnings. Now we can start working on the thing we know best. How to get the information about our resource, a package in this example, out and manageable.</p>
+
+<h2>Let&rsquo;s get the index of all packages</h2>
+
+<p>So let&rsquo;s change the <code>custom_package</code> so we can use Puppet to get a list of all resources. To do this, we need to add just a couple of lines. Lets first look at the method <code>to_get_raw_resources</code>. Its function is to return an Array containing all available resources you manage. Every Array entry is preferably a Hash. A Hash that contains the all the individual properties and parameters of an instance of your resource.</p>
+
+<p>In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the <code>rpm</code> command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rpm -qa<span class="s1">&#39; --qf&#39;</span> %<span class="o">{</span>NAME<span class="o">}</span>, %<span class="o">{</span>VERSION<span class="o">}</span>-%<span class="o">{</span>RELEASE<span class="o">}</span><span class="se">\n</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We would like the Custom Type to execute this command and convert the data to an Array of Hashes.</p>
+
+<p>To do just that, we need to change the <code>to_get_raw_resources</code> method to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">to_get_raw_resources</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">packages_string</span> <span class="o">=</span> <span class="n">rpm</span><span class="p">(</span><span class="s1">&#39;-qa&#39;</span><span class="p">,</span><span class="s1">&#39;--qf&#39;</span><span class="p">,</span><span class="s1">&#39;%{NAME}, %{VERSION}-%{RELEASE}\n&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">convert_csv_data_to_hash</span><span class="p">(</span><span class="n">packages_string</span><span class="p">,</span><span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:version</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>packages_string</code> will contain a string with all the information. The <code>convert_csv_data_to_hash</code> method will convert it to a hash. The elements in the hash are named <code>name</code> and <code>version</code>.</p>
+
+<p>To let <code>easy_type</code> know rpm is an os command, we need to add the line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set_command</span><span class="p">(</span><span class="ss">:rpm</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we need to let Puppet know how to get the name value from the raw resource. To do this, we change the definition of the name parameter.  We need to define the <code>to_translate_to_resource</code> method. Its function is to pick just the name out of the Hash that describes the full resource. You must define this function in every parameter or property. It receives a single instance of a resource in a Hash. It is one element from the Array of Hashes we created before. Because we named the first column in our comma separated data, <code>:name</code>, we can easily get it from the Hash. Lets define the function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">to_translate_to_resource</span> <span class="k">do</span> <span class="o">|</span> <span class="n">raw_resource</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">raw_resource</span><span class="o">.</span><span class="n">column_data</span><span class="p">(</span><span class="ss">:name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>TA TAAHH</h2>
+
+<p>Now when we ask Puppet for the available <code>custom_packages</code>, we get a list of all the available packages.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet resource custom_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;GConf2&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;MAKEDEV&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wait, didn&rsquo;t we also collect the version information? What about that? To Add the version information, we need to add a version property. A property looks very similar to the parameter that was already available in the scaffold. Here is the code for the version property:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">newproperty</span><span class="p">(</span><span class="ss">:version</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">EasyType</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">to_translate_to_resource</span> <span class="k">do</span> <span class="o">|</span> <span class="n">raw_resource</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">raw_resource</span><span class="o">.</span><span class="n">column_data</span><span class="p">(</span><span class="ss">:version</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now when we ask Puppet for the available <code>custom_packages</code> again, we get a list of all the available packages, inclusing the version information.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet resource custom_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;GConf2&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;2.14.0-9.el5&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;MAKEDEV&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;3.23-1.2&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Next&hellip;</h2>
+
+<p>In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing your system installation with RSpec]]></title>
