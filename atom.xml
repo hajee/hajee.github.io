@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-26T17:20:03+01:00</updated>
+  <updated>2014-01-27T22:02:09+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -336,7 +336,7 @@
 
 <h2>Next&hellip;</h2>
 
-<p>In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work.</p>
+<p>In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work. You can find the example <a href="https://github.com/hajee/my_own_easy_type">here</a></p>
 ]]></content>
   </entry>
   
