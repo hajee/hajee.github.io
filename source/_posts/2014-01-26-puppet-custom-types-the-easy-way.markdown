@@ -34,7 +34,7 @@ If the above sounds familiar to you, then you’re probably ready to build your 
 To get started, you first need to include `easy_type` in your `Puppetfile` or otherwise get it into your puppet directories. To add it to your `Puppetfile`, you can add the following line:
 
 ```ruby
-mod "hajee/easy_type", “0.3.0”
+mod "hajee/easy_type", :git => "git://github.com/hajee/easy_type.git"
 ```
 
 After that run the librarian to add the right modules to your puppet tree:
@@ -154,7 +154,7 @@ So let's change the `custom_package` so we can use Puppet to get a list of all r
 In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the `rpm` command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.
 
 ```sh
-rpm -qa' --qf' %{NAME}, %{VERSION}-%{RELEASE}\n
+rpm -qa' --qf' %{NAME}, %{VERSION}\n
 ```
 
 We would like the Custom Type to execute this command and convert the data to an Array of Hashes.
@@ -163,7 +163,7 @@ To do just that, we need to change the `to_get_raw_resources` method to:
 
 ```ruby
     to_get_raw_resources do
-      packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}-%{RELEASE}\n')
+      packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}\n')
       convert_csv_data_to_hash(packages_string,[:name, :version])
     end
 ```
@@ -222,14 +222,16 @@ Output:
 ```ruby
 custom_package { 'GConf2':
   ensure  => 'present',
-  version => '2.14.0-9.el5',
+  version => '2.14.0',
 }
 custom_package { 'MAKEDEV':
   ensure  => 'present',
-  version => '3.23-1.2',
+  version => '3.23',
 }
 ...
 ```
 
 ##Next...
-In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work.
+In the [next blog post]({% post_url 2014-02-08-puppet-custom-types-the-easy-way-part-2 %}), we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)
+
+_Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo_
