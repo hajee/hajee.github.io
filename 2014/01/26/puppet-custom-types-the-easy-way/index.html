@@ -101,7 +101,7 @@
 <p>To get started, you first need to include <code>easy_type</code> in your <code>Puppetfile</code> or otherwise get it into your puppet directories. To add it to your <code>Puppetfile</code>, you can add the following line:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mod</span> <span class="s2">&quot;hajee/easy_type&quot;</span><span class="p">,</span> <span class="err">“</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="err">”</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mod</span> <span class="s2">&quot;hajee/easy_type&quot;</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s2">&quot;git://github.com/hajee/easy_type.git&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -283,7 +283,7 @@
 <p>In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the <code>rpm</code> command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>rpm -qa<span class="s1">&#39; --qf&#39;</span> %<span class="o">{</span>NAME<span class="o">}</span>, %<span class="o">{</span>VERSION<span class="o">}</span>-%<span class="o">{</span>RELEASE<span class="o">}</span><span class="se">\n</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rpm -qa<span class="s1">&#39; --qf&#39;</span> %<span class="o">{</span>NAME<span class="o">}</span>, %<span class="o">{</span>VERSION<span class="o">}</span><span class="se">\n</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -296,7 +296,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">to_get_raw_resources</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">packages_string</span> <span class="o">=</span> <span class="n">rpm</span><span class="p">(</span><span class="s1">&#39;-qa&#39;</span><span class="p">,</span><span class="s1">&#39;--qf&#39;</span><span class="p">,</span><span class="s1">&#39;%{NAME}, %{VERSION}-%{RELEASE}\n&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">packages_string</span> <span class="o">=</span> <span class="n">rpm</span><span class="p">(</span><span class="s1">&#39;-qa&#39;</span><span class="p">,</span><span class="s1">&#39;--qf&#39;</span><span class="p">,</span><span class="s1">&#39;%{NAME}, %{VERSION}\n&#39;</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">convert_csv_data_to_hash</span><span class="p">(</span><span class="n">packages_string</span><span class="p">,</span><span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:version</span><span class="o">]</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -389,11 +389,11 @@
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;GConf2&#39;</span><span class="p">:</span>
 </span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;2.14.0-9.el5&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;2.14.0&#39;</span><span class="p">,</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;MAKEDEV&#39;</span><span class="p">:</span>
 </span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;3.23-1.2&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;3.23&#39;</span><span class="p">,</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -401,7 +401,9 @@
 
 <h2>Next&hellip;</h2>
 
-<p>In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work. You can find the example <a href="https://github.com/hajee/my_own_easy_type">here</a></p>
+<p>In the <a href="/2014/02/08/puppet-custom-types-the-easy-way-part-2/">next blog post</a>, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work. You can find the example <a href="https://github.com/hajee/my_own_easy_type">here</a></p>
+
+<p><em>Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo</em></p>
 </div>
 
 
@@ -443,6 +445,8 @@
         <a class="basic-alignment left" href="/2014/01/18/testing-your-system-installation-with-rspec/" title="Previous Post: Testing your system installation with RSpec">&laquo; Testing your system installation with RSpec</a>
       
       
+        <a class="basic-alignment right" href="/2014/02/08/puppet-custom-types-the-easy-way-part-2/" title="Next Post: Puppet Custom Types, the easy way (part 2)">Puppet Custom Types, the easy way (part 2) &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -452,14 +456,14 @@
     <h2>Related Posts</h2>
     
       <article>
-        <h3 class="title"><a href="/2014/01/18/testing-your-system-installation-with-rspec/">Testing your system installation with RSpec</a></h3>
+        <h3 class="title"><a href="/2014/02/08/puppet-custom-types-the-easy-way-part-2/">Puppet Custom Types, the easy way (part 2)</a></h3>
         <div class="meta">
             
         </div>
       </article>
     
       <article>
-        <h3 class="title"><a href="/2013/12/30/puppet-building-blocks/">Puppet building blocks</a></h3>
+        <h3 class="title"><a href="/2014/01/18/testing-your-system-installation-with-rspec/">Testing your system installation with RSpec</a></h3>
         <div class="meta">
             
         </div>
@@ -497,6 +501,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2014/02/08/puppet-custom-types-the-easy-way-part-2/">Puppet Custom Types, the easy way (part 2)</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/01/26/puppet-custom-types-the-easy-way/">Puppet Custom Types, the easy way</a>
       </li>
     
@@ -510,10 +518,6 @@
     
       <li class="post">
         <a href="/2013/12/30/puppet-building-blocks/">Puppet building blocks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/12/28/repeatability-and-testability-of-linux-platform-installations/">Repeatability and testability of Linux platform installations</a>
       </li>
     
   </ul>

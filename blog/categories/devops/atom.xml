@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-27T22:02:09+01:00</updated>
+  <updated>2014-02-09T14:28:20+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet Custom Types, the easy way (part 2)]]></title>
+    <link href="http://hajee.github.io/2014/02/08/puppet-custom-types-the-easy-way-part-2/"/>
+    <updated>2014-02-08T13:57:20+01:00</updated>
+    <id>http://hajee.github.io/2014/02/08/puppet-custom-types-the-easy-way-part-2</id>
+    <content type="html"><![CDATA[In the [last blog post](/2014/01/26/puppet-custom-types-the-easy-way/), we started with our own custom type. We added the `easy_type` module, created the files necessary for getting started and got our custom running without any errors. We then added two lines to get into a state where Puppet was able to do an inventory of our systems. But a custom type not able to create, delete or modify the state of your system, wouldn;t be very helpful. So in the blog post we are going to add that functionality to our custom_package type.
+
+<!-- more -->
+
+##Let's recap
+Let's first look back at what we did last time. To get started with [easy_type](https://github.com/hajee/easy_type), we made sure `easy_type` is installed in the module path. We used `librarian-puppet` to get `easy_type` installed. After that,  we created the right directories and created a scaffold. Since last blog post,  we have added the scaffold to the `easy_type`. This is to make it even easier to get started. To get it, use the next command:
+
+```sh
+cp -Rv easy_type/scaffold custom_package/lib/puppet
+```
+
+After we created the scaffold, we checked what puppet would do with the type and noticed `Puppet` didn't do anything, but also didn't complain. So a good start.
+
+Then we added the 2 lines of code for getting the raw package information from the system. After that,  we added the 1 line of code that picked the name and version information from the raw package information. Then we had a working Puppet custom type. 
+
+<img src="/images/custom_package_list.png" title="Index from custom_package" >
+
+Wel working...Sort of. Because the type doesn't know yet how it can create, delete and modify resources. So that's what we're going to do next.
+
+##How to create a resource in real life?
+Like I said in the [last blog post](/2014/01/26/puppet-custom-types-the-easy-way/), a design goal of `easy_type` is to let you focus on the resource knowledge and let us do the Puppet stuff. So what is needed to create a new `custom_package` instance. To create a new `custom_package` instance, we need to install a package.
+
+For `easy_type`,  it would be the easiest thing if we could use the same base command as we used to get an index. That would be the `rpm` command, but in this case the best way to install a package is a `yum` command.
+
+```sh
+yum -q install a_package
+```
+
+This would install the latest version. But what if we needed a specific version? Then `a_package` needs to be both the name and the version number, concatenated with a dash. For example:
+
+```sh
+yum -q install php-5.2.6-2
+```
+
+Will install php version 5.2.6-2
+
+##And how to do it in the Puppet world?
+So how do we get this knowledge into our own custom type? First we have to add the extra command (`yum`) that is used. We do this by changing the `set_command` line to:
+
+```ruby
+set_command [:rpm, :yum]
+```
+
+This line tells `easy_type` that we use `rpm` and `yum` as commands. Next we have to tell `easy_type` to use `yum` when we need to create a resource:
+
+```ruby
+on_create do |command_builder|
+  command_builder.add do
+    yum "install -y #{name}"
+  end
+end
+```
+
+But wait. What about the version number? Don't we need to do add it somewhere? And you are right. We need to add it at the definition of the property. At the property add the lines:
+
+```ruby
+on_apply do |command_builder| 
+  command_builder.append do
+    "-#{version}"
+  end
+end
+```
+
+The method is only run when we need to create a resource or when the attribute value in the manifest is different from the attribute value on the system. So in this case, because we create a resource the method is called. With the `append` method, we tell the `command_builder` to add some text to the string created before by the `command_builder.add`.
+
+So now we are able to create a `custom_package` resource.
+
+<img src="/images/custom_package_created.png" title="Install a package using custom_package type" >
+
+##And now some destruction
+Like we saw before, `yum` is the command used to install a package. `yum` is also used to uninstall a package and therefore delete a resource in the Puppet world. The command will be:
+
+```sh
+yum -q erase a_package
+```
+To get this wisdom into our custom type, we need to add some code to the `on_destroy` handler.
+
+```ruby
+on_destroy do | command_builder|
+  command_builder.add do
+    yum "erase -y #{name}"
+  end
+end
+```
+
+So besides indexing and creating, now our custom type is also ready for to destroy a resource.
+
+<img src="/images/custom_package_destroy.png" title="Install a package using custom_package type" >
+
+##How about modifying?
+
+Like we did before, we want to focus on our knowledge of the resource. What do we do when we modify the version attribute? 
+
+<blockquote><p>The on_modify handler is a naive implementation that does not handle downgrade properly. The correct implementation should compare against the installed software version and invoke package downgrade when appropriate. The code here is kept simple; for more complete examples, see the ~/src/puppet/lib/puppet/provider/packages directory.</p><footer><strong>Just like in the book Puppet Types and providers</strong></footer></blockquote>
+
+So in our simple case, we just install the specified version. Actually we just do an `on_create`. So let's tell our type to behave like that.
+
+```ruby
+on_modify do | command_builder|
+  on_create(command_builder)
+end
+```
+
+So now when we change the version number, a different package is installed.
+
+<img src="/images/custom_package_modified.png" title="Install a package using custom_package type" >
+
+## AND TA TAAHH
+Now we are ready. We have a Custom Puppet Type that has the ability to:
+
+* Do an index
+* create a new resource
+* destroy/delete a resource
+* and modify an existing resource
+
+If we don't count the  boiler plate code, we added just 18 lines of code to get this working. Not to bad.
+
+##There's a lot more
+Like I said in the introduction, this is really a simple example. Real life custom types are more difficult. So `easy_type` has some more functionality that is not shown in this examples. 
+
+* support for standard mungers
+* support for standard validators
+* A lot of tricks in the command_builder so it's easy to build commands based on what Puppet thinks, needs to be done.
+* support for extracting the definition of attributes and properties
+
+If you would like to see more about `easy_type` just let me know and I will see if we can do some more posts about it. For now, check the the example source in the [github repository](https://github.com/hajee/my_own_easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. 
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Puppet Custom Types, the easy way]]></title>
@@ -35,7 +170,7 @@ Well that’s an interesting question! The Puppet language is actually very vers
 To get started, you first need to include `easy_type` in your `Puppetfile` or otherwise get it into your puppet directories. To add it to your `Puppetfile`, you can add the following line:
 
 ```ruby
-mod "hajee/easy_type", “0.3.0”
+mod "hajee/easy_type", :git => "git://github.com/hajee/easy_type.git"
 ```
 
 After that run the librarian to add the right modules to your puppet tree:
@@ -153,7 +288,7 @@ So let's change the `custom_package` so we can use Puppet to get a list of all r
 In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the `rpm` command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.
 
 ```sh
-rpm -qa' --qf' %{NAME}, %{VERSION}-%{RELEASE}\n
+rpm -qa' --qf' %{NAME}, %{VERSION}\n
 ```
 
 We would like the Custom Type to execute this command and convert the data to an Array of Hashes.
@@ -162,7 +297,7 @@ To do just that, we need to change the `to_get_raw_resources` method to:
 
 ```ruby
     to_get_raw_resources do
-      packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}-%{RELEASE}\n')
+      packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}\n')
       convert_csv_data_to_hash(packages_string,[:name, :version])
     end
 ```
@@ -221,17 +356,19 @@ Output:
 ```ruby
 custom_package { 'GConf2':
   ensure  => 'present',
-  version => '2.14.0-9.el5',
+  version => '2.14.0',
 }
 custom_package { 'MAKEDEV':
   ensure  => 'present',
-  version => '3.23-1.2',
+  version => '3.23',
 }
 ...
 ```
 
 ##Next...
-In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)]]></content>
+In the [next blog post](/2014/02/08/puppet-custom-types-the-easy-way-part-2/), we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)
+
+_Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo_]]></content>
   </entry>
   
   <entry>
@@ -558,24 +695,6 @@ While the `class` and the defined type can and are used to describe small config
 ##Next time
 This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.
 ]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Repeatability and testability of Linux platform installations]]></title>
-    <link href="http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations/"/>
-    <updated>2013-12-28T20:13:45+01:00</updated>
-    <id>http://hajee.github.io/2013/12/28/repeatability-and-testability-of-linux-platform-installations</id>
-    <content type="html"><![CDATA[While working as a software quality manager at a large company within the Netherlands, we started working on the repeatability and testability of our Linux platforms. We wanted to be able to deliver hight quality Linux platforms and deliver them fast. We believe that both of these abilities are key to achieving that goal.
-In the next month, I will post a series of blog posts on our experiences.
-
-<!-- more -->
-
-* Using RSpec to test our Linux, Oracle and WebLogic installations
-* Using Puppet to facilitate the repeatable installation of Linux systems with Oracle and WLS
-* Using Puppet custom types to make it easier to do small incremental updates on Linux systems with Oracle and WLS.
-* Getting the message across. Why we need a quick feedback loop with automated deployment and automated testing.
-
-The blog posts won't necessary be in the above order.]]></content>
   </entry>
   
 </feed>

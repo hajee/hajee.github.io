@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-01-27T22:02:09+01:00</updated>
+  <updated>2014-02-09T14:28:20+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -11,6 +11,178 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet Custom Types, the easy way (part 2)]]></title>
+    <link href="http://hajee.github.io/2014/02/08/puppet-custom-types-the-easy-way-part-2/"/>
+    <updated>2014-02-08T13:57:20+01:00</updated>
+    <id>http://hajee.github.io/2014/02/08/puppet-custom-types-the-easy-way-part-2</id>
+    <content type="html"><![CDATA[<p>In the <a href="http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way/">last blog post</a>, we started with our own custom type. We added the <code>easy_type</code> module, created the files necessary for getting started and got our custom running without any errors. We then added two lines to get into a state where Puppet was able to do an inventory of our systems. But a custom type not able to create, delete or modify the state of your system, wouldn;t be very helpful. So in the blog post we are going to add that functionality to our custom_package type.</p>
+
+<!-- more -->
+
+
+<h2>Let&rsquo;s recap</h2>
+
+<p>Let&rsquo;s first look back at what we did last time. To get started with <a href="https://github.com/hajee/easy_type">easy_type</a>, we made sure <code>easy_type</code> is installed in the module path. We used <code>librarian-puppet</code> to get <code>easy_type</code> installed. After that,  we created the right directories and created a scaffold. Since last blog post,  we have added the scaffold to the <code>easy_type</code>. This is to make it even easier to get started. To get it, use the next command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>cp -Rv easy_type/scaffold custom_package/lib/puppet
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After we created the scaffold, we checked what puppet would do with the type and noticed <code>Puppet</code> didn&rsquo;t do anything, but also didn&rsquo;t complain. So a good start.</p>
+
+<p>Then we added the 2 lines of code for getting the raw package information from the system. After that,  we added the 1 line of code that picked the name and version information from the raw package information. Then we had a working Puppet custom type.</p>
+
+<p><img src="http://hajee.github.io/images/custom_package_list.png" title="Index from custom_package" ></p>
+
+<p>Wel working&hellip;Sort of. Because the type doesn&rsquo;t know yet how it can create, delete and modify resources. So that&rsquo;s what we&rsquo;re going to do next.</p>
+
+<h2>How to create a resource in real life?</h2>
+
+<p>Like I said in the <a href="http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way/">last blog post</a>, a design goal of <code>easy_type</code> is to let you focus on the resource knowledge and let us do the Puppet stuff. So what is needed to create a new <code>custom_package</code> instance. To create a new <code>custom_package</code> instance, we need to install a package.</p>
+
+<p>For <code>easy_type</code>,  it would be the easiest thing if we could use the same base command as we used to get an index. That would be the <code>rpm</code> command, but in this case the best way to install a package is a <code>yum</code> command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum -q install a_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This would install the latest version. But what if we needed a specific version? Then <code>a_package</code> needs to be both the name and the version number, concatenated with a dash. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum -q install php-5.2.6-2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Will install php version 5.2.6-2</p>
+
+<h2>And how to do it in the Puppet world?</h2>
+
+<p>So how do we get this knowledge into our own custom type? First we have to add the extra command (<code>yum</code>) that is used. We do this by changing the <code>set_command</code> line to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set_command</span> <span class="o">[</span><span class="ss">:rpm</span><span class="p">,</span> <span class="ss">:yum</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This line tells <code>easy_type</code> that we use <code>rpm</code> and <code>yum</code> as commands. Next we have to tell <code>easy_type</code> to use <code>yum</code> when we need to create a resource:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">on_create</span> <span class="k">do</span> <span class="o">|</span><span class="n">command_builder</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">command_builder</span><span class="o">.</span><span class="n">add</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">yum</span> <span class="s2">&quot;install -y </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wait. What about the version number? Don&rsquo;t we need to do add it somewhere? And you are right. We need to add it at the definition of the property. At the property add the lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">on_apply</span> <span class="k">do</span> <span class="o">|</span><span class="n">command_builder</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">command_builder</span><span class="o">.</span><span class="n">append</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;-</span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The method is only run when we need to create a resource or when the attribute value in the manifest is different from the attribute value on the system. So in this case, because we create a resource the method is called. With the <code>append</code> method, we tell the <code>command_builder</code> to add some text to the string created before by the <code>command_builder.add</code>.</p>
+
+<p>So now we are able to create a <code>custom_package</code> resource.</p>
+
+<p><img src="http://hajee.github.io/images/custom_package_created.png" title="Install a package using custom_package type" ></p>
+
+<h2>And now some destruction</h2>
+
+<p>Like we saw before, <code>yum</code> is the command used to install a package. <code>yum</code> is also used to uninstall a package and therefore delete a resource in the Puppet world. The command will be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>yum -q erase a_package
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To get this wisdom into our custom type, we need to add some code to the <code>on_destroy</code> handler.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">on_destroy</span> <span class="k">do</span> <span class="o">|</span> <span class="n">command_builder</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">command_builder</span><span class="o">.</span><span class="n">add</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">yum</span> <span class="s2">&quot;erase -y </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So besides indexing and creating, now our custom type is also ready for to destroy a resource.</p>
+
+<p><img src="http://hajee.github.io/images/custom_package_destroy.png" title="Install a package using custom_package type" ></p>
+
+<h2>How about modifying?</h2>
+
+<p>Like we did before, we want to focus on our knowledge of the resource. What do we do when we modify the version attribute?</p>
+
+<blockquote><p>The on_modify handler is a naive implementation that does not handle downgrade properly. The correct implementation should compare against the installed software version and invoke package downgrade when appropriate. The code here is kept simple; for more complete examples, see the ~/src/puppet/lib/puppet/provider/packages directory.</p><footer><strong>Just like in the book Puppet Types and providers</strong></footer></blockquote>
+
+
+<p>So in our simple case, we just install the specified version. Actually we just do an <code>on_create</code>. So let&rsquo;s tell our type to behave like that.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">on_modify</span> <span class="k">do</span> <span class="o">|</span> <span class="n">command_builder</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">on_create</span><span class="p">(</span><span class="n">command_builder</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now when we change the version number, a different package is installed.</p>
+
+<p><img src="http://hajee.github.io/images/custom_package_modified.png" title="Install a package using custom_package type" ></p>
+
+<h2>AND TA TAAHH</h2>
+
+<p>Now we are ready. We have a Custom Puppet Type that has the ability to:</p>
+
+<ul>
+<li>Do an index</li>
+<li>create a new resource</li>
+<li>destroy/delete a resource</li>
+<li>and modify an existing resource</li>
+</ul>
+
+
+<p>If we don&rsquo;t count the  boiler plate code, we added just 18 lines of code to get this working. Not to bad.</p>
+
+<h2>There&rsquo;s a lot more</h2>
+
+<p>Like I said in the introduction, this is really a simple example. Real life custom types are more difficult. So <code>easy_type</code> has some more functionality that is not shown in this examples.</p>
+
+<ul>
+<li>support for standard mungers</li>
+<li>support for standard validators</li>
+<li>A lot of tricks in the command_builder so it&rsquo;s easy to build commands based on what Puppet thinks, needs to be done.</li>
+<li>support for extracting the definition of attributes and properties</li>
+</ul>
+
+
+<p>If you would like to see more about <code>easy_type</code> just let me know and I will see if we can do some more posts about it. For now, check the the example source in the <a href="https://github.com/hajee/my_own_easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Puppet Custom Types, the easy way]]></title>
@@ -36,7 +208,7 @@
 <p>To get started, you first need to include <code>easy_type</code> in your <code>Puppetfile</code> or otherwise get it into your puppet directories. To add it to your <code>Puppetfile</code>, you can add the following line:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mod</span> <span class="s2">&quot;hajee/easy_type&quot;</span><span class="p">,</span> <span class="err">“</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="err">”</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mod</span> <span class="s2">&quot;hajee/easy_type&quot;</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s2">&quot;git://github.com/hajee/easy_type.git&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -218,7 +390,7 @@
 <p>In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the <code>rpm</code> command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>rpm -qa<span class="s1">&#39; --qf&#39;</span> %<span class="o">{</span>NAME<span class="o">}</span>, %<span class="o">{</span>VERSION<span class="o">}</span>-%<span class="o">{</span>RELEASE<span class="o">}</span><span class="se">\n</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rpm -qa<span class="s1">&#39; --qf&#39;</span> %<span class="o">{</span>NAME<span class="o">}</span>, %<span class="o">{</span>VERSION<span class="o">}</span><span class="se">\n</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -231,7 +403,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">to_get_raw_resources</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">packages_string</span> <span class="o">=</span> <span class="n">rpm</span><span class="p">(</span><span class="s1">&#39;-qa&#39;</span><span class="p">,</span><span class="s1">&#39;--qf&#39;</span><span class="p">,</span><span class="s1">&#39;%{NAME}, %{VERSION}-%{RELEASE}\n&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">packages_string</span> <span class="o">=</span> <span class="n">rpm</span><span class="p">(</span><span class="s1">&#39;-qa&#39;</span><span class="p">,</span><span class="s1">&#39;--qf&#39;</span><span class="p">,</span><span class="s1">&#39;%{NAME}, %{VERSION}\n&#39;</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">convert_csv_data_to_hash</span><span class="p">(</span><span class="n">packages_string</span><span class="p">,</span><span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:version</span><span class="o">]</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -324,11 +496,11 @@
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;GConf2&#39;</span><span class="p">:</span>
 </span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;2.14.0-9.el5&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;2.14.0&#39;</span><span class="p">,</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="n">custom_package</span> <span class="p">{</span> <span class="s1">&#39;MAKEDEV&#39;</span><span class="p">:</span>
 </span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;3.23-1.2&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">version</span> <span class="o">=&gt;</span> <span class="s1">&#39;3.23&#39;</span><span class="p">,</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -336,7 +508,9 @@
 
 <h2>Next&hellip;</h2>
 
-<p>In the next blog post, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work. You can find the example <a href="https://github.com/hajee/my_own_easy_type">here</a></p>
+<p>In the <a href="http://hajee.github.io/2014/02/08/puppet-custom-types-the-easy-way-part-2/">next blog post</a>, we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check <code>easy_type</code> out. You can checkout the source in the <a href="https://github.com/hajee/easy_type">github repository</a>. You can also check some <a href="https://github.com/hajee/oracle">Oracle Custom Types</a> which are build upon <code>easy_type</code>. We would love to hear your feedback on this work. You can find the example <a href="https://github.com/hajee/my_own_easy_type">here</a></p>
+
+<p><em>Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo</em></p>
 ]]></content>
   </entry>
   
