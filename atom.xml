@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-02-10T20:36:04+01:00</updated>
+  <updated>2014-02-23T15:01:02+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -11,6 +11,268 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Puppet to manage Oracle]]></title>
+    <link href="http://hajee.github.io/2014/02/23/using-puppet-to-manage-oracle/"/>
+    <updated>2014-02-23T08:01:51+01:00</updated>
+    <id>http://hajee.github.io/2014/02/23/using-puppet-to-manage-oracle</id>
+    <content type="html"><![CDATA[<p>Russ looked at his screen. He started to get a bit weary. How in heavens name would he be able to manage this. He was looking at the requests he had for twenty applications that all had specific Oracle database needs. All different with regards to tablespaces, users, rights and services. And if that wasn’t bad enough in itself, all of the project teams building those applications, had up to 5 specific environments with different sizes and sometimes other settings. Russ definitely could use some help with this.</p>
+
+<p>If you are like Russ in dire need of help manageing your Oracle databases, you should checkout this blog post. It describes a Puppet module we are building and already using to manage the dba objects of an Oracle database.</p>
+
+<!-- more -->
+
+
+<h2>The requirements</h2>
+
+<p>After discovering the <a href="https://forge.puppetlabs.com/hajee/oracle">Puppet Oracle module</a>, Russ felt a little bit less anxious. This could really make life a bit more easy.</p>
+
+<p>First Russ started to look at the PIO application. The requirements for installing the PIO application where:</p>
+
+<ol>
+<li>An Oracle tablespace named <code>PIO_DATA</code> with a size of 200 Gigabyte</li>
+<li>An oracle user <code>PIO_USER</code> with the default tablespace set to <code>PIO_DATA</code> and only <code>connect</code>, <code>select any table</code> and <code>create table</code> rights. Also the user must have unlimited quota&rsquo;s in the <code>PIO_DATA</code> tablespace</li>
+<li>An Oracle role <code>PIO_APPLICATION_USER</code></li>
+<li>A Service named like the application. So a  <code>PIO</code> service.</li>
+</ol>
+
+
+<p><sup>(This list is slimmed down a bit to make it more readable.)</sup></p>
+
+<h2>The PIO Tablespace</h2>
+
+<p>Let&rsquo;s start with the tablespace requirement. With the new found Oracle module, this looks like a strait forward Puppet definition. This code should do the trick:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tablespace</span> <span class="p">{</span><span class="s1">&#39;PIO_DATA&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>                    <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">bigfile</span>                   <span class="o">=&gt;</span> <span class="n">yes</span>
+</span><span class='line'>  <span class="n">datafile</span>                  <span class="o">=&gt;</span> <span class="s1">&#39;pio_data.dbf&#39;</span>
+</span><span class='line'>  <span class="n">size</span>                      <span class="o">=&gt;</span> <span class="mi">200</span><span class="n">G</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">logging</span>                   <span class="o">=&gt;</span> <span class="n">yes</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">autoextend</span>                <span class="o">=&gt;</span> <span class="n">on</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">next</span>                      <span class="o">=&gt;</span> <span class="mi">100</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">max_size</span>                  <span class="o">=&gt;</span> <span class="mi">12288</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">extent_management</span>         <span class="o">=&gt;</span> <span class="n">local</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">segment_space_management</span>  <span class="o">=&gt;</span> <span class="n">auto</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So that takes care of requirement 1. let&rsquo;s test it.</p>
+
+<p>Wait, the Oracle module doesn&rsquo;t install Oracle itself. What good is a module like this if you haven&rsquo;t gotten Oracle installed. Fortunately Russ found <a href="https://forge.puppetlabs.com/biemond/oradb">Edwin Biemond&rsquo;s Oracle DB module</a> to take care of the installation.</p>
+
+<h2>The PIO User</h2>
+
+<p>The oracle user <code>PIO</code> is a little bit more difficult. It has a default tablespace. So we must make sure the tablespace already exist before we start creating the user.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">oracle_user</span><span class="p">{</span><span class="s1">&#39;PIO&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="n">temporary_tablespace</span>      <span class="o">=&gt;</span> <span class="n">temp</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">default_tablespace</span>        <span class="o">=&gt;</span> <span class="s1">&#39;PIO_DATA&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">password</span>                  <span class="o">=&gt;</span> <span class="s1">&#39;justapassword,</span>
+</span><span class='line'><span class="s1">  require                   =&gt; Tablespace[&#39;</span><span class="no">PIO_DATA</span><span class="s1">&#39;],</span>
+</span><span class='line'><span class="s1">  grants                    =&gt; [&#39;</span><span class="no">SELECT</span> <span class="no">ANY</span> <span class="no">TABLE</span><span class="s1">&#39;, &#39;</span><span class="no">CONNECT</span><span class="s1">&#39;, &#39;</span><span class="no">CREATE</span> <span class="no">TABLE</span><span class="s1">&#39;],</span>
+</span><span class='line'><span class="s1">  quotas                    =&gt; {</span>
+</span><span class='line'><span class="s1">                                  &#39;</span><span class="no">PIO_DATA</span><span class="s1">&#39;  =&gt; &#39;</span><span class="n">unlimited</span><span class="err">&#39;</span>
+</span><span class='line'>                              <span class="p">},</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again this looks like a strait forward Puppet definition. No Exec&rsquo;s no if&rsquo;s, just an easy readable Puppet definition. Requirement 3 fulfilled.</p>
+
+<h2>The PIO_APPLICATION_USER role and the PIO service</h2>
+
+<p>Making sure the role and the service exist, s super easy. Just look at this code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">role</span> <span class="p">{</span><span class="s1">&#39;PIO_APPLICATION_ROLE&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>    <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">oracle_service</span><span class="p">{</span><span class="s1">&#39;PIO&#39;</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This completes the list of requirements for one application. But when Russ looked at the other application&rsquo;s, he noticed a very similar pattern. A user, a tablespace a role and a service. Only the values of the different applications where different.</p>
+
+<h2>Puppet defined types to the rescue</h2>
+
+<p>Puppet has some nice mechanisms to handle just this kind of repeating pattern. A <code>defined typ[e</code> . let&rsquo;s create this type to manage all of Russ&rsquo;s applications.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">define</span> <span class="ss">db</span><span class="p">:</span><span class="ss">:app</span><span class="p">(</span>
+</span><span class='line'>  <span class="vg">$tablespace_name</span>    <span class="o">=</span> <span class="s2">&quot;${name}_data&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="vg">$password</span>           <span class="o">=</span> <span class="vg">$name</span><span class="p">,</span>
+</span><span class='line'>  <span class="vg">$size</span>               <span class="o">=</span> <span class="mi">3072</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>  <span class="vg">$maxsize</span>            <span class="o">=</span> <span class="mi">12288</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>  <span class="vg">$next</span>               <span class="o">=</span> <span class="mi">100</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>  <span class="vg">$user_rights</span>        <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;SELECT ANY TABLE&#39;</span>
+</span><span class='line'>                        <span class="p">,</span> <span class="s1">&#39;CONNECT&#39;</span>
+</span><span class='line'>                        <span class="p">,</span> <span class="s1">&#39;CREATE TABLE&#39;</span>
+</span><span class='line'>                        <span class="o">]</span>
+</span><span class='line'><span class="p">){</span>
+</span><span class='line'> <span class="c1"># include the class that installes Oracle. to make sure</span>
+</span><span class='line'> <span class="c1"># This defined type is run after the Oracle installation</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">tablespace</span> <span class="p">{</span><span class="vg">$tablespace_name</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">ensure</span>                    <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">size</span>                      <span class="o">=&gt;</span> <span class="vg">$size</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">logging</span>                   <span class="o">=&gt;</span> <span class="n">yes</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">autoextend</span>                <span class="o">=&gt;</span> <span class="n">on</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">next</span>                      <span class="o">=&gt;</span> <span class="mi">100</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">max_size</span>                  <span class="o">=&gt;</span> <span class="mi">12288</span><span class="n">M</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">extent_management</span>         <span class="o">=&gt;</span> <span class="n">local</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">segment_space_management</span>  <span class="o">=&gt;</span> <span class="n">auto</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">oracle_user</span><span class="p">{</span><span class="vg">$name</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">temporary_tablespace</span>      <span class="o">=&gt;</span> <span class="n">temp</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">default_tablespace</span>        <span class="o">=&gt;</span> <span class="vg">$tablespace_name</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">password</span>                  <span class="o">=&gt;</span> <span class="vg">$password</span><span class="p">,</span>
+</span><span class='line'>    <span class="nb">require</span>                   <span class="o">=&gt;</span> <span class="no">Tablespace</span><span class="o">[</span><span class="vg">$tablespace_name</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">grants</span>                    <span class="o">=&gt;</span> <span class="o">[</span><span class="vg">$user_rights</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">quotas</span>                    <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>                                    <span class="s2">&quot;${tablespace_name}&quot;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;unlimited&#39;</span>
+</span><span class='line'>                                  <span class="p">},</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="vg">$app_role</span> <span class="o">=</span> <span class="s2">&quot;${name}_application_user&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">role</span> <span class="p">{</span><span class="vg">$app_role</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">ensure</span>    <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">oracle_service</span><span class="p">{</span><span class="vg">$name</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">ensure</span>  <span class="o">=&gt;</span> <span class="n">present</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The new and improved PIO definition</h2>
+
+<p>With this defined type in place, the <code>PIO</code> definition becomes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="n">pio</span> <span class="p">{</span>
+</span><span class='line'>  <span class="ss">db</span><span class="p">:</span><span class="ss">:app</span><span class="p">{</span> <span class="s1">&#39;pio&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">size</span>      <span class="o">=&gt;</span> <span class="mi">200</span><span class="n">G</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">password</span>  <span class="o">=&gt;</span> <span class="s1">&#39;justapassword&#39;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For all the other applications, you can make the same kind of definitions. Your <code>node.pp</code> file could read like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">node</span> <span class="s2">&quot;basenode&quot;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">pio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">axe</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">bcc</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>You want to start as well?</h2>
+
+<p>The code in the blog post is based on the <a href="https://forge.puppetlabs.com/hajee/oracle">Puppet Oracle module</a>. Checkout the <a href="https://github.com/hajee/oracle">repository</a> if you want to see how we do it. This is a fresh project, so you might run into some bugs. Don&rsquo;t hesitate to register them at <a href="https://github.com/hajee/oracle/issues">the issue log</a>.</p>
+
+<h2>You can help?</h2>
+
+<p>That would be great. We only have a couple of Oracle DBA objects covered right now. There are lot&rsquo;s more. It would really be nice if we could get this module covering a lot of Oracle stuff. Clone the <a href="https://github.com/hajee/oracle">repository</a> make your enhancements and post a pull request.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Puppet Custom Types, the easy way (part 2)]]></title>

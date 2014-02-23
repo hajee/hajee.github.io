@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-02-10T20:36:04+01:00</updated>
+  <updated>2014-02-23T15:01:02+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -12,6 +12,176 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Puppet to manage Oracle]]></title>
+    <link href="http://hajee.github.io/2014/02/23/using-puppet-to-manage-oracle/"/>
+    <updated>2014-02-23T08:01:51+01:00</updated>
+    <id>http://hajee.github.io/2014/02/23/using-puppet-to-manage-oracle</id>
+    <content type="html"><![CDATA[Russ looked at his screen. He started to get a bit weary. How in heavens name would he be able to manage this. He was looking at the requests he had for twenty applications that all had specific Oracle database needs. All different with regards to tablespaces, users, rights and services. And if that wasn’t bad enough in itself, all of the project teams building those applications, had up to 5 specific environments with different sizes and sometimes other settings. Russ definitely could use some help with this.
+
+If you are like Russ in dire need of help manageing your Oracle databases, you should checkout this blog post. It describes a Puppet module we are building and already using to manage the dba objects of an Oracle database.
+
+<!-- more -->
+
+##The requirements
+
+After discovering the [Puppet Oracle module](https://forge.puppetlabs.com/hajee/oracle), Russ felt a little bit less anxious. This could really make life a bit more easy.
+
+First Russ started to look at the PIO application. The requirements for installing the PIO application where:
+
+ 1. An Oracle tablespace named `PIO_DATA` with a size of 200 Gigabyte
+ 2. An oracle user `PIO_USER` with the default tablespace set to `PIO_DATA` and only `connect`, `select any table` and `create table` rights. Also the user must have unlimited quota's in the `PIO_DATA` tablespace
+ 3. An Oracle role `PIO_APPLICATION_USER`
+ 4. A Service named like the application. So a  `PIO` service.
+
+<sup>(This list is slimmed down a bit to make it more readable.)</sup>
+
+##The PIO Tablespace
+
+Let's start with the tablespace requirement. With the new found Oracle module, this looks like a strait forward Puppet definition. This code should do the trick:
+
+```ruby
+tablespace {'PIO_DATA':
+  ensure                    => present,
+  bigfile                   => yes
+  datafile                  => 'pio_data.dbf'
+  size                      => 200G,
+  logging                   => yes,
+  autoextend                => on,
+  next                      => 100M,
+  max_size                  => 12288M,
+  extent_management         => local,
+  segment_space_management  => auto,
+}
+```
+
+So that takes care of requirement 1. let's test it.
+
+Wait, the Oracle module doesn't install Oracle itself. What good is a module like this if you haven't gotten Oracle installed. Fortunately Russ found [Edwin Biemond's Oracle DB module](https://forge.puppetlabs.com/biemond/oradb) to take care of the installation.
+
+##The PIO User
+
+The oracle user `PIO` is a little bit more difficult. It has a default tablespace. So we must make sure the tablespace already exist before we start creating the user.
+
+```ruby
+oracle_user{'PIO':
+  temporary_tablespace      => temp,
+  default_tablespace        => 'PIO_DATA',
+  password                  => 'justapassword,
+  require                   => Tablespace['PIO_DATA'],
+  grants                    => ['SELECT ANY TABLE', 'CONNECT', 'CREATE TABLE'],
+  quotas                    => {
+                                  'PIO_DATA'  => 'unlimited'
+                              },
+}
+```
+
+Again this looks like a strait forward Puppet definition. No Exec's no if's, just an easy readable Puppet definition. Requirement 3 fulfilled.
+
+##The PIO_APPLICATION_USER role and the PIO service
+
+Making sure the role and the service exist, s super easy. Just look at this code: 
+
+```ruby
+role {'PIO_APPLICATION_ROLE':
+  ensure    => present,
+}
+
+oracle_service{'PIO':
+  ensure  => present,
+}
+
+```
+This completes the list of requirements for one application. But when Russ looked at the other application's, he noticed a very similar pattern. A user, a tablespace a role and a service. Only the values of the different applications where different.
+
+##Puppet defined types to the rescue
+
+Puppet has some nice mechanisms to handle just this kind of repeating pattern. A `defined typ[e` . let's create this type to manage all of Russ's applications.
+
+```ruby
+define db::app(
+  $tablespace_name    = "${name}_data",
+  $password           = $name,
+  $size               = 3072M,
+  $maxsize            = 12288M,
+  $next               = 100M,
+  $user_rights        = ['SELECT ANY TABLE'
+                        , 'CONNECT'
+                        , 'CREATE TABLE'
+                        ]
+){
+ # include the class that installes Oracle. to make sure
+ # This defined type is run after the Oracle installation
+
+  tablespace {$tablespace_name:
+    ensure                    => present,
+    size                      => $size,
+    logging                   => yes,
+    autoextend                => on,
+    next                      => 100M,
+    max_size                  => 12288M,
+    extent_management         => local,
+    segment_space_management  => auto,
+  }
+
+  oracle_user{$name:
+    temporary_tablespace      => temp,
+    default_tablespace        => $tablespace_name,
+    password                  => $password,
+    require                   => Tablespace[$tablespace_name],
+    grants                    => [$user_rights],
+    quotas                    => {
+                                    "${tablespace_name}"  => 'unlimited'
+                                  },
+  }
+
+  $app_role = "${name}_application_user"
+
+  role {$app_role:
+    ensure    => present,
+  }
+
+  oracle_service{$name:
+    ensure  => present,
+  }
+
+}
+```
+
+##The new and improved PIO definition
+
+With this defined type in place, the `PIO` definition becomes:
+
+```ruby
+class pio {
+  db::app{ 'pio':
+    size      => 200G,
+    password  => 'justapassword'
+  }
+}
+```
+
+For all the other applications, you can make the same kind of definitions. Your `node.pp` file could read like this:
+
+```ruby
+node "basenode" {
+  include pio
+  include axe
+  include bcc
+  ...
+}
+```
+
+##You want to start as well?
+
+The code in the blog post is based on the [Puppet Oracle module](https://forge.puppetlabs.com/hajee/oracle). Checkout the [repository](https://github.com/hajee/oracle) if you want to see how we do it. This is a fresh project, so you might run into some bugs. Don't hesitate to register them at [the issue log](https://github.com/hajee/oracle/issues).
+
+##You can help?
+
+That would be great. We only have a couple of Oracle DBA objects covered right now. There are lot's more. It would really be nice if we could get this module covering a lot of Oracle stuff. Clone the [repository](https://github.com/hajee/oracle) make your enhancements and post a pull request.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Puppet Custom Types, the easy way (part 2)]]></title>
@@ -639,62 +809,6 @@ On the other hand, if a new package solves a certain bug, it is easy to test if 
 
 ##Next...
 In the [next blog post](/2014/01/18/testing-your-system-installation-with-rspec/)  I will explain how we have structured our Rspec code. ]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Puppet building blocks]]></title>
-    <link href="http://hajee.github.io/2013/12/30/puppet-building-blocks/"/>
-    <updated>2013-12-30T20:14:10+01:00</updated>
-    <id>http://hajee.github.io/2013/12/30/puppet-building-blocks</id>
-    <content type="html"><![CDATA[In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.
-
-In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it's detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.
-
-<!-- more -->
-
-##The resource type
-Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the `File` type.
-
-```ruby
-
-file {'/application/config.xml':
-  ensure	=> present,
-  content	=> '<xml>just some config file</xml>',
-}
-```
-
-besides the `File` type, there are types for managing `Users`, `Groups`, `Services` and so on. Actually Puppet has a lot of built-in types. If you look at [type documentation](http://docs.puppetlabs.com/references/latest/type.html) on the puppet site,you see a list of 48 built-in types.
-
-<img src="/images/list_of_types.png" title="List of built-in types" >
-
-A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`.
-
-A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`. 
-
-
-##The class
-[The Puppet documentation for classes](http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html) states:
-
-<blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node's catalog) with the include function or a resource-like syntax.</p></blockquote>
-
-Quite some definition. In layman's terms, though a Puppet class is a way of structuring resources into a building block. The class [apache](https://forge.puppetlabs.com/puppetlabs/apache), for example, contains all resources needed to install, configure and run an apache https daemon on your system.
-
-
-##The defined resource
-[The Puppet documentation for defined types](http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html) states:
-
-<blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote>
-
-As you can see in the definition, just like the `class`, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a `class`and a  defined type is that a `class`may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.
-
-
-##The custom type
-While the `class` and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the `types` needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.
-
-
-##Next time
-This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.
-]]></content>
   </entry>
   
 </feed>
