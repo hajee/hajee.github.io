@@ -1,0 +1,172 @@
+---
+layout: post
+title: "Using Puppet to manage Oracle"
+date: 2014-02-23 08:01:51 +0100
+comments: true
+categories: ['puppet', 'devops', 'ruby', 'oracle']
+keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby, oracle
+description: Describes a Puppet module to manage tabelspaces, users grants 
+
+---
+Russ looked at his screen. He started to get a bit weary. How in heavens name would he be able to manage this. He was looking at the requests he had for twenty applications that all had specific Oracle database needs. All different with regards to tablespaces, users, rights and services. And if that wasn’t bad enough in itself, all of the project teams building those applications, had up to 5 specific environments with different sizes and sometimes other settings. Russ definitely could use some help with this.
+
+If you are like Russ in dire need of help manageing your Oracle databases, you should checkout this blog post. It describes a Puppet module we are building and already using to manage the dba objects of an Oracle database.
+
+<!-- more -->
+
+##The requirements
+
+After discovering the [Puppet Oracle module](https://forge.puppetlabs.com/hajee/oracle), Russ felt a little bit less anxious. This could really make life a bit more easy.
+
+First Russ started to look at the PIO application. The requirements for installing the PIO application where:
+
+ 1. An Oracle tablespace named `PIO_DATA` with a size of 200 Gigabyte
+ 2. An oracle user `PIO_USER` with the default tablespace set to `PIO_DATA` and only `connect`, `select any table` and `create table` rights. Also the user must have unlimited quota's in the `PIO_DATA` tablespace
+ 3. An Oracle role `PIO_APPLICATION_USER`
+ 4. A Service named like the application. So a  `PIO` service.
+
+<sup>(This list is slimmed down a bit to make it more readable.)</sup>
+
+##The PIO Tablespace
+
+Let's start with the tablespace requirement. With the new found Oracle module, this looks like a strait forward Puppet definition. This code should do the trick:
+
+```ruby
+tablespace {'PIO_DATA':
+  ensure                    => present,
+  bigfile                   => yes
+  datafile                  => 'pio_data.dbf'
+  size                      => 200G,
+  logging                   => yes,
+  autoextend                => on,
+  next                      => 100M,
+  max_size                  => 12288M,
+  extent_management         => local,
+  segment_space_management  => auto,
+}
+```
+
+So that takes care of requirement 1. let's test it.
+
+Wait, the Oracle module doesn't install Oracle itself. What good is a module like this if you haven't gotten Oracle installed. Fortunately Russ found [Edwin Biemond's Oracle DB module](https://forge.puppetlabs.com/biemond/oradb) to take care of the installation.
+
+##The PIO User
+
+The oracle user `PIO` is a little bit more difficult. It has a default tablespace. So we must make sure the tablespace already exist before we start creating the user.
+
+```ruby
+oracle_user{'PIO':
+  temporary_tablespace      => temp,
+  default_tablespace        => 'PIO_DATA',
+  password                  => 'justapassword,
+  require                   => Tablespace['PIO_DATA'],
+  grants                    => ['SELECT ANY TABLE', 'CONNECT', 'CREATE TABLE'],
+  quotas                    => {
+                                  'PIO_DATA'  => 'unlimited'
+                              },
+}
+```
+
+Again this looks like a strait forward Puppet definition. No Exec's no if's, just an easy readable Puppet definition. Requirement 3 fulfilled.
+
+##The PIO_APPLICATION_USER role and the PIO service
+
+Making sure the role and the service exist, s super easy. Just look at this code: 
+
+```ruby
+role {'PIO_APPLICATION_ROLE':
+  ensure    => present,
+}
+
+oracle_service{'PIO':
+  ensure  => present,
+}
+
+```
+This completes the list of requirements for one application. But when Russ looked at the other application's, he noticed a very similar pattern. A user, a tablespace a role and a service. Only the values of the different applications where different.
+
+##Puppet defined types to the rescue
+
+Puppet has some nice mechanisms to handle just this kind of repeating pattern. A `defined typ[e` . let's create this type to manage all of Russ's applications.
+
+```ruby
+define db::app(
+  $tablespace_name    = "${name}_data",
+  $password           = $name,
+  $size               = 3072M,
+  $maxsize            = 12288M,
+  $next               = 100M,
+  $user_rights        = ['SELECT ANY TABLE'
+                        , 'CONNECT'
+                        , 'CREATE TABLE'
+                        ]
+){
+ # include the class that installes Oracle. to make sure
+ # This defined type is run after the Oracle installation
+
+  tablespace {$tablespace_name:
+    ensure                    => present,
+    size                      => $size,
+    logging                   => yes,
+    autoextend                => on,
+    next                      => 100M,
+    max_size                  => 12288M,
+    extent_management         => local,
+    segment_space_management  => auto,
+  }
+
+  oracle_user{$name:
+    temporary_tablespace      => temp,
+    default_tablespace        => $tablespace_name,
+    password                  => $password,
+    require                   => Tablespace[$tablespace_name],
+    grants                    => [$user_rights],
+    quotas                    => {
+                                    "${tablespace_name}"  => 'unlimited'
+                                  },
+  }
+
+  $app_role = "${name}_application_user"
+
+  role {$app_role:
+    ensure    => present,
+  }
+
+  oracle_service{$name:
+    ensure  => present,
+  }
+
+}
+```
+
+##The new and improved PIO definition
+
+With this defined type in place, the `PIO` definition becomes:
+
+```ruby
+class pio {
+  db::app{ 'pio':
+    size      => 200G,
+    password  => 'justapassword'
+  }
+}
+```
+
+For all the other applications, you can make the same kind of definitions. Your `node.pp` file could read like this:
+
+```ruby
+node "basenode" {
+  include pio
+  include axe
+  include bcc
+  ...
+}
+```
+
+##You want to start as well?
+
+The code in the blog post is based on the [Puppet Oracle module](https://forge.puppetlabs.com/hajee/oracle). Checkout the [repository](https://github.com/hajee/oracle) if you want to see how we do it. This is a fresh project, so you might run into some bugs. Don't hesitate to register them at [the issue log](https://github.com/hajee/oracle/issues).
+
+##You can help?
+
+That would be great. We only have a couple of Oracle DBA objects covered right now. There are lot's more. It would really be nice if we could get this module covering a lot of Oracle stuff. Clone the [repository](https://github.com/hajee/oracle) make your enhancements and post a pull request.

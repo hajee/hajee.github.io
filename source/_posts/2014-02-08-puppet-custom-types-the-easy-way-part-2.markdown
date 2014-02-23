@@ -7,12 +7,12 @@ categories: ['puppet', 'devops', 'ruby']
 keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby
 description: The easy way to building Puppet Custom Types with easy_type (part 2)
 ---
-In the [last blog post]({% post_url 2014-01-26-puppet-custom-types-the-easy-way %}), we started with our own custom type. We added the `easy_type` module, created the files necessary for getting started and got our custom running without any errors. We then added two lines to get into a state where Puppet was able to do an inventory of our systems. But a custom type not able to create, delete or modify the state of your system, wouldn;t be very helpful. So in the blog post we are going to add that functionality to our custom_package type.
+In the [last blog post]({% post_url 2014-01-26-puppet-custom-types-the-easy-way %}), we started with our own custom type. We added the `easy_type` module, created the files necessary for getting started and got our custom running without any errors. We then added two lines to get into a state where Puppet was able to do an inventory of our systems. But a custom type not able to create, delete or modify the state of your system, wouldnt be very helpful. So in the blog post we are going to add that functionality to our custom_package type.
 
 <!-- more -->
 
 ##Let's recap
-Let's first look back at what we did last time. To get started with [easy_type](https://github.com/hajee/easy_type), we made sure `easy_type` is installed in the module path. We used `librarian-puppet` to get `easy_type` installed. After that,  we created the right directories and created a scaffold. Since last blog post,  we have added the scaffold to the `easy_type`. This is to make it even easier to get started. To get it, use the next command:
+Let's first look back at what we did last time. To get started with [easy_type](https://github.com/hajee/easy_type), we made sure `easy_type` is installed in the module path. We used `librarian-puppet` to get `easy_type` installed. After that,  we created the right directories and created a scaffold. Since the last blog post,  we have added the scaffold to the `easy_type`. This makes's it even easier to get started. To get it, use the next command:
 
 ```sh
 cp -Rv easy_type/scaffold custom_package/lib/puppet
@@ -124,7 +124,7 @@ Now we are ready. We have a Custom Puppet Type that has the ability to:
 * destroy/delete a resource
 * and modify an existing resource
 
-If we don't count the  boiler plate code, we added just 18 lines of code to get this working. Not to bad.
+If we don't count the  boiler plate code, then we added just 18 lines of code to get this working. Not to bad.
 
 ##There's a lot more
 Like I said in the introduction, this is really a simple example. Real life custom types are more difficult. So `easy_type` has some more functionality that is not shown in this examples. 
@@ -134,5 +134,5 @@ Like I said in the introduction, this is really a simple example. Real life cust
 * A lot of tricks in the command_builder so it's easy to build commands based on what Puppet thinks, needs to be done.
 * support for extracting the definition of attributes and properties
 
-If you would like to see more about `easy_type` just let me know and I will see if we can do some more posts about it. For now, check the the example source in the [github repository](https://github.com/hajee/my_own_easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. 
+If you would like to see more about `easy_type`, just let me know and I will see if we can do some more posts about it. For now, check the example source in the [github repository](https://github.com/hajee/my_own_easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. 
 
