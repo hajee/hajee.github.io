@@ -1,0 +1,42 @@
+---
+layout: post
+title: "troubleshooting your Puppet custom type and provider"
+date: 2014-03-30 22:31:44 +0200
+comments: false
+published: false
+categories: ['puppet', 'devops', 'ruby']
+keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby, oracle
+description: troubleshooting your Puppet custom type and provider 
+---
+
+Not again....! This custom type and provider stuff had gotten under Tim's skin. Somehow it just kept giving errors. Not only errors, but error's Tim could not pinpoint. 
+
+Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests. 
+If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.
+
+<!-- more -->
+
+##Where to look
+
+One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error. 
+
+```
+Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass
+```
+
+Although Puppet told him, it was in his custom_type (`your_custom_type`) and in his provider (`your_provider`), this was nowhere precice enough to get going. Beeëing a `NillClass` exception didn't help either. There was no variable name to start looking for.
+
+In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.
+
+After Googleing around, Tim found that ruby normaly print's a stack trace as well. It looked like Puppet was catching the error's and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace. 
+
+```sh
+puppet apply your_manifest.pp --trace
+```
+
+
+No clue's to where 
+
+##Getting into the debugger
+
+##What to do in the debugger

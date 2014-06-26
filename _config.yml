@@ -41,7 +41,7 @@ rdiscount:
     - smart
 pygments: false # default python pygments have been replaced by pygments.rb
 
-lsi: true
+lsi: false
 maximum_related_posts: 2
 
 paginate: 5          # Posts per page on the blog index
