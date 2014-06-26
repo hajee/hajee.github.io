@@ -4,7 +4,7 @@
   <title><![CDATA[Category: puppet | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/puppet/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-06-26T15:07:43+02:00</updated>
+  <updated>2014-06-26T16:56:42+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -42,9 +42,8 @@ Obviously you need to have Puppet installed first. Check  the [Puppet installati
 
 If you want more information about the Puppet pizza module, checkout [the puppet forge page](https://forge.puppetlabs.com/hajee/pizza) for this module.
 
-
-###Getting to know miss Piggy
-Miss Piggy looked like an ordinary robot. It just didn't do anything yet. Pietro needed to tell Miss piggy what he wanted. What kind of pizza he would like miss Piggy to make.  Let's first see what ingredients Miss Piggy knew. Pietro looked in the manual and typed the command:
+###Getting to know Miss Piggy
+Miss Piggy looked like an ordinary robot. It just didn't do anything yet. Pietro needed to tell Miss Piggy what he wanted. What kind of pizza he would like Miss Piggy to make.  Let's first see what ingredients Miss Piggy knew. Pietro looked in the manual and typed the command:
 
 ```sh
 $ puppet describe -l
@@ -58,7 +57,7 @@ salami          - Add salami to the pizza or modify the amount  ...
 tomato_sauce    - Add tomato sauce to the pizza or modify the a ...
 ```
 
-This showed a list of all components (ingredients) miss Piggy new. In the manual, it stated that Puppet knows these ingredients as types. 
+This showed a list of all components (ingredients) Miss Piggy new. In the manual, it stated that Puppet knows these ingredients as types. 
 
 Seeing this list of things Pietro knew about, he started to get enthusiasts. Let's start with the crust. Again Pietro looked in the manual. It stated that in order to get to know a type intimately, you can ask Puppet for information. So Pietro typed:
 
@@ -102,7 +101,7 @@ Providers
 ```
 
 ###The first try
-He started to get more and more excited. He expected a lot of technical stuff, but instead he saw that Puppet knew about pizza's. He knew about pan and regular pizza's and about regular and wholesome dough. Let get miss Piggy to make a crust. Pietro opened a file and entered the instruction:
+He started to get more and more excited. He expected a lot of technical stuff, but instead he saw that Puppet knew about pizza's. Puppet knew about pan and regular pizza's and about regular and wholesome dough. So let's get Miss Piggy to make a crust. Pietro opened a file and entered the instruction:
 
 ```
 crust{"large_wholesome_pan_crust":
@@ -118,7 +117,7 @@ $ puppet apply crust.pp
 Notice: Compiled catalog for macintosh.local in environment production in 0.10 seconds
 ```
 
-All of a sudden he saw miss Piggy come to life. She started buzzing and beeping. Got some wholesome dough. Made it into a 20" slice, put it into a pizza pan and pushed it into a pizza oven. After 3 minutes, Pietro was staring at a perfect pizza crust. A bleep on then Puppet console showed that Puppet was ready.
+All of a sudden he saw Miss Piggy come to life. She started buzzing and beeping. Got some wholesome dough. Made it into a 20" slice, put it into a pizza pan and pushed it into a pizza oven. After 3 minutes, Pietro was staring at a perfect pizza crust. A bleep on then Puppet console showed that Puppet was ready.
 
 ```
 Notice: /Stage[main]/Main/Crust[large_wholesome_pan_crust]/ensure: ensure changed 'present' to 'baked'
@@ -126,7 +125,7 @@ Notice: Finished catalog run in 181.10 seconds
 ```
 
 ###What did I do?
-Pietro took a while to take this all in. What exactly did he do? He described through a Pupped DSL how the pizza should look. He didn't describe how t mak it. Miss Piggy already knew that. She knew about the dough. She knew about pan pizza's and about the pizza size. Pietro just had to describe it in the DSL. The DSL was actually very simple. Just name the resource (type/ingerdient) place a `{`, specify a name. Any name as long as it is unique for the resource. Close it of with a `: ` sign and then start with the properties of the pizza. Every property contains a name like for example: `size` and a value like `20`. They are separated by a `=>` sign. After the value, he placed a `,`. Even after the last value. After the last value, the description was closed off with a `}` sign.
+Pietro took a while to take this all in. What exactly did he do? He described through a Pupped DSL how the pizza should look. He didn't describe how to make it. Miss Piggy already knew that. She knew about the dough. She knew about pan pizza's and about the pizza size. Pietro just had to describe it in the DSL. The DSL was actually very simple. Just name the resource (type/ingerdient) place a `{`, specify a name. Any name as long as it is unique for the resource. Close it of with a `: ` sign and then start with the properties of the pizza. Every property contains a name like for example: `size` and a value like `20`. They are separated by a `=>` sign. After the value, he placed a `,`. Even after the last value. After the last value, the description was closed off with a `}` sign.
 
 
 ###Add some sauce and cheese
@@ -154,7 +153,7 @@ That was good, but not enough. A crust is not a pizza. Pietro needed to add some
   }
 ``` 
 
-Just like before, Pietro instructed miss Piggy to go and do it.
+Just like before, Pietro instructed Miss Piggy to go and do it.
 
 ```
 $ puppet apply pizza.pp
@@ -164,7 +163,7 @@ Notice: /Stage[main]/Main/Crust[large_wholesome_thin_crust]/ensure: defined 'ens
 Notice: /Stage[main]/Main/Cheese[mozzarella_thick]/ensure: created
 Notice: Finished catalog run in 181.10 seconds
 ```
-But now something strange happened. Miss Piggy started by putting tomato sauce on the table and then adding the crust dough afterwards. That was obviously **not** what Pietro wanted. There must be some defect in miss Piggy. Everyone knows that the pizza crust must be available before the tomato sauce and other ingredients can be added.
+But now something strange happened. Miss Piggy started by putting tomato sauce on the table and then adding the crust dough afterwards. That was obviously **not** what Pietro wanted. There must be some defect in Miss Piggy. Everyone knows that the pizza crust must be available **before*** the tomato sauce and other ingredients can be added.
 
 Pietro looked in the manual. Aah there it was. Miss Piggy knows a lot, but you have to tell it the order in which the  ingredients are applied. To do this, add an explicit order in the description of the pizza. You can do this by using the `require` keyword.  Let's change the pizza description and save it as `pizza2.pp`. To make it more interesting, let's change some ingredients as well. Let's make medium thin pizza with thick cristal tomato sauce and a lot of mozzarella.
 
@@ -200,7 +199,7 @@ Notice: /Stage[main]/Main/Tomato_sauce[thick_cristal]/ensure: created
 Notice: /Stage[main]/Main/Cheese[a_lot_of_mozzarella]/ensure: created
 Notice: Finished catalog run in 182.08 seconds
 ```
-Pietro waited anxiously. What would miss Piggy do this time? After 3 minutes, Pietro was looking at a perfect pizza Napolitana. That was much better. First the crust, then the tomato sauce and last but not least the cheese.
+Pietro waited anxiously. What would Miss Piggy do this time? After 3 minutes, Pietro was looking at a perfect pizza Napolitana. That was much better. First the crust, then the tomato sauce and last but not least the cheese.
 
 ###What did I do?
 
@@ -211,46 +210,7 @@ require     => Tomato_sauce["thick_cristal"],
 ``` 
 
 ##Next time...
-That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[troubleshooting your Puppet custom type and provider]]></title>
-    <link href="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/"/>
-    <updated>2014-03-30T22:31:44+02:00</updated>
-    <id>http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider</id>
-    <content type="html"><![CDATA[Not again....! This custom type and provider stuff had gotten under Tim's skin. Somehow it just kept giving errors. Not only errors, but error's Tim could not pinpoint. 
-
-Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests. 
-If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.
-
-<!-- more -->
-
-##Where to look
-
-One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error. 
-
-```
-Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass
-```
-
-Although Puppet told him, it was in his custom_type (`your_custom_type`) and in his provider (`your_provider`), this was nowhere precice enough to get going. Beeëing a `NillClass` exception didn't help either. There was no variable name to start looking for.
-
-In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.
-
-After Googleing around, Tim found that ruby normaly print's a stack trace as well. It looked like Puppet was catching the error's and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace. 
-
-```sh
-puppet apply your_manifest.pp --trace
-```
-
-
-No clue's to where 
-
-##Getting into the debugger
-
-##What to do in the debugger
-]]></content>
+That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the Miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.]]></content>
   </entry>
   
   <entry>
@@ -779,6 +739,62 @@ custom_package { 'MAKEDEV':
 In the [next blog post](/2014/02/08/puppet-custom-types-the-easy-way-part-2/), we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)
 
 _Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo_]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet building blocks]]></title>
+    <link href="http://hajee.github.io/2013/12/30/puppet-building-blocks/"/>
+    <updated>2013-12-30T20:14:10+01:00</updated>
+    <id>http://hajee.github.io/2013/12/30/puppet-building-blocks</id>
+    <content type="html"><![CDATA[In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.
+
+In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it's detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.
+
+<!-- more -->
+
+##The resource type
+Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the `File` type.
+
+```ruby
+
+file {'/application/config.xml':
+  ensure	=> present,
+  content	=> '<xml>just some config file</xml>',
+}
+```
+
+besides the `File` type, there are types for managing `Users`, `Groups`, `Services` and so on. Actually Puppet has a lot of built-in types. If you look at [type documentation](http://docs.puppetlabs.com/references/latest/type.html) on the puppet site,you see a list of 48 built-in types.
+
+<img src="/images/list_of_types.png" title="List of built-in types" >
+
+A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`.
+
+A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`. 
+
+
+##The class
+[The Puppet documentation for classes](http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html) states:
+
+<blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node's catalog) with the include function or a resource-like syntax.</p></blockquote>
+
+Quite some definition. In layman's terms, though a Puppet class is a way of structuring resources into a building block. The class [apache](https://forge.puppetlabs.com/puppetlabs/apache), for example, contains all resources needed to install, configure and run an apache https daemon on your system.
+
+
+##The defined resource
+[The Puppet documentation for defined types](http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html) states:
+
+<blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote>
+
+As you can see in the definition, just like the `class`, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a `class`and a  defined type is that a `class`may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.
+
+
+##The custom type
+While the `class` and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the `types` needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.
+
+
+##Next time
+This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.
+]]></content>
   </entry>
   
 </feed>
