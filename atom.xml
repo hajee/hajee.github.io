@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-02-23T15:07:26+01:00</updated>
+  <updated>2014-06-26T15:07:43+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -11,6 +11,372 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Puppet at the Puppet Pizza Place]]></title>
+    <link href="http://hajee.github.io/2014/06/26/pietros-puppet-pizza-place-1/"/>
+    <updated>2014-06-26T14:36:46+02:00</updated>
+    <id>http://hajee.github.io/2014/06/26/pietros-puppet-pizza-place-1</id>
+    <content type="html"><![CDATA[<h1>Learning Puppet at the Puppet Pizza Place</h1>
+
+<p>In this set of blog posts, I will teach you the base concepts of the <a href="http://puppetlabs.com/puppet">puppet DSL</a>. Most of the time Puppet is taught within the context of IT configuration management. I&rsquo;ve chosen not to do so. I&rsquo;ve chosen baking pizza&rsquo;s as the learning environment. It helps less technical people, like IT managers, for example, to get the concepts of Puppet.</p>
+
+<!-- more -->
+
+
+<h2>Pietro&rsquo;s Puppet Pizza Place</h2>
+
+<p>Pietro was worn out. He&rsquo;d had a very busy day at his pizza place. Business was going well. Too well actually. Every evening he was totally worn out.To keep his business growing, but be less worn out at the end of the day, Pietro had started to look around for some help.</p>
+
+<h3>Miss Piggy</h3>
+
+<p>On the Internet, he&rsquo;d run into this ad for <em>&ldquo;Miss Piggy The Puppetized Pizza Robot&rdquo;</em>. Miss Piggy was advertised as a robot able to make all sorts of Pizza&rsquo;s. To control Miss Piggy, they used Puppet DSL. A DSL able to describe all the Pizza&rsquo;s in the world. This looked like just the help Pietro needed, So he ordered it.</p>
+
+<h3>Running along..</h3>
+
+<p>All the examples in this blog post do really run. You can install the modules needed to do so by using the next commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ puppet module install hajee/pizza</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obviously you need to have Puppet installed first. Check  the <a href="http://docs.puppetlabs.com/guides/install_puppet/pre_install.html">Puppet installation guide</a> for information on how to do this.</p>
+
+<p>If you want more information about the Puppet pizza module, checkout <a href="https://forge.puppetlabs.com/hajee/pizza">the puppet forge page</a> for this module.</p>
+
+<h3>Getting to know miss Piggy</h3>
+
+<p>Miss Piggy looked like an ordinary robot. It just didn&rsquo;t do anything yet. Pietro needed to tell Miss piggy what he wanted. What kind of pizza he would like miss Piggy to make.  Let&rsquo;s first see what ingredients Miss Piggy knew. Pietro looked in the manual and typed the command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>puppet describe -l
+</span><span class='line'>These are the types known to puppet:
+</span><span class='line'>anchovy         - Add anchovy to the pizza or modify the amount ...
+</span><span class='line'>bacon           - Add bacon to the pizza or modify the amount o ...
+</span><span class='line'>cheese          - Add cheese to the pizza or modify the amount  ...
+</span><span class='line'>crust           - Select the crust <span class="k">for </span>your pizza
+</span><span class='line'>mushroom        - Add mushrooms to the pizza or modify the amou ...
+</span><span class='line'>salami          - Add salami to the pizza or modify the amount  ...
+</span><span class='line'>tomato_sauce    - Add tomato sauce to the pizza or modify the a ...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This showed a list of all components (ingredients) miss Piggy new. In the manual, it stated that Puppet knows these ingredients as types.</p>
+
+<p>Seeing this list of things Pietro knew about, he started to get enthusiasts. Let&rsquo;s start with the crust. Again Pietro looked in the manual. It stated that in order to get to know a type intimately, you can ask Puppet for information. So Pietro typed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>puppet describe crust
+</span><span class='line'><span class="nv">crust</span>
+</span><span class='line'><span class="o">=====</span>
+</span><span class='line'>Select the crust <span class="k">for </span>your pizza. An example:
+</span><span class='line'>crust<span class="o">{</span><span class="s2">&quot;large_wholesome_pan_crust&quot;</span>:
+</span><span class='line'>  <span class="nv">ensure</span>    <span class="o">=</span>&gt; baked,
+</span><span class='line'>  <span class="nv">size</span>      <span class="o">=</span>&gt; 20,          <span class="c"># 10&quot;, 20&quot;</span>
+</span><span class='line'>  <span class="nb">type</span>      <span class="o">=</span>&gt; <span class="s1">&#39;pan&#39;</span>,       <span class="c"># thin</span>
+</span><span class='line'>  <span class="nv">dough</span>     <span class="o">=</span>&gt; <span class="s1">&#39;wholesome&#39;</span>, <span class="c"># wholesome ore white</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Parameters
+</span><span class='line'>----------
+</span><span class='line'>
+</span><span class='line'>- **dough**
+</span><span class='line'>    The <span class="nb">type </span>of dough to use <span class="k">for </span>your crust
+</span><span class='line'>    Valid values are <span class="sb">`</span>wholesome<span class="sb">`</span>, <span class="sb">`</span>white<span class="sb">`</span>, <span class="sb">`</span>regular<span class="sb">`</span>.
+</span><span class='line'>
+</span><span class='line'>- **ensure**
+</span><span class='line'>    is the crust baked or raw
+</span><span class='line'>Valid values are <span class="sb">`</span>baked<span class="sb">`</span>, <span class="sb">`</span>absent<span class="sb">`</span>.
+</span><span class='line'>
+</span><span class='line'>- **name**
+</span><span class='line'>    The ingredient<span class="err">&#39;</span>s name
+</span><span class='line'>
+</span><span class='line'>- **size**
+</span><span class='line'>    the size of the pizza crus in inches
+</span><span class='line'>
+</span><span class='line'>- **type**
+</span><span class='line'>    The <span class="nb">type </span>of crust
+</span><span class='line'>Valid values are <span class="sb">`</span>thin<span class="sb">`</span>, <span class="sb">`</span>pan<span class="sb">`</span>, <span class="sb">`</span>regular<span class="sb">`</span>.
+</span><span class='line'>
+</span><span class='line'>Providers
+</span><span class='line'>---------
+</span><span class='line'>    simple
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The first try</h3>
+
+<p>He started to get more and more excited. He expected a lot of technical stuff, but instead he saw that Puppet knew about pizza&rsquo;s. He knew about pan and regular pizza&rsquo;s and about regular and wholesome dough. Let get miss Piggy to make a crust. Pietro opened a file and entered the instruction:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>crust<span class="o">{</span><span class="s2">&quot;large_wholesome_pan_crust&quot;</span>:
+</span><span class='line'>  <span class="nv">ensure</span>    <span class="o">=</span>&gt; baked,
+</span><span class='line'>  <span class="nv">size</span>      <span class="o">=</span>&gt; 20,          <span class="c"># 10&quot;, 20&quot;</span>
+</span><span class='line'>  <span class="nb">type</span>      <span class="o">=</span>&gt; <span class="s1">&#39;pan&#39;</span>,       <span class="c"># thin</span>
+</span><span class='line'>  <span class="nv">dough</span>     <span class="o">=</span>&gt; <span class="s1">&#39;wholesome&#39;</span>, <span class="c"># wholesome ore white</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then he saved it as <code>crust.pp</code> and told Puppet to go do it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>puppet apply crust.pp
+</span><span class='line'>Notice: Compiled catalog <span class="k">for </span>macintosh.local in environment production in 0.10 seconds
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All of a sudden he saw miss Piggy come to life. She started buzzing and beeping. Got some wholesome dough. Made it into a 20&#8221; slice, put it into a pizza pan and pushed it into a pizza oven. After 3 minutes, Pietro was staring at a perfect pizza crust. A bleep on then Puppet console showed that Puppet was ready.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Crust<span class="o">[</span>large_wholesome_pan_crust<span class="o">]</span>/ensure: ensure changed <span class="s1">&#39;present&#39;</span> to <span class="s1">&#39;baked&#39;</span>
+</span><span class='line'>Notice: Finished catalog run in 181.10 seconds
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>What did I do?</h3>
+
+<p>Pietro took a while to take this all in. What exactly did he do? He described through a Pupped DSL how the pizza should look. He didn&rsquo;t describe how t mak it. Miss Piggy already knew that. She knew about the dough. She knew about pan pizza&rsquo;s and about the pizza size. Pietro just had to describe it in the DSL. The DSL was actually very simple. Just name the resource (type/ingerdient) place a <code>{</code>, specify a name. Any name as long as it is unique for the resource. Close it of with a <code>:</code> sign and then start with the properties of the pizza. Every property contains a name like for example: <code>size</code> and a value like <code>20</code>. They are separated by a <code>=&gt;</code> sign. After the value, he placed a <code>,</code>. Even after the last value. After the last value, the description was closed off with a <code>}</code> sign.</p>
+
+<h3>Add some sauce and cheese</h3>
+
+<p>That was good, but not enough. A crust is not a pizza. Pietro needed to add some tomato sauce and cheese. He opened a new file named <code>pizza.pp</code> and entered all the ingredients for a real pizza.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  crust<span class="o">{</span><span class="s2">&quot;large_wholesome_thin_crust&quot;</span>:
+</span><span class='line'>    <span class="nv">ensure</span>    <span class="o">=</span>&gt; baked,
+</span><span class='line'>    <span class="nv">size</span>      <span class="o">=</span>&gt; 20,          <span class="c"># 10&quot;, 20&quot;</span>
+</span><span class='line'>    <span class="nb">type</span>      <span class="o">=</span>&gt; <span class="s1">&#39;thin&#39;</span>,       <span class="c"># thin</span>
+</span><span class='line'>    <span class="nv">dough</span>     <span class="o">=</span>&gt; <span class="s1">&#39;wholesome&#39;</span>, <span class="c"># wholesome ore white</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  tomato_sauce<span class="o">{</span><span class="s2">&quot;thin_cristal&quot;</span>:
+</span><span class='line'>    <span class="nv">ensure</span>      <span class="o">=</span>&gt; <span class="s1">&#39;present&#39;</span>,
+</span><span class='line'>    <span class="nb">type</span>        <span class="o">=</span>&gt; <span class="s1">&#39;cristal&#39;</span>,
+</span><span class='line'>    <span class="nv">composure</span>   <span class="o">=</span>&gt; <span class="s1">&#39;thick&#39;</span>,
+</span><span class='line'>    <span class="nv">amount</span>      <span class="o">=</span>&gt; 5,
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  cheese<span class="o">{</span><span class="s2">&quot;mozzarella_thick&quot;</span>:
+</span><span class='line'>    <span class="nv">ensure</span>      <span class="o">=</span>&gt; <span class="s1">&#39;present&#39;</span>,
+</span><span class='line'>    <span class="nb">type</span>        <span class="o">=</span>&gt; <span class="s1">&#39;mozzarella&#39;</span>,
+</span><span class='line'>    <span class="nv">amount</span>      <span class="o">=</span>&gt; <span class="s1">&#39;2&#39;</span>,
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Just like before, Pietro instructed miss Piggy to go and do it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>puppet apply pizza.pp
+</span><span class='line'>Notice: Compiled catalog <span class="k">for </span>macintosh.local in environment production in 0.14 seconds
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Tomato_sauce<span class="o">[</span>thin_cristal<span class="o">]</span>/ensure: created
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Crust<span class="o">[</span>large_wholesome_thin_crust<span class="o">]</span>/ensure: defined <span class="s1">&#39;ensure&#39;</span> as <span class="s1">&#39;baked&#39;</span>
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Cheese<span class="o">[</span>mozzarella_thick<span class="o">]</span>/ensure: created
+</span><span class='line'>Notice: Finished catalog run in 181.10 seconds
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But now something strange happened. Miss Piggy started by putting tomato sauce on the table and then adding the crust dough afterwards. That was obviously <strong>not</strong> what Pietro wanted. There must be some defect in miss Piggy. Everyone knows that the pizza crust must be available before the tomato sauce and other ingredients can be added.</p>
+
+<p>Pietro looked in the manual. Aah there it was. Miss Piggy knows a lot, but you have to tell it the order in which the  ingredients are applied. To do this, add an explicit order in the description of the pizza. You can do this by using the <code>require</code> keyword.  Let&rsquo;s change the pizza description and save it as <code>pizza2.pp</code>. To make it more interesting, let&rsquo;s change some ingredients as well. Let&rsquo;s make medium thin pizza with thick cristal tomato sauce and a lot of mozzarella.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>crust<span class="o">{</span><span class="s2">&quot;medium_wholesome_thin_crust&quot;</span>:
+</span><span class='line'>    <span class="nv">ensure</span>    <span class="o">=</span>&gt; baked,
+</span><span class='line'>    <span class="nv">size</span>      <span class="o">=</span>&gt; 10,          <span class="c"># 10&quot;, 20&quot;</span>
+</span><span class='line'>    <span class="nb">type</span>      <span class="o">=</span>&gt; <span class="s1">&#39;thin&#39;</span>,       <span class="c"># thin</span>
+</span><span class='line'>    <span class="nv">dough</span>     <span class="o">=</span>&gt; <span class="s1">&#39;wholesome&#39;</span>, <span class="c"># wholesome ore white</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>tomato_sauce<span class="o">{</span><span class="s2">&quot;thick_cristal&quot;</span>:
+</span><span class='line'>  <span class="nv">ensure</span>      <span class="o">=</span>&gt; <span class="s1">&#39;present&#39;</span>,
+</span><span class='line'>  <span class="nb">type</span>        <span class="o">=</span>&gt; <span class="s1">&#39;cristal&#39;</span>,
+</span><span class='line'>  <span class="nv">composure</span>   <span class="o">=</span>&gt; <span class="s1">&#39;thick&#39;</span>,
+</span><span class='line'>  <span class="nv">amount</span>      <span class="o">=</span>&gt; 5,
+</span><span class='line'>  <span class="nv">require</span>     <span class="o">=</span>&gt; Crust<span class="o">[</span><span class="s2">&quot;medium_wholesome_thin_crust&quot;</span><span class="o">]</span>,
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>cheese<span class="o">{</span><span class="s2">&quot;a_lot_of_mozzarella&quot;</span>:
+</span><span class='line'>  <span class="nv">ensure</span>      <span class="o">=</span>&gt; <span class="s1">&#39;present&#39;</span>,
+</span><span class='line'>  <span class="nb">type</span>        <span class="o">=</span>&gt; <span class="s1">&#39;mozzarella&#39;</span>,
+</span><span class='line'>  <span class="nv">amount</span>      <span class="o">=</span>&gt; <span class="s1">&#39;4&#39;</span>,
+</span><span class='line'>  <span class="nv">require</span>     <span class="o">=</span>&gt; Tomato_sauce<span class="o">[</span><span class="s2">&quot;thick_cristal&quot;</span><span class="o">]</span>,
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>puppet apply pizza2.pp
+</span><span class='line'>Notice: Compiled catalog <span class="k">for </span>macintosh.local in environment production in 0.15 seconds
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Crust<span class="o">[</span>medium_wholesome_thin_crust<span class="o">]</span>/ensure: defined <span class="s1">&#39;ensure&#39;</span> as <span class="s1">&#39;baked&#39;</span>
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Tomato_sauce<span class="o">[</span>thick_cristal<span class="o">]</span>/ensure: created
+</span><span class='line'>Notice: /Stage<span class="o">[</span>main<span class="o">]</span>/Main/Cheese<span class="o">[</span>a_lot_of_mozzarella<span class="o">]</span>/ensure: created
+</span><span class='line'>Notice: Finished catalog run in 182.08 seconds
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pietro waited anxiously. What would miss Piggy do this time? After 3 minutes, Pietro was looking at a perfect pizza Napolitana. That was much better. First the crust, then the tomato sauce and last but not least the cheese.</p>
+
+<h3>What did I do?</h3>
+
+<p>To make this an optimal learning experience, again Pietro looked at what he had accomplished. To be sure the ingredients were added in the right order, he had to specify what the order was. He could do so using the <code>require</code> attribute on an ingredient. The value of the <code>require</code> keyword was a reference to another ingredient. To specify a reference, you needed to start it with a capital letter. So <code>tomato_sauce</code> became <code>Tomato_sauce</code>. To uniquely identify the ingredient, he used the name of the ingredient as specified before and put it between a <code>[</code> and <code>]</code> character. So the reference to the thick cristal tomato sauce became:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">require</span>     <span class="o">=</span>&gt; Tomato_sauce<span class="o">[</span><span class="s2">&quot;thick_cristal&quot;</span><span class="o">]</span>,
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h2>Next time&hellip;</h2>
+
+<p>That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[troubleshooting your Puppet custom type and provider]]></title>
+    <link href="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/"/>
+    <updated>2014-03-30T22:31:44+02:00</updated>
+    <id>http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider</id>
+    <content type="html"><![CDATA[<p>Not again&hellip;.! This custom type and provider stuff had gotten under Tim&rsquo;s skin. Somehow it just kept giving errors. Not only errors, but error&rsquo;s Tim could not pinpoint.</p>
+
+<p>Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests.
+If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.</p>
+
+<!-- more -->
+
+
+<h2>Where to look</h2>
+
+<p>One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Although Puppet told him, it was in his custom_type (<code>your_custom_type</code>) and in his provider (<code>your_provider</code>), this was nowhere precice enough to get going. Beeëing a <code>NillClass</code> exception didn&rsquo;t help either. There was no variable name to start looking for.</p>
+
+<p>In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.</p>
+
+<p>After Googleing around, Tim found that ruby normaly print&rsquo;s a stack trace as well. It looked like Puppet was catching the error&rsquo;s and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet apply your_manifest.pp --trace
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No clue&rsquo;s to where</p>
+
+<h2>Getting into the debugger</h2>
+
+<h2>What to do in the debugger</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Puppet to manage Oracle]]></title>
