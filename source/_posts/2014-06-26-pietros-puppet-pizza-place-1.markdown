@@ -31,9 +31,8 @@ Obviously you need to have Puppet installed first. Check  the [Puppet installati
 
 If you want more information about the Puppet pizza module, checkout [the puppet forge page](https://forge.puppetlabs.com/hajee/pizza) for this module.
 
-
-###Getting to know miss Piggy
-Miss Piggy looked like an ordinary robot. It just didn't do anything yet. Pietro needed to tell Miss piggy what he wanted. What kind of pizza he would like miss Piggy to make.  Let's first see what ingredients Miss Piggy knew. Pietro looked in the manual and typed the command:
+###Getting to know Miss Piggy
+Miss Piggy looked like an ordinary robot. It just didn't do anything yet. Pietro needed to tell Miss Piggy what he wanted. What kind of pizza he would like Miss Piggy to make.  Let's first see what ingredients Miss Piggy knew. Pietro looked in the manual and typed the command:
 
 ```sh
 $ puppet describe -l
@@ -47,7 +46,7 @@ salami          - Add salami to the pizza or modify the amount  ...
 tomato_sauce    - Add tomato sauce to the pizza or modify the a ...
 ```
 
-This showed a list of all components (ingredients) miss Piggy new. In the manual, it stated that Puppet knows these ingredients as types. 
+This showed a list of all components (ingredients) Miss Piggy new. In the manual, it stated that Puppet knows these ingredients as types. 
 
 Seeing this list of things Pietro knew about, he started to get enthusiasts. Let's start with the crust. Again Pietro looked in the manual. It stated that in order to get to know a type intimately, you can ask Puppet for information. So Pietro typed:
 
@@ -91,7 +90,7 @@ Providers
 ```
 
 ###The first try
-He started to get more and more excited. He expected a lot of technical stuff, but instead he saw that Puppet knew about pizza's. He knew about pan and regular pizza's and about regular and wholesome dough. Let get miss Piggy to make a crust. Pietro opened a file and entered the instruction:
+He started to get more and more excited. He expected a lot of technical stuff, but instead he saw that Puppet knew about pizza's. Puppet knew about pan and regular pizza's and about regular and wholesome dough. So let's get Miss Piggy to make a crust. Pietro opened a file and entered the instruction:
 
 ```
 crust{"large_wholesome_pan_crust":
@@ -107,7 +106,7 @@ $ puppet apply crust.pp
 Notice: Compiled catalog for macintosh.local in environment production in 0.10 seconds
 ```
 
-All of a sudden he saw miss Piggy come to life. She started buzzing and beeping. Got some wholesome dough. Made it into a 20" slice, put it into a pizza pan and pushed it into a pizza oven. After 3 minutes, Pietro was staring at a perfect pizza crust. A bleep on then Puppet console showed that Puppet was ready.
+All of a sudden he saw Miss Piggy come to life. She started buzzing and beeping. Got some wholesome dough. Made it into a 20" slice, put it into a pizza pan and pushed it into a pizza oven. After 3 minutes, Pietro was staring at a perfect pizza crust. A bleep on then Puppet console showed that Puppet was ready.
 
 ```
 Notice: /Stage[main]/Main/Crust[large_wholesome_pan_crust]/ensure: ensure changed 'present' to 'baked'
@@ -115,7 +114,7 @@ Notice: Finished catalog run in 181.10 seconds
 ```
 
 ###What did I do?
-Pietro took a while to take this all in. What exactly did he do? He described through a Pupped DSL how the pizza should look. He didn't describe how t mak it. Miss Piggy already knew that. She knew about the dough. She knew about pan pizza's and about the pizza size. Pietro just had to describe it in the DSL. The DSL was actually very simple. Just name the resource (type/ingerdient) place a `{`, specify a name. Any name as long as it is unique for the resource. Close it of with a `: ` sign and then start with the properties of the pizza. Every property contains a name like for example: `size` and a value like `20`. They are separated by a `=>` sign. After the value, he placed a `,`. Even after the last value. After the last value, the description was closed off with a `}` sign.
+Pietro took a while to take this all in. What exactly did he do? He described through a Pupped DSL how the pizza should look. He didn't describe how to make it. Miss Piggy already knew that. She knew about the dough. She knew about pan pizza's and about the pizza size. Pietro just had to describe it in the DSL. The DSL was actually very simple. Just name the resource (type/ingerdient) place a `{`, specify a name. Any name as long as it is unique for the resource. Close it of with a `: ` sign and then start with the properties of the pizza. Every property contains a name like for example: `size` and a value like `20`. They are separated by a `=>` sign. After the value, he placed a `,`. Even after the last value. After the last value, the description was closed off with a `}` sign.
 
 
 ###Add some sauce and cheese
@@ -143,7 +142,7 @@ That was good, but not enough. A crust is not a pizza. Pietro needed to add some
   }
 ``` 
 
-Just like before, Pietro instructed miss Piggy to go and do it.
+Just like before, Pietro instructed Miss Piggy to go and do it.
 
 ```
 $ puppet apply pizza.pp
@@ -153,7 +152,7 @@ Notice: /Stage[main]/Main/Crust[large_wholesome_thin_crust]/ensure: defined 'ens
 Notice: /Stage[main]/Main/Cheese[mozzarella_thick]/ensure: created
 Notice: Finished catalog run in 181.10 seconds
 ```
-But now something strange happened. Miss Piggy started by putting tomato sauce on the table and then adding the crust dough afterwards. That was obviously **not** what Pietro wanted. There must be some defect in miss Piggy. Everyone knows that the pizza crust must be available before the tomato sauce and other ingredients can be added.
+But now something strange happened. Miss Piggy started by putting tomato sauce on the table and then adding the crust dough afterwards. That was obviously **not** what Pietro wanted. There must be some defect in Miss Piggy. Everyone knows that the pizza crust must be available **before*** the tomato sauce and other ingredients can be added.
 
 Pietro looked in the manual. Aah there it was. Miss Piggy knows a lot, but you have to tell it the order in which the  ingredients are applied. To do this, add an explicit order in the description of the pizza. You can do this by using the `require` keyword.  Let's change the pizza description and save it as `pizza2.pp`. To make it more interesting, let's change some ingredients as well. Let's make medium thin pizza with thick cristal tomato sauce and a lot of mozzarella.
 
@@ -189,7 +188,7 @@ Notice: /Stage[main]/Main/Tomato_sauce[thick_cristal]/ensure: created
 Notice: /Stage[main]/Main/Cheese[a_lot_of_mozzarella]/ensure: created
 Notice: Finished catalog run in 182.08 seconds
 ```
-Pietro waited anxiously. What would miss Piggy do this time? After 3 minutes, Pietro was looking at a perfect pizza Napolitana. That was much better. First the crust, then the tomato sauce and last but not least the cheese.
+Pietro waited anxiously. What would Miss Piggy do this time? After 3 minutes, Pietro was looking at a perfect pizza Napolitana. That was much better. First the crust, then the tomato sauce and last but not least the cheese.
 
 ###What did I do?
 
@@ -200,4 +199,4 @@ require     => Tomato_sauce["thick_cristal"],
 ``` 
 
 ##Next time...
-That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.
+That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the Miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.
