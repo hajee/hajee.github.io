@@ -137,7 +137,7 @@ Puppet::Type.type(:custom_package).provide(:simple) do
 end
 ```
 
-We need to put that at `my_own_easy_type/lib/puppet/provider/easy_type/simple.rb`
+We need to put that at `my_own_easy_type/lib/puppet/provider/custom_package/simple.rb`
 
 ##It works.... Well, kind of
 Actually this is all you have to do to get the basic Puppet stuff in order. Now you can give the puppet command to get a view of all available resources:
