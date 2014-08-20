@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-06-26T16:56:42+02:00</updated>
+  <updated>2014-08-20T16:06:00+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Puppet at the Puppet Pizza Place part 2]]></title>
+    <link href="http://hajee.github.io/2014/06/30/pietros-puppet-pizza-place-2/"/>
+    <updated>2014-06-30T15:00:15+02:00</updated>
+    <id>http://hajee.github.io/2014/06/30/pietros-puppet-pizza-place-2</id>
+    <content type="html"><![CDATA[#Learning Puppet at the Puppet Pizza Place
+
+In this set of blog posts, I will teach you the base concepts of the [puppet DSL](http://puppetlabs.com/puppet). Most of the time Puppet is taught within the context of IT configuration management. I've chosen not to do so. I've chosen baking pizza's as the learning environment. It helps less technical people, like IT managers, for example, to get the concepts of Puppet. Checkout part 1 of the series [here](/2014/06/26/pietros-puppet-pizza-place-1/))
+
+<!-- more -->
+
+## More pizza's....
+
+Last time Pietro experimentented with Miss Piggy the pizaa backing robot. He used the Puppet DSL to describe a pizza Napolitane. After some experimenting, he'd got his first real pizza from Miss Piggy. That was all really nice, but Miss Piggy would really become an asset if Pietro was able to reuse the description of his pizza Napolitane.
+
+##Puppet classes
+Pietro looked in the Puppet manual and saw that Puppet had a mechanism for putting related ingredients together and resuing them. It was called a `class`. That was exactly wat he needed. Because a pizza in fact is nothing else then putting the right ingredients in the right order together with the right steps. So Pietro started with a class for 
+
+##Puppetizing the menu card]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Learning Puppet at the Puppet Pizza Place]]></title>
@@ -641,7 +662,7 @@ Puppet::Type.type(:custom_package).provide(:simple) do
 end
 ```
 
-We need to put that at `my_own_easy_type/lib/puppet/provider/easy_type/simple.rb`
+We need to put that at `my_own_easy_type/lib/puppet/provider/custom_package/simple.rb`
 
 ##It works.... Well, kind of
 Actually this is all you have to do to get the basic Puppet stuff in order. Now you can give the puppet command to get a view of all available resources:
@@ -739,228 +760,6 @@ custom_package { 'MAKEDEV':
 In the [next blog post](/2014/02/08/puppet-custom-types-the-easy-way-part-2/), we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)
 
 _Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo_]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing your system installation with RSpec]]></title>
-    <link href="http://hajee.github.io/2014/01/18/testing-your-system-installation-with-rspec/"/>
-    <updated>2014-01-18T14:12:37+01:00</updated>
-    <id>http://hajee.github.io/2014/01/18/testing-your-system-installation-with-rspec</id>
-    <content type="html"><![CDATA[[In the last blog post](/2014/01/13/how-to-test-systems-installations/) we introduced described the need for a testing tool for Linux and middleware installations. After some Internet reasearch and a small test, we concluded  [RSpec](https://relishapp.com/rspec) would be a good fit. In this blog post,  we will dive into the way we use RSpec to build the specifications and tests needed for your systems.
-
-<!-- more -->
-
-##Our environment
-
-Before we dive into RSpec, lets first describe our environment. Most of our applications use at least the combination of an Oracle database and a WebLogic JEE server. Sometimes the applications are also built using  Tibco products. Normally, all these middleware functions are installed on separate distinct systems. This means one or more  systems for the Oracle database. One or more systems for the WebLogic JEE server, and one or more systems for Tibco products. All these systems have interrelated settings. For example, the Weblogic server needs a connection to the Oracle database to get it's data. This group of interrelated systems, we call a platform. We build specifications and tests for a complete platform. So the specification contains all settings and tests for a set of 3 or more systems.
-
-##What's this RSpec thing? 
-RSpec is a tool based on the  [Behaviour Driven Development](http://en.wikipedia.org/wiki/Behavior-driven_development)(BDD) software development process. Wikipedia says:
-
-<blockquote><p>At the heart of BDD is a rethinking of the approach to unit testing and acceptance testing that North came up with while dealing with these issues. For example, he proposes that unit test names be whole sentences starting with the word "should" and should be written in order of business value.</p></blockquote>
-
-Heart of the matter is, you write specifications, and you accompany them with a test to validate the specification. Throughout this blog post, the terms specification (and spec) and tests are both used and mean (about) the same.
-If you would like to know more about the RSpec core, I recommend checking out the [web site](https://www.relishapp.com/rspec/rspec-core/v/3-0/docs)  and to read the book [The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends](http://pragprog.com/book/achbd/the-rspec-book)
-
-##The top spec
-
-The code below shows what we call, a top level spec. As you can see, we use all the normal RSpec syntax. 
-
-```ruby
-describe "a top spec, 
-	:with_domain => 'just.a.domain.com',
-	:with_dbname => 'dbname' do
-
-	include_context "running in our development network"
-
-	host = 'dbhost'
-	describe "RDBMS host", 
-		:on_host => host,
-		:with_ip => '10.0.0.1',
-		:if => runs_on(host) do
-
-		it_behaves_like "runs on DL380", 'M6', 4, '4G'
-		it_behaves_like "a database server"
-		it_behaves_like "database is configured for a specific application"
-
-	end
-
-	host = 'wlshost'
-	describe "JEE host", 
-		:on_host => host,
-		:with_ip => '10.0.0.3',
-		:if => runs_on(host) do
-
-		it_behaves_like "runs on DL380", 'M6', 4, '4G'
-		it_behaves_like "a WebLogic host"
-		it_behaves_like "WebLogic is configured dor a specific application"
-	end
-end
-```
-
-If you read through the code, you can see, the top level spec, contains the specifications for all the systems in this platform. We have a `dbhost`. The spec for this system starts at line 8. The other system in the platform is the `wlshost`. Again: together, we call them a platform. To run the spec on either system, you can use the regular RSpec command:
-
-
-```bash
-$ rspec toplevel_spec.rb
-```
-
-The line `:on_host => host`, takes care that only the right set of spec's and tests are run on the system. If we enter this command on node `wlshost`, only line 15 trough to line 28 are run. On the other hand, if we run the command on host `dbhost`, only lines 13 until 15 are run. If you enter the command on any other system, nothings happens.
-
-##Running in different environments
-One of the design goals of our testing setup is that we want to be able to run the same set of tests in all of our environments. This means the same tests run in development, test, acceptance and even in production. To accomplish this, we make heavy use of RSpec's metadata.
-
-```ruby
-describe "RDBMS host", 
-		:on_host => host,
-		:with_ip => '10.0.0.1',
-		:if => runs_on(host) do
-```
-The `:on_host => host` and the `:with_ip => '10.0.0.1'` are [user defined metadata elements](https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/metadata/user-defined-metadata). Later in this blog post, I will show how we actually use this metadata to make the individual tests are unaffected by the environment the run in.
-
-If you have more than a couple of environment specific settings, setting them all in the [`describe block`](https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/basic-structure-describe-it), would become quite large and cumbersome to read and understand. Therefore, we introduced the `include_context "running in our 
-development network` in line 5. In this line,  we include a specific context or environment. 
-
-In the shared_contexts, you can specify all sorts of metadata parameters. Because they are named, you can select which one you need. Right now, we use the one that works in our development network. The shared contexts can be written in another file. Here is the one we used:
-
-```ruby
-shared_context "running in our development network" do
-	meta_for do
-		domain			'just.a.domain.com'
-		dns_servers		['12.88.129.19', '192.168.42.155']
-		ntp_servers 		['192.168.80.4', '192.168.80.120', '127.127.1.0']
-		netmask			'255.255.254.0'
-		ldap_server		'ldap.domain.com'
-		env				'd'
-	end
-end
-```
- 
-In this `shared_context`,  we can specify all specific setting for an environment. What's even better, we can share it between different top level specs. So the top level spec's running in this environment, can include this shared context and have all nescecarry settings. It's also very [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself) If you change your dns servers, there's only one place you have to change this value.
-
-The [`shared_context`](https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/shared-context) idiom is RSpec standard. The `meta_for` is something we added. You can specify any legal ruby variable name on the left and any ruby type on the right side.
-
-##structure of the spec's
-
-Let's get back to the actual specification. Again we make heavy use of a standard RSpec feature. The [shared examples](https://www.relishapp.com/rspec/rspec-core/v/3-0/docs/example-groups/shared-examples).  Using `it_behaves_like`, we can call a set of specifications.
-```ruby
-it_behaves_like "runs on DL380", 'M6', 4, '4G'
-it_behaves_like "a database server"
-it_behaves_like "database is configured for a specific application"
-```
-We have a convention to structure the tests in three levels.
-
-1. The hardware
-2. The type of function of the system. E.g. a database or a JEE server 
-3. The extra additions we need to get a specific application running on it.
-
-##The real stuff
-
-All the elements we talked about this far, are mostly stuff we need to structure the set of tests. But what does the real stuff look like? Here is part of the real stuff.
-
-```ruby
-shared_examples "using generic services" do
-	describe "having LDAP service" do
-
-		it "file /etc/ldap.conf exists" do
-			System.files.should include "/etc/ldap.conf"
-		end
-
-		it "idle time limit for LDAP queries is set to 870" do
-			System.files["/etc/ldap.conf"]["idle_timelimit"].should eq "870"
-		end
-
-		it "ldap url is set to ldap://#{meta(:ldap_server)}/" do
-			System.files["/etc/ldap.conf"]["uri"].should eq ("ldap://" + meta(:ldap_server) + "/")
-		end
-	end
-
-	describe "using generic DNS services" do
-		it "file /etc/resolv.conf exists" do
-			System.files.should include "/etc/resolv.conf"
-		end
-
-		it "dns servers are set to: #{meta(:dns_servers)}" do
-			System.files["/etc/resolv.conf"]["nameserver"].should include *meta(:dns_servers)
-		end
-
-		it "DNS search list is set to: #{meta(:domain)}" do
-			System.files["/etc/resolv.conf"]["search"].should eq_ignorecase meta(:domain)
-		end
-
-		it "is able to resolve FQDN (#{meta(:host)}.#{meta(:domain)})" do
-			System.check_dns(meta(:host) + "." + meta(:domain)).should eq true
-		end
-	end
-end
-```
-
-This is part of the specifications for the base Linux system. It describes the LDAP and DNS settings.  Here, you see the basic RSpec structure. We use `describe` to structure  a big set of specifications and tests into smaller units. The actual specifications are done using the `it` commands.  Our aim is to write communicable text in the `it` statement. We have noticed that besides a good test tool, RSpec really enabled us to communicate about what we did and why we did it.
-
-The `System.files["/etc/ldap.conf"]["idle_timelimit"].should eq "870"` is the actual test. Also in this code, we place a high value on communication. Even someone who doesn't know anything about RSpec and ruby, but knows about LDAP, is able to understand that we test if the `idle_timelimit` in `/etc/ldap.conf` is set to 870.
-
-##What does that meta thing do?
-I told you before that we make heavy use of Rspec's user defined metadata. We define the information either in the describe block or we can describe them in the shared_context's. But in the test, is where we actually use them. Let's look at one in detail.
-
-```ruby
-it "dns servers are set to: #{meta(:dns_servers)}" do
-	System.files["/etc/resolv.conf"]["nameserver"].should include *meta(:dns_servers)
-end
-```
-
-This specification text contains a call to the `meta` method with the parameter `:dns_servers`. This call looks into the meta information that's available and retrieves the value for `:dns_servers`. If you check back to the `shared_context`, you can see, that it translates to `['12.88.129.19', '192.168.42.155']`. So when this specification is run, the description of the specification will become:
-
-```
-dns servers are set to: ["12.88.129.19", "192.168.42.155"]
-```
-
-In the test itself,  the `*meta(:dns_servers)` will also be translated to the array with the two string values.
-
-This `meta` method is **not** standard RSpec. In standard RSpec,  there is a difference between meta information you can use on the description level and the meta information you can use in the test. We felt that it would be useful to use them equally in both the description and the test. So we build our own extension to the RSpec meta information.
-
-##The **real** real stuff
-I said before that I would show you the real stuff. But that was a small lie. The `System` class you see in the example is an abstraction. An abstraction we use to keep the spec's and tests at that level very readable and with a high communication value. Did I tell you the value we put on communication ;-). But **NOW** I',m going to show you the real stuff. Here.... without further ado, is the `System` class:
- 
-```ruby
-class System
-	def self.files
-		Facter.value("system_files")
-	end
-	
-	def self.service_startup
-		return Facter.fact("service_startup").value
-	end
-end
-```
-
-In the `System class`,  we use the [Facter gem](http://puppetlabs.com/facter).
-
-<blockquote><p>Facter is a lightweight program that gathers basic node information about the hardware and operating system. Facter is especially useful for retrieving things like operating system names, hardware characteristics, IP addresses, MAC addresses, and SSH keys.</p></blockquote>
-
-With facter,  we retrieve all sorts of information from the operating system and middleware in a way that we can easily use it in our spec's (Or in a puppet manifest). Depending on the kind of information, it returns an integer, an array, a string or even a [hash](http://ruby-doc.org/core-2.1.0/Hash.html). Returning a hash helps in making the higher level tests very easy to read. Let me give you an example. Let's look at the test below:
-
-```ruby
-it "idle time limit for LDAP queries is set to 870" do
-	System.files["/etc/ldap.conf"]["idle_timelimit"].should eq "870"
-end
-```
-
-It calls the `files` method on the `System` class.  We've seen the files method calling the `system_files`  fact. The fact returns the following information:
-
-```ruby
-	"/etc/anther_file" => {...}
-	"/etc/ldap.conf"  => {
-		"idle_timelimit"  		=>  "870", 
-		"another_setting"     =>  "nonsense"
-	}
-}
-```
-
-That's why it is easy to get the `idele_timelimit` from `/etc/ldap.conf`
-
-##Whats next...
-Next time, I'm going to tell you a bit about the work we did to make it easier to build custom types and resources for Puppet. Stay tuned.
-]]></content>
   </entry>
   
 </feed>
