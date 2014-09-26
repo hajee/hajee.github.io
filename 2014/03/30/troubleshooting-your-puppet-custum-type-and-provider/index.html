@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Area's of interest for continuous deployment - People & Software</title>
+  <title>troubleshooting your Puppet custom type and provider - People & Software</title>
   <meta name="author" content="Bert Hajee">
   <meta name="twitter:widgets:csp" content="on">
 
   
-  <meta name="description" content="Describe the six area's of interest for realizing continuous delivery">
-  <meta name="keywords" content="devops, continuous deployment, continuous integration, maturity, cmm">
+  <meta name="description" content="troubleshooting your Puppet custom type and provider">
+  <meta name="keywords" content="devops, continuous deployment, infastructure puppet, easy_type, ruby, oracle">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/">
+  <link rel="canonical" href="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Area's of Interest for Continuous Deployment</h1>
+      <h1 class="entry-title">Troubleshooting Your Puppet Custom Type and Provider</h1>
     
   </header>
 
@@ -77,41 +77,43 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/maturity-model/'>maturity model</a>, <a class='category' href='/blog/categories/method/'>method</a>
+    <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
 
-<div class="entry-content"><p>In <a href="/2013/10/02/visualize-your-continuous-deployment-maturity/">my last blog post</a>, I showed a way to visualize the level of maturity for the six interest area&rsquo;s of continuous delivery. In this blog post,  I will dig deeper into what the areas of interest are.</p>
+<div class="entry-content"><p>Not again&hellip;.! This custom type and provider stuff had gotten under Tim&rsquo;s skin. Somehow it just kept giving errors. Not only errors, but error&rsquo;s Tim could not pinpoint.</p>
+
+<p>Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests.
+If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.</p>
 
 <!-- more -->
 
 
-<h2>The area&rsquo;s of interest</h2>
+<h2>Where to look</h2>
 
-<h3>Build management and continuous integration</h3>
+<p>One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error.</p>
 
-<p>Build management are all processes and tools we need to ensure that ,at any point in time, we can build a specific version of our software. Besides being able to build it, we also need to ensure that is works. To do this, we need a set of (preferably automated) unit-tests. To be able, to quickly see the impact of source code changes, at least every night a build must be done.</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass</span></code></pre></td></tr></table></div></figure>
 
-<h3>Environments and deployments</h3>
 
-<p>To be able to do continuous delivery, there must be a pipeline of systems for doing DTAP(Development Testing, Acceptance and Production) like tests. It is cheap (meaning automated) to get a new environment for testing. Systems provisioning and application deployments are all automated. Also, there needs to be a way to automatically roll back to a previous well known working system state.</p>
+<p>Although Puppet told him, it was in his custom_type (<code>your_custom_type</code>) and in his provider (<code>your_provider</code>), this was nowhere precice enough to get going. Beeëing a <code>NillClass</code> exception didn&rsquo;t help either. There was no variable name to start looking for.</p>
 
-<h3>Release management and compliance</h3>
+<p>In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.</p>
 
-<p>Besides all sorts of tooling stuff, processes must be in place. There must be a (strict) change management process including regulated approvals to go from state to state (e.g. from testing to acceptance and so on to production). These change management processes and approvals must be enforced.</p>
+<p>After Googleing around, Tim found that ruby normaly print&rsquo;s a stack trace as well. It looked like Puppet was catching the error&rsquo;s and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace.</p>
 
-<h3>Testing</h3>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet apply your_manifest.pp --trace
+</span></code></pre></td></tr></table></div></figure>
 
-<p>To be able to do continuous delivery, testing must be highly automated. You need at least automated unit-tests and a set of automated acceptance tests. It is preferable to have the acceptance test scenario&rsquo;s written by testers and business representatives in cooperation. Not only functional tests need te be automated, there needs to be some sort of mechanism te check non-functional requirements like, for example, response times</p>
 
-<h3>Data management</h3>
+<p>No clue&rsquo;s to where</p>
 
-<p>While most automated installation scripts focus on provisioning the software. The data in the database is just as important. Therefore, you need to have automated the way you change your data model and also the configuration data inside the database.</p>
+<h2>Getting into the debugger</h2>
 
-<h3>Configuration management</h3>
-
-<p>To be able to get built every version in time at any moment,  we need source code management tools like <a href="http://git-scm.com/">git</a> or <a href="Apache%20Subversion">subversion</a>. All components needed to get the software working, must be under this regime of version control. This includes the libraries and all database changes.</p>
+<h2>What to do in the debugger</h2>
 </div>
 
 
@@ -134,12 +136,12 @@
   
 
 
-<time datetime="2013-10-12T22:25:10+02:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
+<time datetime="2014-03-30T22:31:44+02:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time>
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/" data-via="bhajee" data-counturl="http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/" data-via="bhajee" data-counturl="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/" >Tweet</a>
   
   
   
@@ -150,10 +152,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2013/10/02/visualize-your-continuous-deployment-maturity/" title="Previous Post: Visualize your continuous deployment maturity">&laquo; Visualize your continuous deployment maturity</a>
+        <a class="basic-alignment left" href="/2014/02/23/using-puppet-to-manage-oracle/" title="Previous Post: Using Puppet to manage Oracle">&laquo; Using Puppet to manage Oracle</a>
       
       
-        <a class="basic-alignment right" href="/2013/10/17/levels-of-maturity-for-continuous-deployment/" title="Next Post: On your way to easier deployments?">On your way to easier deployments? &raquo;</a>
+        <a class="basic-alignment right" href="/2014/06/26/pietros-puppet-pizza-place-1/" title="Next Post: Learning Puppet at the Puppet Pizza Place">Learning Puppet at the Puppet Pizza Place &raquo;</a>
       
     </p>
   </footer>
@@ -180,12 +182,6 @@
   </div>
 </article>
 
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
 
 </div>
 
@@ -277,22 +273,6 @@
 
 </footer>
   
-
-<script type="text/javascript">
-      var disqus_shortname = 'hajee';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/';
-        var disqus_url = 'http://hajee.github.io/2013/10/12/areas-of-interest-to-realize-continuous-deployment/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 

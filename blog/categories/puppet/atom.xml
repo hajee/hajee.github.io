@@ -4,7 +4,7 @@
   <title><![CDATA[Category: puppet | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/puppet/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-08-21T07:50:18+02:00</updated>
+  <updated>2014-09-26T23:20:03+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Review of the book Mastering Puppet]]></title>
+    <link href="http://hajee.github.io/2014/09/26/review-of-the-book-mastering-puppet/"/>
+    <updated>2014-09-26T22:58:22+02:00</updated>
+    <id>http://hajee.github.io/2014/09/26/review-of-the-book-mastering-puppet</id>
+    <content type="html"><![CDATA[#Review of the book 'MAstering puppet'
+
+I've had the privilege of reviewing a new Puppet book. The book is called
+['Mastering Puppet'](https://www.packtpub.com/networking-and-servers/mastering-puppet) and it is published by [Packt publishing](https://www.packtpub.com/)  and written by Thomas Uphill.
+
+
+<img src="https://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/ppv4_main_book_cover/2189OS_cov.jpg" title="The book cover" >
+
+<!-- more -->
+
+
+##Structure of the book
+The book is 251 pages that contain the following ten chapters:
+- Dealing with Load/Scale
+- Organizing Your Nodes and Data
+- Git and Environments
+- Public Modules
+- Custom Facts and Modules
+- Custom Types
+- Reporting and Orchestration
+- Exported Resources
+- Roles and Profiles
+- Troubleshooting
+
+##Learning style
+All chapters contain lots of commands and screen output. This way you are taken through the commands needed to get the job done. Some people like this. Personally when I read the term "Mastering" in a book title, I expect the book to be a book written for people who are almost master. I find this book more of a Puppet cookbook than a book that explains the mastery details of Puppet.
+
+Almost from the start of the chapter, it dives into the details and commands needed to get the job done. This without showing the big picture.
+
+## Book content
+Most of the chapters in the book address existing challenges for using Puppet in big enterprise environments. Chapter 1 discusses how to scale puppet servers. Given the fact that Puppetlabs just announces a much better performing puppet server, shows that this used to be a real challenge. But it is uncertain if the tips and tricks in this chapter are still needed and if they still work.
+
+I would have liked the chapter on roles and profiles to be a bit more elusive. I think that getting the roles and profiles right, helps big to keep enterprise environments manageable in puppet. The chapter in the book just scratches the surface and leaves a lot of important stuff to be discovered.
+
+Same thing applies to the chapter on custom types. The chapter deals mostly with `defined types` and a small part of the chapter is on custom types. Again personally I would've liked these chapters to be more extensive. If you want to know more about custom types, you can always get the book [Puppet Types and Providers](http://shop.oreilly.com/product/0636920026860.do) by [Dan Bode](http://www.oreillynet.com/pub/au/5593) and [Nan Liu](http://www.oreilly.com/pub/au/5594)
+
+## Conclusion
+Some of my comments are pretty harsh. This doesn't mean the book isn't useful. Like I said before, the book is more of a cookbook then a book explaining how to become a master at Puppet. But if you look at the book as a cookbook, it is a pretty extensive cookbook. A cookbook that takes the by the hand and guides it through a couple challenges of using Puppet in the enterprise.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Learning Puppet at the Puppet Pizza Place]]></title>
@@ -211,6 +257,45 @@ require     => Tomato_sauce["thick_cristal"],
 
 ##Next time...
 That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the Miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[troubleshooting your Puppet custom type and provider]]></title>
+    <link href="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/"/>
+    <updated>2014-03-30T22:31:44+02:00</updated>
+    <id>http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider</id>
+    <content type="html"><![CDATA[Not again....! This custom type and provider stuff had gotten under Tim's skin. Somehow it just kept giving errors. Not only errors, but error's Tim could not pinpoint. 
+
+Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests. 
+If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.
+
+<!-- more -->
+
+##Where to look
+
+One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error. 
+
+```
+Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass
+```
+
+Although Puppet told him, it was in his custom_type (`your_custom_type`) and in his provider (`your_provider`), this was nowhere precice enough to get going. Beeëing a `NillClass` exception didn't help either. There was no variable name to start looking for.
+
+In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.
+
+After Googleing around, Tim found that ruby normaly print's a stack trace as well. It looked like Puppet was catching the error's and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace. 
+
+```sh
+puppet apply your_manifest.pp --trace
+```
+
+
+No clue's to where 
+
+##Getting into the debugger
+
+##What to do in the debugger
+]]></content>
   </entry>
   
   <entry>
@@ -515,285 +600,6 @@ Like I said in the introduction, this is really a simple example. Real life cust
 
 If you would like to see more about `easy_type`, just let me know and I will see if we can do some more posts about it. For now, check the example source in the [github repository](https://github.com/hajee/my_own_easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Puppet Custom Types, the easy way]]></title>
-    <link href="http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way/"/>
-    <updated>2014-01-26T13:57:20+01:00</updated>
-    <id>http://hajee.github.io/2014/01/26/puppet-custom-types-the-easy-way</id>
-    <content type="html"><![CDATA[Robert scratched his head. How would he get a Puppet class to manage a complex resource on his systems? I guess I’ll have to make a Custom Type, he thought. But last time I looked into that, I noticed you need to know a lot about Puppet Internals. 
-
-If you recognize this thought process, maybe it’s time to meet [easy_type](https://github.com/hajee/easy_type). Like the name says, easy type is designed to make it easy to build a Custom Puppet Type. In this article, we will introduce [easy_type](https://github.com/hajee/easy_type). We do this by taking you along on in the process of  making a Custom Type. In the process, we explain how `easy_type` actually makes it…… well easy to build a Custom Type. In the first part, we will show you how to get Puppet to see and index all your resources. In the next blog posts, we will enhance the Custom Type to be able to create, remove and modify existing resources.
-
-<!-- more -->
-
-##When to build a Custom Type
-
-Well that’s an interesting question! The Puppet language is actually very versatile, and you can do anything with it. But why would you step out of puppet and into ruby to build a Custom Type? In one of his [excellent blog posts](http://garylarizza.com/blog/2013/11/25/fun-with-providers/), Gary Larizza explains it in one sentence: “Because 20 execs in a defined type… “. Another indication, you’d be better of on a Custom Type path instead of a defined type, is when you need to build one or more custom facts. 
-
-<blockquote><p>What would drive someone to write a custom type and provider for Puppet anyhow? Afterall, you can do ANYTHING IMAGINABLE in the Puppet DSL*! After drawing back my sarcasm a bit, let me explain where the Puppet DSL tends to fall over and the idea of a custom type and provider starts becoming more than just an incredibly vivid dream:</p><p><ul><br/>	<li>You have more than a couple of exec statements in a single class/defined type that have multiple conditional properties like ‘onlyif’ and/or ‘unless’.</li><br/>	<li>You need to use pure Ruby to manipulate data and parse it through a system binary</li><br/>	<li>Your defined type has more conditional logic than your pre-nuptual agreement</li><br/>	<li>Any combination of similar arguments related to the above</li><br/></ul><br/>If the above sounds familiar to you, then you’re probably ready to build your own custom Puppet type and provider.</p><footer><strong>Gary Larizza in Fun With Puppet Providers</strong></footer></blockquote>
-
-##Let’s get started
-
-To get started, you first need to include `easy_type` in your `Puppetfile` or otherwise get it into your puppet directories. To add it to your `Puppetfile`, you can add the following line:
-
-```ruby
-mod "hajee/easy_type", :git => "git://github.com/hajee/easy_type.git"
-```
-
-After that run the librarian to add the right modules to your puppet tree:
-
-```sh
-librarian-puppet install
-```
-
-The `librarian` reads the `Puppetfile` and puts the nescecary files into your module tree. After this command, you can see `easy_type` in your  list of modules.
-
-<img src="/images/easy_type_added.png" title="easy_type added to modules" >
-
-Well that was easy. Now we have all the basic requirements in place to start. What better time then now to think about the resource you want to manage.
-
-##How to manage the resource?
-Because `easy_type` hides some of the Puppet intricacies from you, you can focus on the resource. To continue, you need to know how: 
-
--	get a list of all available resources? 
--	what’s important in a resource?
--	to create a resource?
--	to modify an existing resource
--	to remove one
-
-This is the basic information you need to build a custom resource.
-
-#An example please?
-
-As an example I’ve picked the same Custom Type as is described in the book [“Puppet Types and Providers"](http://shop.oreilly.com/product/0636920026860.do).  This is an excellent book if you are into writing custom resources. It describes in great detail everything you must known and do to build a Custom Type in the standard puppet way. In the book they state:
-
-<blockquote><p>the `custom_package` type is not intended to serve as a replacement of Puppet’s existing package type. It serves as an example of how to take advantage of the features of the type and provider APIs.</p><footer><strong>Puppet Types and Providers By Dan Bode</strong> <cite>Nan Liu</cite></footer></blockquote>
-
-Of course, the same thing counts over here.
-
-##A scaffold
-To get started, it would be helfull if we have a scafffold. Let's say we want to name our own module `my_own_easy_type` and we name our own Custom Type `custom_package`. Let's start with creating the right directories. Go over to your module directory and create the following directories:
-
-```sh
-mkdir -p my_own_easy_type/lib/puppet/provider/custom_package
-mkdir -p my_own_easy_type/lib/puppet/type/custom_package
-``` 
-
-The first code we need, is the next scaffold:
-
-```ruby
-require 'easy_type'
-
-module Puppet
-
-  newtype(:custom_package) do
-    include EasyType
-
-    # set_command(:the_righ_command)
-
-    to_get_raw_resources do
-      # What commando to give to get a list of all resource.
-      # We need to return an Array of Hashes 
-    end
-
-    on_create do
-      # What do we do to create a resource
-    end
-
-    on_modify do
-      # What do we do to modify an existingresource
-    end
-
-    on_destroy do
-      # What do we do to destroy/delete an existingresource
-    end
-
-    newparam(:name) do
-      include EasyType
-      isnamevar
-
-      to_translate_to_resource do | raw_resource|
-        # how to translate from the Hash-like raw resource to get the name
-        # raw_resource.column_data(:name)
-      end
-
-    end
-
-  end
-end
-```
-
-Let's put it in `my_own_easy_type/lib/puppet/type/custom_package.rb`. The next file we need is the provider file.
-
-```ruby
-require 'easy_type'
-
-Puppet::Type.type(:custom_package).provide(:simple) do
-	include EasyType::Provider
-
-  desc "Manage packages with easy_type"
-
-  mk_resource_methods
-
-end
-```
-
-We need to put that at `my_own_easy_type/lib/puppet/provider/custom_package/simple.rb`
-
-##It works.... Well, kind of
-Actually this is all you have to do to get the basic Puppet stuff in order. Now you can give the puppet command to get a view of all available resources:
-
-```sh
-puppet resource custom_package
-```
-
-And it shows..... nothing. No output. But what is more import at this stage, is no error's or warnings. Now we can start working on the thing we know best. How to get the information about our resource, a package in this example, out and manageable.
-
-##Let's get the index of all packages
-So let's change the `custom_package` so we can use Puppet to get a list of all resources. To do this, we need to add just a couple of lines. Lets first look at the method `to_get_raw_resources`. Its function is to return an Array containing all available resources you manage. Every Array entry is preferably a Hash. A Hash that contains the all the individual properties and parameters of an instance of your resource.
-
-In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the `rpm` command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.
-
-```sh
-rpm -qa' --qf' %{NAME}, %{VERSION}\n
-```
-
-We would like the Custom Type to execute this command and convert the data to an Array of Hashes.
-
-To do just that, we need to change the `to_get_raw_resources` method to:
-
-```ruby
-    to_get_raw_resources do
-      packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}\n')
-      convert_csv_data_to_hash(packages_string,[:name, :version])
-    end
-```
-The `packages_string` will contain a string with all the information. The `convert_csv_data_to_hash` method will convert it to a hash. The elements in the hash are named `name` and `version`.
-
-To let `easy_type` know rpm is an os command, we need to add the line:
-
-```ruby
-set_command(:rpm)
-```
-
-Now we need to let Puppet know how to get the name value from the raw resource. To do this, we change the definition of the name parameter.  We need to define the `to_translate_to_resource` method. Its function is to pick just the name out of the Hash that describes the full resource. You must define this function in every parameter or property. It receives a single instance of a resource in a Hash. It is one element from the Array of Hashes we created before. Because we named the first column in our comma separated data, `:name`, we can easily get it from the Hash. Lets define the function:
-
-```
-to_translate_to_resource do | raw_resource|
-	raw_resource.column_data(:name)
-end
-```
-
-##TA TAAHH
-
-Now when we ask Puppet for the available `custom_packages`, we get a list of all the available packages.
-
-```sh
-puppet resource custom_package
-```
-Output:
-```ruby
-custom_package { 'GConf2':
-  ensure  => 'present',
-}
-custom_package { 'MAKEDEV':
-  ensure  => 'present',
-}
-...
-```
-But wait, didn't we also collect the version information? What about that? To Add the version information, we need to add a version property. A property looks very similar to the parameter that was already available in the scaffold. Here is the code for the version property:
-
-```ruby
-newproperty(:version) do
-  include EasyType
-
-  to_translate_to_resource do | raw_resource|
-    raw_resource.column_data(:version)
-  end
-end
-```
-
-Now when we ask Puppet for the available `custom_packages` again, we get a list of all the available packages, inclusing the version information.
-
-```sh
-puppet resource custom_package
-```
-Output:
-
-```ruby
-custom_package { 'GConf2':
-  ensure  => 'present',
-  version => '2.14.0',
-}
-custom_package { 'MAKEDEV':
-  ensure  => 'present',
-  version => '3.23',
-}
-...
-```
-
-##Next...
-In the [next blog post](/2014/02/08/puppet-custom-types-the-easy-way-part-2/), we will enhance our work. We will add support for changing existing resources. If, in the meanwhile you want to check `easy_type` out. You can checkout the source in the [github repository](https://github.com/hajee/easy_type). You can also check some [Oracle Custom Types](https://github.com/hajee/oracle) which are build upon `easy_type`. We would love to hear your feedback on this work. You can find the example [here](https://github.com/hajee/my_own_easy_type)
-
-_Since first publication, some changes where made to the code fragments in this blog post. If you used the code in this post, please check the changes in the github repo_]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Puppet building blocks]]></title>
-    <link href="http://hajee.github.io/2013/12/30/puppet-building-blocks/"/>
-    <updated>2013-12-30T20:14:10+01:00</updated>
-    <id>http://hajee.github.io/2013/12/30/puppet-building-blocks</id>
-    <content type="html"><![CDATA[In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.
-
-In Puppet, you describe how your system should be configured by describing the artefacts available on the system. Per artefact, you describe it's detailed configuration. A configured system contains many artefacts. How can we structure these artefacts in such a way that it is readable, understandable and maybe usable by other (parts of) the organisation.
-
-<!-- more -->
-
-##The resource type
-Generally a system consists of files, services, processes, packages and so on and so on. In the Puppet world, these are called resources. Resources are of a specified type. Lets say, for example, we want to make sure a configuration file is available on a unix system.  Besides being available, it should also contain the right content. With Puppet, we can do this by using the `File` type.
-
-```ruby
-
-file {'/application/config.xml':
-  ensure	=> present,
-  content	=> '<xml>just some config file</xml>',
-}
-```
-
-besides the `File` type, there are types for managing `Users`, `Groups`, `Services` and so on. Actually Puppet has a lot of built-in types. If you look at [type documentation](http://docs.puppetlabs.com/references/latest/type.html) on the puppet site,you see a list of 48 built-in types.
-
-<img src="/images/list_of_types.png" title="List of built-in types" >
-
-A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`.
-
-A resource type is the smallest building block available in Puppet. Besides to the built-in types, Puppet has some other mechanism's to define structured sets of resources on a system. These are the `class` and the `defined resource`. 
-
-
-##The class
-[The Puppet documentation for classes](http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html) states:
-
-<blockquote><p>Classes are named blocks of Puppet code which are not applied unless they are invoked by name. They can be stored in<br/>modules for later use and then declared (added to a node's catalog) with the include function or a resource-like syntax.</p></blockquote>
-
-Quite some definition. In layman's terms, though a Puppet class is a way of structuring resources into a building block. The class [apache](https://forge.puppetlabs.com/puppetlabs/apache), for example, contains all resources needed to install, configure and run an apache https daemon on your system.
-
-
-##The defined resource
-[The Puppet documentation for defined types](http://docs.puppetlabs.com/puppet/2.7/reference/lang_defined_types.html) states:
-
-<blockquote><p>Defined resource types (also called defined types or defines) are blocks of Puppet code that can be evaluated multiple<br/>times with different parameters. Once defined, they act like a new resource type: you can cause the block to be evaluated<br/>by declaring a resource of that new type.</p><p>Defines can be used as simple macros or as a lightweight way to develop fairly sophisticated resource types.</p></blockquote>
-
-As you can see in the definition, just like the `class`, the defined resource is a block of Puppet code. So they are both a means to structure your Puppet code and make building blocks of reusable resources. The difference between a `class`and a  defined type is that a `class`may only be applied to your system. A defined type however, is some sort of template that can be applied multiple times to your system.
-
-
-##The custom type
-While the `class` and the defined type can and are used to describe small configurable elements on a system, the custom type is designed to do just that. Puppetlabs new that they would never be able to build all the `types` needed to describe all systems. So instead they made sure, Puppet is extensible by making your own types. In fact, all built-in types are build using the same extension mechanism that is available for custom types.
-
-
-##Next time
-This concludes our small introduction into the Puppet building blocks. Next time I will dive into building your own custom resources.
 ]]></content>
   </entry>
   
