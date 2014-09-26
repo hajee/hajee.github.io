@@ -1,0 +1,47 @@
+---
+layout: post
+title: "Review of the book Mastering Puppet"
+date: 2014-09-26 22:58:22 +0200
+comments: true
+categories: ['puppet', 'devops', 'learning','books']
+keywords: devops, continuous deployment, infastructure puppet, learning
+description: Review of the book 'Mastering Puppet'
+---
+#Review of the book 'Mastering puppet'
+
+I've had the privilege of reviewing a new Puppet book. The book is called
+['Mastering Puppet'](https://www.packtpub.com/networking-and-servers/mastering-puppet) and it is published by [Packt publishing](https://www.packtpub.com/)  and written by Thomas Uphill.
+
+
+{% img https://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/ppv4_main_book_cover/2189OS_cov.jpg The book cover %}
+
+<!-- more -->
+
+
+##Structure of the book
+The book is 251 pages that contain the following ten chapters:
+- Dealing with Load/Scale
+- Organizing Your Nodes and Data
+- Git and Environments
+- Public Modules
+- Custom Facts and Modules
+- Custom Types
+- Reporting and Orchestration
+- Exported Resources
+- Roles and Profiles
+- Troubleshooting
+
+##Learning style
+All chapters contain lots of commands and screen output. This way you are taken through the commands needed to get the job done. Some people like this. Personally when I read the term "Mastering" in a book title, I expect the book to be a book written for people who are almost master. I find this book more of a Puppet cookbook than a book that explains the mastery details of Puppet.
+
+Almost from the start of the chapter, it dives into the details and commands needed to get the job done. This without showing the big picture.
+
+## Book content
+Most of the chapters in the book address existing challenges for using Puppet in big enterprise environments. Chapter 1 discusses how to scale puppet servers. Given the fact that Puppetlabs just announces a much better performing puppet server, shows that this used to be a real challenge. But it is uncertain if the tips and tricks in this chapter are still needed and if they still work.
+
+I would have liked the chapter on roles and profiles to be a bit more elusive. I think that getting the roles and profiles right, helps big to keep enterprise environments manageable in puppet. The chapter in the book just scratches the surface and leaves a lot of important stuff to be discovered.
+
+Same thing applies to the chapter on custom types. The chapter deals mostly with `defined types` and a small part of the chapter is on custom types. Again personally I would've liked these chapters to be more extensive. If you want to know more about custom types, you can always get the book [Puppet Types and Providers](http://shop.oreilly.com/product/0636920026860.do) by [Dan Bode](http://www.oreillynet.com/pub/au/5593) and [Nan Liu](http://www.oreilly.com/pub/au/5594)
+
+## Conclusion
+Some of my comments are pretty harsh. This doesn't mean the book isn't useful. Like I said before, the book is more of a cookbook then a book explaining how to become a master at Puppet. But if you look at the book as a cookbook, it is a pretty extensive cookbook. A cookbook that takes the by the hand and guides it through a couple challenges of using Puppet in the enterprise.

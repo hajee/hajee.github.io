@@ -3,6 +3,7 @@ layout: post
 title: "Learning Puppet at the Puppet Pizza Place part 2"
 date: 2014-06-30 15:00:15 +0200
 comments: true
+published: false
 categories: ['puppet', 'devops', 'learning']
 keywords: devops, continuous deployment, infastructure puppet, learning
 description: Learning Puppet at the Puppet Pizza Place
