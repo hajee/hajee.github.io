@@ -3,7 +3,7 @@
   <title><![CDATA[People & Software]]></title>
   <link href="http://hajee.github.io/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-09-26T23:20:03+02:00</updated>
+  <updated>2014-09-27T10:06:51+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -17,7 +17,7 @@
     <link href="http://hajee.github.io/2014/09/26/review-of-the-book-mastering-puppet/"/>
     <updated>2014-09-26T22:58:22+02:00</updated>
     <id>http://hajee.github.io/2014/09/26/review-of-the-book-mastering-puppet</id>
-    <content type="html"><![CDATA[<h1>Review of the book &lsquo;MAstering puppet&rsquo;</h1>
+    <content type="html"><![CDATA[<h1>Review of the book &lsquo;Mastering puppet&rsquo;</h1>
 
 <p>I&rsquo;ve had the privilege of reviewing a new Puppet book. The book is called
 <a href="https://www.packtpub.com/networking-and-servers/mastering-puppet">&lsquo;Mastering Puppet&rsquo;</a> and it is published by <a href="https://www.packtpub.com/">Packt publishing</a>  and written by Thomas Uphill.</p>
@@ -384,46 +384,6 @@
 <h2>Next time&hellip;</h2>
 
 <p>That was a lot of learning going on. Pietro was even more worn out than normal. But he had confidence the Miss Piggy Puppet Pizza Robot was going to help him a lot. Tomorrow he would start at making descriptions for the first half of his menu.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[troubleshooting your Puppet custom type and provider]]></title>
-    <link href="http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider/"/>
-    <updated>2014-03-30T22:31:44+02:00</updated>
-    <id>http://hajee.github.io/2014/03/30/troubleshooting-your-puppet-custum-type-and-provider</id>
-    <content type="html"><![CDATA[<p>Not again&hellip;.! This custom type and provider stuff had gotten under Tim&rsquo;s skin. Somehow it just kept giving errors. Not only errors, but error&rsquo;s Tim could not pinpoint.</p>
-
-<p>Coming from a sysadmin background, jumping into Puppet was already a big jump, but getting into ruby programming proved an even bigger jump. Tim really wanted to get this working. If he were able to pull it of, he would get extremelyy nice and readable Puppet manifests.
-If you recognise this cry for help, check out this article. In the article we will show you all the tricks to get up to speed in debugging your custom Puppet types and providers.</p>
-
-<!-- more -->
-
-
-<h2>Where to look</h2>
-
-<p>One of the things that bothered Tim, was that he had no clue where to look. Puppet just handed him an error.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Error: Could not prefetch your_custom_type provider 'your_provider': undefined method `length' for nil:NilClass</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Although Puppet told him, it was in his custom_type (<code>your_custom_type</code>) and in his provider (<code>your_provider</code>), this was nowhere precice enough to get going. Beeëing a <code>NillClass</code> exception didn&rsquo;t help either. There was no variable name to start looking for.</p>
-
-<p>In most other programming languages Tim had worked with, there was a notion of a stack trace. In this trace he would be able to see the context where the error occurred.</p>
-
-<p>After Googleing around, Tim found that ruby normaly print&rsquo;s a stack trace as well. It looked like Puppet was catching the error&rsquo;s and supressing the stack trace. Luckily, Tim found a command line option for Puppet to enable the stack trace.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>puppet apply your_manifest.pp --trace
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>No clue&rsquo;s to where</p>
-
-<h2>Getting into the debugger</h2>
-
-<h2>What to do in the debugger</h2>
 ]]></content>
   </entry>
   
