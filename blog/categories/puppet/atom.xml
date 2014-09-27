@@ -4,7 +4,7 @@
   <title><![CDATA[Category: puppet | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/puppet/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-09-27T10:06:51+02:00</updated>
+  <updated>2014-09-27T10:08:16+02:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -31,6 +31,7 @@ I've had the privilege of reviewing a new Puppet book. The book is called
 
 ##Structure of the book
 The book is 251 pages that contain the following ten chapters:
+
 - Dealing with Load/Scale
 - Organizing Your Nodes and Data
 - Git and Environments
