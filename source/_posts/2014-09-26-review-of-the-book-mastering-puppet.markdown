@@ -20,6 +20,7 @@ I've had the privilege of reviewing a new Puppet book. The book is called
 
 ##Structure of the book
 The book is 251 pages that contain the following ten chapters:
+
 - Dealing with Load/Scale
 - Organizing Your Nodes and Data
 - Git and Environments
