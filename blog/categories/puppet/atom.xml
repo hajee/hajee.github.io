@@ -4,7 +4,7 @@
   <title><![CDATA[Category: puppet | People & Software]]></title>
   <link href="http://hajee.github.io/blog/categories/puppet/atom.xml" rel="self"/>
   <link href="http://hajee.github.io/"/>
-  <updated>2014-09-27T10:08:16+02:00</updated>
+  <updated>2014-10-28T11:04:34+01:00</updated>
   <id>http://hajee.github.io/</id>
   <author>
     <name><![CDATA[Bert Hajee]]></name>
@@ -576,6 +576,8 @@ If you recognize this thought process, maybe it’s time to meet [easy_type](htt
 
 <!-- more -->
 
+*This article is changed at the 28th of October to refelect changes in `easy_type`*
+
 ##When to build a Custom Type
 
 Well that’s an interesting question! The Puppet language is actually very versatile, and you can do anything with it. But why would you step out of puppet and into ruby to build a Custom Type? In one of his [excellent blog posts](http://garylarizza.com/blog/2013/11/25/fun-with-providers/), Gary Larizza explains it in one sentence: “Because 20 execs in a defined type… “. Another indication, you’d be better of on a Custom Type path instead of a defined type, is when you need to build one or more custom facts. 
@@ -584,7 +586,11 @@ Well that’s an interesting question! The Puppet language is actually very vers
 
 ##Let’s get started
 
-To get started, you first need to include `easy_type` in your `Puppetfile` or otherwise get it into your puppet directories. To add it to your `Puppetfile`, you can add the following line:
+To get started, you first need to install `easy_type`. You can either add it to your `Puppetfile` or use the puppet module installer to install it. 
+
+###Install `easy_type` using puppet-librarian
+
+To add it to your `Puppetfile`, you can add the following line:
 
 ```ruby
 mod "hajee/easy_type", :git => "git://github.com/hajee/easy_type.git"
@@ -592,13 +598,22 @@ mod "hajee/easy_type", :git => "git://github.com/hajee/easy_type.git"
 
 After that run the librarian to add the right modules to your puppet tree:
 
+<img src="/images/easy_type_added.png" title="easy_type added to modules" >
+
+
 ```sh
 librarian-puppet install
 ```
 
 The `librarian` reads the `Puppetfile` and puts the nescecary files into your module tree. After this command, you can see `easy_type` in your  list of modules.
 
-<img src="/images/easy_type_added.png" title="easy_type added to modules" >
+###Install using puppet module installer.
+
+To install `easy_type` using the puppet installer, enter the next command:
+
+```sh
+$ puppet module install hajee/easy_type
+```
 
 Well that was easy. Now we have all the basic requirements in place to start. What better time then now to think about the resource you want to manage.
 
@@ -622,73 +637,20 @@ As an example I’ve picked the same Custom Type as is described in the book [�
 Of course, the same thing counts over here.
 
 ##A scaffold
-To get started, it would be helfull if we have a scafffold. Let's say we want to name our own module `my_own_easy_type` and we name our own Custom Type `custom_package`. Let's start with creating the right directories. Go over to your module directory and create the following directories:
+To get started, it would be helfull if we have a scafffold. Let's say we want to name our own module `my_own_easy_type` and we name our own Custom Type `custom_package`. `easy_type` also contains some generators to make this easy. But first we have to create the directories and files needed for any puppet module:
 
 ```sh
-mkdir -p my_own_easy_type/lib/puppet/provider/custom_package
-mkdir -p my_own_easy_type/lib/puppet/type/custom_package
-``` 
-
-The first code we need, is the next scaffold:
-
-```ruby
-require 'easy_type'
-
-module Puppet
-
-  newtype(:custom_package) do
-    include EasyType
-
-    # set_command(:the_righ_command)
-
-    to_get_raw_resources do
-      # What commando to give to get a list of all resource.
-      # We need to return an Array of Hashes 
-    end
-
-    on_create do
-      # What do we do to create a resource
-    end
-
-    on_modify do
-      # What do we do to modify an existingresource
-    end
-
-    on_destroy do
-      # What do we do to destroy/delete an existingresource
-    end
-
-    newparam(:name) do
-      include EasyType
-      isnamevar
-
-      to_translate_to_resource do | raw_resource|
-        # how to translate from the Hash-like raw resource to get the name
-        # raw_resource.column_data(:name)
-      end
-
-    end
-
-  end
-end
+$ puppet module generate robert-my_own_easy_type
 ```
 
-Let's put it in `my_own_easy_type/lib/puppet/type/custom_package.rb`. The next file we need is the provider file.
 
-```ruby
-require 'easy_type'
+Now we can start creating the custom type:
 
-Puppet::Type.type(:custom_package).provide(:simple) do
-	include EasyType::Provider
 
-  desc "Manage packages with easy_type"
-
-  mk_resource_methods
-
-end
+```sh
+$ puppet type scaffold easy_type custom_package --force
 ```
 
-We need to put that at `my_own_easy_type/lib/puppet/provider/custom_package/simple.rb`
 
 ##It works.... Well, kind of
 Actually this is all you have to do to get the basic Puppet stuff in order. Now you can give the puppet command to get a view of all available resources:
@@ -705,7 +667,7 @@ So let's change the `custom_package` so we can use Puppet to get a list of all r
 In our example,  we are managing packages. To get a list of packages on a Linux system, you can use the `rpm` command. The following os command returns a list of all packages formatted in a comma separated way containing its name and its version.
 
 ```sh
-rpm -qa' --qf' %{NAME}, %{VERSION}\n
+rpm -qa --qf '%{NAME}, %{VERSION}\n'
 ```
 
 We would like the Custom Type to execute this command and convert the data to an Array of Hashes.
@@ -715,7 +677,7 @@ To do just that, we need to change the `to_get_raw_resources` method to:
 ```ruby
     to_get_raw_resources do
       packages_string = rpm('-qa','--qf','%{NAME}, %{VERSION}\n')
-      convert_csv_data_to_hash(packages_string,[:name, :version])
+      convert_csv_data_to_hash(packages_string,['name', 'version'])
     end
 ```
 The `packages_string` will contain a string with all the information. The `convert_csv_data_to_hash` method will convert it to a hash. The elements in the hash are named `name` and `version`.
@@ -724,14 +686,6 @@ To let `easy_type` know rpm is an os command, we need to add the line:
 
 ```ruby
 set_command(:rpm)
-```
-
-Now we need to let Puppet know how to get the name value from the raw resource. To do this, we change the definition of the name parameter.  We need to define the `to_translate_to_resource` method. Its function is to pick just the name out of the Hash that describes the full resource. You must define this function in every parameter or property. It receives a single instance of a resource in a Hash. It is one element from the Array of Hashes we created before. Because we named the first column in our comma separated data, `:name`, we can easily get it from the Hash. Lets define the function:
-
-```
-to_translate_to_resource do | raw_resource|
-	raw_resource.column_data(:name)
-end
 ```
 
 ##TA TAAHH
@@ -751,16 +705,10 @@ custom_package { 'MAKEDEV':
 }
 ...
 ```
-But wait, didn't we also collect the version information? What about that? To Add the version information, we need to add a version property. A property looks very similar to the parameter that was already available in the scaffold. Here is the code for the version property:
+But wait, didn't we also collect the version information? What about that? To Add the version information, we need to add a version property. A property looks very similar to the parameter that was already available in the scaffold. `Easy_type` contains a generator to add a property. Let's run it:
 
-```ruby
-newproperty(:version) do
-  include EasyType
-
-  to_translate_to_resource do | raw_resource|
-    raw_resource.column_data(:version)
-  end
-end
+```sh
+$ puppet type generate property version custom_package
 ```
 
 Now when we ask Puppet for the available `custom_packages` again, we get a list of all the available packages, inclusing the version information.
