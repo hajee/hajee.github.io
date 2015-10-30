@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Testing your system installation with RSpec"
 date: 2014-01-18 14:12:37 +0100
 comments: true
 categories: ['testing', 'devops', 'rspec', 'ruby']
 keywords: devops, continuous deployment, infastructure testing, rspec, ruby
 description: Testing your systems installations with RSpec
+redirect_to:  https://www.enterprisemodules.com/blog/2014/01/testing-your-system-installation-with-rspec/
 ---
 
 [In the last blog post]({% post_url 2014-01-13-how-to-test-systems-installations %}) we introduced described the need for a testing tool for Linux and middleware installations. After some Internet reasearch and a small test, we concluded  [RSpec](https://relishapp.com/rspec) would be a good fit. In this blog post,  we will dive into the way we use RSpec to build the specifications and tests needed for your systems.

@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Puppet building blocks"
 date: 2013-12-30 20:14:10 +0100
 comments: true
 categories: ['devops','puppet', 'method']
 keywords: devops, puppet, continuous deployment, continuous integration
 description: A description of the main Puppet building blocks
+redirect_to: https://www.enterprisemodules.com/blog/2013/12/puppet-building-blocks/
 ---
 
 In this blog post,  I will look into Puppet and describe the building blocks Puppet uses.

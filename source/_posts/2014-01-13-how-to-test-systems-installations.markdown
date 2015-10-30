@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "How to test systems installations"
 date: 2014-01-13 20:14:10 +0100
 comments: true
 categories: ['testing', 'devops', 'rspec', 'ruby']
 keywords: devops, puppet, continuous deployment, infastructure testing, rspec, ruby
 description: How to test your systems installations
+redirect_to: https://www.enterprisemodules.com/blog/2014/01/how-to-test-systems-installations/
 ---
 Just imagine yourself installing a Linux system with an Oracle database and a WebLogic application server. There are a lot of manual steps that have to be taken. A lot of commands to be typed and a lot of configurations to be set right in order to get the perfect system for the application. A lot of things can go wrong. You can miss a configuration setting. You can forget a command. Hopefully you get an error message because you did something wrong, but it can also turn out te be a silent error. One you only see after you have given the system to the application developers, or worse one that only comes out after the system is running in production and some load is put onto it. Hoe do we make sure a system is correct after the installation. In this blog post,  I will describe how we used Rspec to test out installations.
 

@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Visualize your continuous deployment maturity"
 date: 2013-10-02 16:15:13 +0100
 comments: true
 categories: ['devops', 'visualize']
 keywords: devops, visualize, maturity level, continuous deployment, continuous integration
 description: Visualize the levels of maturity at the six interest area's for continuous deployment
+redirect_to: https://www.enterprisemodules.com/blog/2013/10/2013/10/02/visualize-your-continuous-deployment-maturity/
 ---
 Looking around the Internet, you see more and more companies starting to do multiple deployments per day. There are the [stories of Facebook deploying multiple times per day](https://www.facebook.com/notes/facebook-engineering/ship-early-and-ship-twice-as-often/10150985860363920). The stories of [The Guardian](http://blog.utest.com/continuous-deployment-and-testing-in-production/2012/12/) and many more. If you want to go down that path, it really helps having a way of visualizing where you are, and where you want to go to. This helps the discussion with the stakeholders and gets things going. In this blog post,  I will demonstrate a way to do just that.
 

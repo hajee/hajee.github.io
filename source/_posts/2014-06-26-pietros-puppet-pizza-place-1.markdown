@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Learning Puppet at the Puppet Pizza Place"
 date: 2014-06-26 14:36:46 +0200
 comments: true
 categories: ['puppet', 'devops', 'learning']
 keywords: devops, continuous deployment, infastructure puppet, learning
 description: Learning Puppet at the Puppet Pizza Place
+redirect_to:  https://www.enterprisemodules.com/blog/2014/06/pietros-puppet-pizza-place-1/
 ---
 #Learning Puppet at the Puppet Pizza Place
 

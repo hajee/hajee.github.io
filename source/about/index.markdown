@@ -1,10 +1,11 @@
 ---
-layout: page
+layout: redirect
 title: "About Bert Hajee"
 comments: true
 sharing: true
 footer: true
 description: I'm a IT Project manager and consultant. I'm specialised in bridging the gap between highly technical stuff and management.
+redirect_to: https://www.enterprisemodules.com/company/about-us/
 ---
 My name is Bert Hajee. I'm a IT Project manager and consultant. I'm specialised in bridging the gap between highly technical stuff and management.
 

@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Asses YOUR continuous deployment maturity"
 date: 2013-10-24 12:45:47
 comments: true
 categories: ['devops', 'visualize']
 keywords: devops, visualize, maturity level, continuous deployment, continuous integration
 description: This blog post describes the practices belonging to a certain maturity level.
+redirect_to: https://www.enterprisemodules.com/blog/2013/10/asses-YOUR-continuous-deployment-maturity/
 ---
 In the last couple of blog posts, I've talked about how to describe how mature you are in your ability to do continuous deployment. [This blog post]({% post_url 2013-10-02-visualize-your-continuous-deployment-maturity %}) introduced a way to visualise the maturity. In [this blog post]({% post_url 2013-10-12-areas-of-interest-to-realize-continuous-deployment %}) I described the area's of interest on the x-scale of the graph. While in [the last blog post]( {% post_url 2013-10-17-levels-of-maturity-for-continuous-deployment %}) I described the levels of maturity on the y-scale. That's all nice, but how do you use these ingredients to assess *YOUR* continuous deployment maturity? In this blog post,  I will introduce  some criteria.
 

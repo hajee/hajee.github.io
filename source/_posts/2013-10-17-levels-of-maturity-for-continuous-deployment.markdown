@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "On your way to easier deployments?"
 date: 2013-10-17 16:15:13 +0100
 comments: true
 categories: ['devops','method']
 keywords: devops, continuous deployment, continuous integration
 description: How to get the discussions started about faster and more deployments
+redirect_to: https://www.enterprisemodules.com/blog/2013/10/levels-of-maturity-for-continuous-deployment/
 ---
 In [my last blog post]({% post_url 2013-10-02-visualize-your-continuous-deployment-maturity %}), I described the main area's of interest to work on to get faster and easier deployments. For every area,  the level of maturity may be different. In this blog post,  I will dive deeper in the levels of maturity and what they mean.
 

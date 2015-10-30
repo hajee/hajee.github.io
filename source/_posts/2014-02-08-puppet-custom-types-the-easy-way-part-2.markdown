@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Puppet Custom Types, the easy way (part 2)"
 date: 2014-02-08 13:57:20 +0100
 comments: true
 categories: ['puppet', 'devops', 'ruby']
 keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby
 description: The easy way to building Puppet Custom Types with easy_type (part 2)
+redirect_to:  https://www.enterprisemodules.com/blog/2014/02/puppet-custom-types-the-easy-way-part-2/
 ---
 In the [last blog post]({% post_url 2014-01-26-puppet-custom-types-the-easy-way %}), we started with our own custom type. We added the `easy_type` module, created the files necessary for getting started and got our custom running without any errors. We then added two lines to get into a state where Puppet was able to do an inventory of our systems. But a custom type not able to create, delete or modify the state of your system, wouldnt be very helpful. So in the blog post we are going to add that functionality to our custom_package type.
 

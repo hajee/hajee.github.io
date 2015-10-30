@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Puppet Custom Types, the easy way"
 date: 2014-01-26 13:57:20 +0100
 comments: true
 categories: ['puppet', 'devops', 'ruby']
 keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby
 description: The easy way to building Puppet Custom Types with easy_type
+redirect_to:  https://www.enterprisemodules.com/blog/2014/01/puppet-custom-types-the-easy-way/
 ---
 Robert scratched his head. How would he get a Puppet class to manage a complex resource on his systems? I guess I’ll have to make a Custom Type, he thought. But last time I looked into that, I noticed you need to know a lot about Puppet Internals. 
 

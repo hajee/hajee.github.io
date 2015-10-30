@@ -1,12 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Using Puppet to manage Oracle"
 date: 2014-02-23 08:01:51 +0100
 comments: true
 categories: ['puppet', 'devops', 'ruby', 'oracle']
 keywords: devops, continuous deployment, infastructure puppet, easy_type, ruby, oracle
 description: Describes a Puppet module to manage tabelspaces, users grants 
-
+redirect_to:  https://www.enterprisemodules.com/blog/2014/02/using-puppet-to-manage-oracle/
 ---
 Russ looked at his screen. He started to get a bit weary. How in heavens name would he be able to manage this. He was looking at the requests he had for twenty applications that all had specific Oracle database needs. All different with regards to tablespaces, users, rights and services. And if that wasn’t bad enough in itself, all of the project teams building those applications, had up to 5 specific environments with different sizes and sometimes other settings. Russ definitely could use some help with this.
 

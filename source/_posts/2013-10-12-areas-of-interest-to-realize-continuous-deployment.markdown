@@ -1,11 +1,12 @@
 ---
-layout: post
+layout: redirect
 title: "Area's of interest for continuous deployment"
 date: 2013-10-12 21:25:10 +0100
 comments: true
 categories: ['devops','method', 'maturity model']
 keywords: devops, continuous deployment, continuous integration, maturity, cmm
 description: Describe the six area's of interest for realizing continuous delivery
+redirect_to: https://www.enterprisemodules.com/blog/2013/10/areas-of-interest-to-realize-continuous-deployment/
 ---
 In [my last blog post]({% post_url 2013-10-02-visualize-your-continuous-deployment-maturity%}), I showed a way to visualize the level of maturity for the six interest area's of continuous delivery. In this blog post,  I will dig deeper into what the areas of interest are.
 
